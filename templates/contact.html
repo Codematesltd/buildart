@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us - Buildaart Construction{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-12 bg-gray-100">
+    <!-- Page Header -->
+    <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold mb-4">Contact Us</h1>
+        <div class="w-24 h-1 bg-yellow-500 mx-auto"></div>
+    </div>
+
+    <!-- Map and Contact Info Section -->
+    <div class="grid md:grid-cols-2 gap-8 mb-12">
+        <!-- Google Map -->
+        <div class="rounded-lg shadow-lg overflow-hidden h-[400px]">
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.3460054733003!2d77.56999!3d12.945100!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae158b11e34d2f%3A0x5f4adbdbab8bd80f!2sBasavanagudi%2C%20Bengaluru%2C%20Karnataka!5e0!3m2!1sen!2sin!4v1679900000000!5m2!1sen!2sin"
+                width="100%" 
+                height="100%" 
+                style="border:0;" 
+                allowfullscreen="" 
+                loading="lazy" 
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="bg-white p-8 rounded-lg shadow-lg">
+            <h2 class="text-2xl font-bold mb-6">Get in Touch</h2>
+            <div class="space-y-4">
+                <div class="flex items-start space-x-4">
+                    <div class="text-pink-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold">Address</h3>
+                        <p class="text-gray-600">Ground Floor, Church road,<br>Basavanagudi, Bengaluru,<br>Karnataka 560004</p>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-4">
+                    <div class="text-pink-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold">Phone</h3>
+                        <p class="text-gray-600">+91 8748899996</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- General Inquiries Section -->
+    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8 mb-12">
+        <h2 class="text-2xl font-bold mb-6">General Inquiries</h2>
+        <p class="text-gray-600 mb-6">For project details, collaborations, or other queries, reach out to us here.</p>
+        <form method="POST" action="{{ url_for('main.contact') }}" class="space-y-6">
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">Name *</label>
+                    <input type="text" name="name" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-pink-500">
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">Email *</label>
+                    <input type="email" name="email" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-pink-500">
+                </div>
+            </div>
+            <div>
+                <label class="block text-gray-700 font-semibold mb-2">Message *</label>
+                <textarea name="message" rows="4" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-pink-500"></textarea>
+            </div>
+            <button type="submit" class="bg-pink-600 text-white px-6 py-2 rounded-lg hover:bg-pink-700 transition-colors">
+                Submit Inquiry
+            </button>
+        </form>
+    </div>
+
+    <!-- Quick Contact Form -->
+    <div class="max-w-4xl mx-auto bg-gradient-to-r from-gray-800 to-gray-900 rounded-lg shadow-lg p-8 text-white">
+        <h2 class="text-2xl font-bold mb-6">Quick Contact</h2>
+        <form method="POST" action="{{ url_for('main.contact') }}" class="space-y-6">
+            <div class="grid md:grid-cols-2 gap-6">
+                <input type="text" placeholder="Name" name="quick_name" required 
+                    class="w-full px-4 py-2 rounded-lg bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500">
+                <input type="email" placeholder="Email" name="quick_email" required 
+                    class="w-full px-4 py-2 rounded-lg bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500">
+            </div>
+            <textarea placeholder="Message" name="quick_message" rows="3" required 
+                class="w-full px-4 py-2 rounded-lg bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500"></textarea>
+            <button type="submit" class="bg-pink-600 text-white px-6 py-2 rounded-lg hover:bg-pink-700 transition-colors">
+                Send Message
+            </button>
+        </form>
+    </div>
+
+    <!-- Labels Section -->
+    <div class="max-w-4xl mx-auto mt-12">
+        <h2 class="text-2xl font-bold mb-6">Labels</h2>
+        <div class="flex flex-wrap gap-3">
+            <!-- Project Categories -->
+            <span class="px-4 py-2 bg-pink-100 text-pink-800 rounded-full hover:bg-pink-200 cursor-pointer transition-colors">All Projects</span>
+            
+            <!-- Locations -->
+            <span class="px-4 py-2 bg-blue-100 text-blue-800 rounded-full hover:bg-blue-200 cursor-pointer transition-colors">Bengaluru</span>
+            <span class="px-4 py-2 bg-blue-100 text-blue-800 rounded-full hover:bg-blue-200 cursor-pointer transition-colors">Hiriyur</span>
+            <span class="px-4 py-2 bg-blue-100 text-blue-800 rounded-full hover:bg-blue-200 cursor-pointer transition-colors">Kabini</span>
+            <span class="px-4 py-2 bg-blue-100 text-blue-800 rounded-full hover:bg-blue-200 cursor-pointer transition-colors">Madurai</span>
+            <span class="px-4 py-2 bg-blue-100 text-blue-800 rounded-full hover:bg-blue-200 cursor-pointer transition-colors">Mysore</span>
+            <span class="px-4 py-2 bg-blue-100 text-blue-800 rounded-full hover:bg-blue-200 cursor-pointer transition-colors">Pondicherry</span>
+            <span class="px-4 py-2 bg-blue-100 text-blue-800 rounded-full hover:bg-blue-200 cursor-pointer transition-colors">Tumkur</span>
+            
+            <!-- Project Types -->
+            <span class="px-4 py-2 bg-green-100 text-green-800 rounded-full hover:bg-green-200 cursor-pointer transition-colors">Commercial</span>
+            <span class="px-4 py-2 bg-green-100 text-green-800 rounded-full hover:bg-green-200 cursor-pointer transition-colors">Instituition</span>
+            <span class="px-4 py-2 bg-green-100 text-green-800 rounded-full hover:bg-green-200 cursor-pointer transition-colors">Public</span>
+            <span class="px-4 py-2 bg-green-100 text-green-800 rounded-full hover:bg-green-200 cursor-pointer transition-colors">Residential</span>
+            
+            <!-- Status -->
+            <span class="px-4 py-2 bg-yellow-100 text-yellow-800 rounded-full hover:bg-yellow-200 cursor-pointer transition-colors">Ongoing</span>
+        </div>
+    </div>
+</div>
+{% endblock %}
