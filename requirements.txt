@@ -4,7 +4,6 @@ flask-talisman
 flask-wtf
 flask-limiter
 flask-caching
-flask-minify
 python-dotenv
 bleach
 redis

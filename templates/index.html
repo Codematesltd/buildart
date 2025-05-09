@@ -1,153 +1,150 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Buildaart Construction</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-white text-gray-800">
-  <!-- Navbar -->
-  <header class="flex justify-between items-center px-6 py-4 shadow-md sticky top-0 bg-white z-50">
-    <img src="\static\images\logo.png" alt="Buildaart Logo" class="h-20">
+{% extends "base.html" %}
+
+{% block title %}Buildaart Construction{% endblock %}
+
+{% block content %}
+<!-- Navbar -->
+<header class="flex justify-between items-center px-6 py-4 shadow-md sticky top-0 bg-white z-50">
+    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Buildaart Logo" class="h-20">
     <nav class="space-x-4 text-lg font-semibold hidden md:block">
-      <a href="#" class="hover:text-yellow-600">Home</a>
-      <a href="#" class="hover:text-yellow-600">About us</a>
-      <a href="#" class="hover:text-yellow-600">Projects</a>
-      <a href="#" class="hover:text-yellow-600">Awards</a>
-      <a href="#" class="hover:text-yellow-600">Careers</a>
-      <a href="#" class="hover:text-yellow-600">Contact Us</a>
+        <a href="{{ url_for('main.index') }}" class="hover:text-yellow-600">Home</a>
+        <a href="{{ url_for('main.about') }}" class="hover:text-yellow-600">About us</a>
+        <a href="{{ url_for('main.projects') }}" class="hover:text-yellow-600">Projects</a>
+        <a href="{{ url_for('main.awards') }}" class="hover:text-yellow-600">Awards</a>
+        <a href="#" class="hover:text-yellow-600">Careers</a>
+        <a href="{{ url_for('main.enquiry') }}" class="hover:text-yellow-600">Contact Us</a>
     </nav>
-  </header>
+</header>
 
-  <!-- Hero Section -->
-  <section class="relative">
-    <img src="\static\images\hero-image.png" alt="Hero" class="w-full h-[90vh] object-cover">
-    <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-start p-10 md:p-20 text-white">
-      <h1 class="text-3xl md:text-5xl font-bold mb-4 max-w-xl">Shaping tomorrow’s spaces with luxury, comfort, and a vision for the future.</h1>
-      <button class="bg-white text-black px-6 py-2 rounded shadow-md hover:bg-gray-200 font-semibold">GET IN TOUCH</button>
-    </div>
-  </section>
+<div class="container mx-auto px-4">
+    <h1 class="text-4xl font-bold text-blue-600 my-8">Welcome</h1>
 
-  <!-- About Section -->
-  <section class="flex flex-col md:flex-row justify-between items-center gap-6 p-6 bg-gray-200">
-    <div class="md:w-1/2 space-y-4">
-      <h2 class="text-2xl font-bold">We are a local business focusing on historic preservation, using traditional materials and techniques.</h2>
-      
-    <p>Write a paragraph that talks about your company here. You can talk about your company's background, history, mission, vision, or philosophy. Anything that will introduce your brand's persona to your clients. This will help build a connection between you and them, that hopefully leads into a working relationship.</p>
-    </div>
-    <img src="\static\images\about.JPG"class="w-full md:w-1/2 rounded-lg shadow-lg" alt="About image">
-  </section>
-
-  <!-- Services -->
-  <section class="relative">
-    <img src="\static\images\service.png" alt="Service Background" class="absolute inset-0 w-full h-full object-cover opacity-75" />
-    <div class="relative z-10 bg-white/10 p-6">
-      <h2 class="text-2xl font-bold mb-4">Services</h2>
-      <div class="md:w-1/2 space-y-4 text-center mx-auto mb-8">
-        <p>Write a paragraph that talks about your construction company here. Convince your prospective clients to choose you and your team for their construction needs by talking about your unique services, as well as your commitment to getting the job done.</p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-        <div class="text-center space-y-4">
-          <img src="\static\images\service3.jpg" class="w-full h-52 object-cover rounded-md" />
-          <p class="font-semibold mt-4">Lead Paint Removal</p>
+    <!-- Hero Section -->
+    <section class="relative">
+        <img src="\static\images\hero-image.png" alt="Hero" class="w-full h-[90vh] object-cover">
+        <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-start p-10 md:p-20 text-white">
+            <h1 class="text-3xl md:text-5xl font-bold mb-4 max-w-xl">Shaping tomorrow’s spaces with luxury, comfort, and a vision for the future.</h1>
+            <button class="bg-white text-black px-6 py-2 rounded shadow-md hover:bg-gray-200 font-semibold">GET IN TOUCH</button>
         </div>
-        <div class="text-center space-y-4">
-          <img src="\static\images\service2.webp" class="w-full h-52 object-cover rounded-md" />
-          <p class="font-semibold mt-4">Woodwork Replication</p>
-        </div>
-        <div class="text-center space-y-4 md:col-span-2 mx-auto" style="width: calc(50% - 1rem)">
-          <img src="\static\images\service1.webp" class="w-full h-52 object-cover rounded-md" />
-          <p class="font-semibold mt-4">Window Restoration</p>
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Projects -->
-  <section class="p-6 bg-black text-white">
-    
-    <h2 class="text-2xl font-bold mb-4">Projects</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-      <div class="text-center space-y-4">
-        <img src="\static\images\project1.jpg" class="w-full h-56 object-cover rounded-md" />
-        <p class="mt-2">CASA LUX</p>
-      </div>
-      <div class="text-center space-y-4">
-        <img src="\static\images\project2.jpg" class="w-full h-56 object-cover rounded-md" />
-        <p class="mt-2">CONDUR</p>
-      </div>
-      <div class="text-center space-y-4 md:col-span-2 mx-auto" style="width: calc(50% - 1rem)">
-        <img src="\static\images\project3.jpg" class="w-full h-56 object-cover rounded-md" />
-        <p class="mt-2">SANCTUM</p>
-      </div>
-    </div>
-  </section>
+    <!-- About Section -->
+    <section class="flex flex-col md:flex-row justify-between items-center gap-6 p-6 bg-gray-200">
+        <div class="md:w-1/2 space-y-4">
+            <h2 class="text-2xl font-bold">We are a local business focusing on historic preservation, using traditional materials and techniques.</h2>
+            <p>Write a paragraph that talks about your company here. You can talk about your company's background, history, mission, vision, or philosophy. Anything that will introduce your brand's persona to your clients. This will help build a connection between you and them, that hopefully leads into a working relationship.</p>
+        </div>
+        <img src="\static\images\about.JPG" class="w-full md:w-1/2 rounded-lg shadow-lg" alt="About image">
+    </section>
 
-  <!-- Stats Section -->
-  <section class="p-16 bg-gray-400 text-white text-center">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-      <div class="py-8">
-        <h3 class="text-2xl font-semibold mb-4">Year Established</h3>
-        <p class="text-5xl font-bold">1902</p>
-      </div>
-      <div class="py-8">
-        <h3 class="text-2xl font-semibold mb-4">Skilled Artisans</h3>
-        <p class="text-5xl font-bold">56</p>
-      </div>
-      <div class="py-8">
-        <h3 class="text-2xl font-semibold mb-4">Completed Projects</h3>
-        <p class="text-5xl font-bold">1,000+</p>
-      </div>
-    </div>
-  </section>
+    <!-- Services -->
+    <section class="relative">
+        <img src="\static\images\service.png" alt="Service Background" class="absolute inset-0 w-full h-full object-cover opacity-75" />
+        <div class="relative z-10 bg-white/10 p-6">
+            <h2 class="text-2xl font-bold mb-4">Services</h2>
+            <div class="md:w-1/2 space-y-4 text-center mx-auto mb-8">
+                <p>Write a paragraph that talks about your construction company here. Convince your prospective clients to choose you and your team for their construction needs by talking about your unique services, as well as your commitment to getting the job done.</p>
+            </div>
 
-  <!-- Awards Section -->
-  <section class="relative">
-    <img src="\static\images\award.png" alt="Award Background" class="absolute inset-0 w-full h-full object-cover" />
-    <div class="relative z-10 bg-black/40 p-6">
-      <h2 class="text-2xl font-bold mb-4 text-white">Awards</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-        <div class="text-center space-y-4">
-          <img src="\static\images\award1.jpg" class="w-full h-52 object-cover rounded-md" />
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                <div class="text-center space-y-4">
+                    <img src="\static\images\service3.jpg" class="w-full h-52 object-cover rounded-md" />
+                    <p class="font-semibold mt-4">Lead Paint Removal</p>
+                </div>
+                <div class="text-center space-y-4">
+                    <img src="\static\images\service2.webp" class="w-full h-52 object-cover rounded-md" />
+                    <p class="font-semibold mt-4">Woodwork Replication</p>
+                </div>
+                <div class="text-center space-y-4 md:col-span-2 mx-auto" style="width: calc(50% - 1rem)">
+                    <img src="\static\images\service1.webp" class="w-full h-52 object-cover rounded-md" />
+                    <p class="font-semibold mt-4">Window Restoration</p>
+                </div>
+            </div>
         </div>
-        <div class="text-center space-y-4">
-          <img src="\static\images\award2.jpg" class="w-full h-52 object-cover rounded-md" />
-        </div>
-        <div class="text-center space-y-4 md:col-span-2 mx-auto" style="width: calc(50% - 1rem)">
-          <img src="\static\images\award3.jpg" class="w-full h-52 object-cover rounded-md" />
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-   <!-- Footer -->
-   <footer class="p-6 bg-gray-800 text-white mt-auto w-full">
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-      <div>
-        <h4 class="font-bold">Contact Info</h4>
-        <p>+91 8748899966</p>
-        <p>Ground Floor, Church Road,<br/> Basavanagudi, Bengaluru</p>
-      </div>
-      <div>
-        <h4 class="font-bold">Office Hours</h4>
-        <p>Mon to Fri: 9:00 AM - 5:00 PM</p>
-        <p>Weekends by appointment</p>
-      </div>
-      <div>
-        <h4 class="font-bold">Stay Connected</h4>
-        <div class="flex space-x-4 mt-2">
-          <img src="/static/images/fb-icon.svg" class="h-6" />
-          <img src="/static/images/twitter-icon.svg" class="h-6" />
-          <img src="/static/images/instagram-icon.svg" class="h-6" />
+    <!-- Projects -->
+    <section class="p-6 bg-black text-white">
+        <h2 class="text-2xl font-bold mb-4">Projects</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            <div class="text-center space-y-4">
+                <img src="\static\images\project1.jpg" class="w-full h-56 object-cover rounded-md" />
+                <p class="mt-2">CASA LUX</p>
+            </div>
+            <div class="text-center space-y-4">
+                <img src="\static\images\project2.jpg" class="w-full h-56 object-cover rounded-md" />
+                <p class="mt-2">CONDUR</p>
+            </div>
+            <div class="text-center space-y-4 md:col-span-2 mx-auto" style="width: calc(50% - 1rem)">
+                <img src="\static\images\project3.jpg" class="w-full h-56 object-cover rounded-md" />
+                <p class="mt-2">SANCTUM</p>
+            </div>
         </div>
-      </div>
-      <div>
-        <h4 class="font-bold">Location</h4>
-        <img src="/static/images/qrcode.png" class="h-24" />
-      </div>
-    </div>
-  </footer>
-</body>
-</html>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="p-16 bg-gray-400 text-white text-center">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <div class="py-8">
+                <h3 class="text-2xl font-semibold mb-4">Year Established</h3>
+                <p class="text-5xl font-bold">1902</p>
+            </div>
+            <div class="py-8">
+                <h3 class="text-2xl font-semibold mb-4">Skilled Artisans</h3>
+                <p class="text-5xl font-bold">56</p>
+            </div>
+            <div class="py-8">
+                <h3 class="text-2xl font-semibold mb-4">Completed Projects</h3>
+                <p class="text-5xl font-bold">1,000+</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Awards Section -->
+    <section class="relative">
+        <img src="\static\images\award.png" alt="Award Background" class="absolute inset-0 w-full h-full object-cover" />
+        <div class="relative z-10 bg-black/40 p-6">
+            <h2 class="text-2xl font-bold mb-4 text-white">Awards</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                <div class="text-center space-y-4">
+                    <img src="\static\images\award1.jpg" class="w-full h-52 object-cover rounded-md" />
+                </div>
+                <div class="text-center space-y-4">
+                    <img src="\static\images\award2.jpg" class="w-full h-52 object-cover rounded-md" />
+                </div>
+                <div class="text-center space-y-4 md:col-span-2 mx-auto" style="width: calc(50% - 1rem)">
+                    <img src="\static\images\award3.jpg" class="w-full h-52 object-cover rounded-md" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="p-6 bg-gray-800 text-white mt-auto w-full">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div>
+                <h4 class="font-bold">Contact Info</h4>
+                <p>+91 8748899966</p>
+                <p>Ground Floor, Church Road,<br/> Basavanagudi, Bengaluru</p>
+            </div>
+            <div>
+                <h4 class="font-bold">Office Hours</h4>
+                <p>Mon to Fri: 9:00 AM - 5:00 PM</p>
+                <p>Weekends by appointment</p>
+            </div>
+            <div>
+                <h4 class="font-bold">Stay Connected</h4>
+                <div class="flex space-x-4 mt-2">
+                    <img src="/static/images/fb-icon.svg" class="h-6" />
+                    <img src="/static/images/twitter-icon.svg" class="h-6" />
+                    <img src="/static/images/instagram-icon.svg" class="h-6" />
+                </div>
+            </div>
+            <div>
+                <h4 class="font-bold">Location</h4>
+                <img src="/static/images/qrcode.png" class="h-24" />
+            </div>
+        </div>
+    </footer>
+</div>
+{% endblock %}

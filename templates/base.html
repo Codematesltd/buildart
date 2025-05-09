@@ -3,8 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' cdn.tailwindcss.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:;">
   <title>{% block title %}Buildaart Construction{% endblock %}</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style type="text/tailwindcss">
+    @layer utilities {
+      /* Your custom styles */
+    }
+  </style>
+  {% block styles %}{% endblock %}
 </head>
 <body class="bg-white text-gray-800 flex flex-col min-h-screen">
   <!-- Navbar -->
@@ -24,6 +31,6 @@
     {% block content %}{% endblock %}
   </main>
 
- 
+  {% block scripts %}{% endblock %}
 </body>
 </html>
