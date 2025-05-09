@@ -18,12 +18,13 @@
   <header class="flex justify-between items-center px-6 py-4 shadow-md sticky top-0 bg-gray-900 z-50">
     <img src="\static\images\logo.png" alt="Buildaart Logo" class="h-20">
     <nav class="space-x-4 text-lg font-semibold hidden md:block text-white">
-      <a href="#" class="hover:text-yellow-500 transition-colors">Home</a>
-      <a href="#" class="hover:text-yellow-500 transition-colors">About us</a>
-      <a href="#" class="hover:text-yellow-500 transition-colors">Projects</a>
-      <a href="#" class="hover:text-yellow-500 transition-colors">Awards</a>
+      <a href="{{ url_for('main.index') }}" class="hover:text-yellow-500 transition-colors">Home</a>
+      <a href="{{ url_for('main.about') }}" class="hover:text-yellow-500 transition-colors">About us</a>
+      <a href="{{ url_for('main.projects') }}" class="hover:text-yellow-500 transition-colors">Projects</a>
+      <a href="{{ url_for('main.awards') }}" class="hover:text-yellow-500 transition-colors">Awards</a>
       <a href="#" class="hover:text-yellow-500 transition-colors">Careers</a>
-      <a href="#" class="hover:text-yellow-500 transition-colors">Contact Us</a>
+      <a href="{{ url_for('main.enquiry') }}" class="hover:text-yellow-500 transition-colors">Contact Us</a>
+      <a href="{{ url_for('admin.login') }}" class="hover:text-yellow-500 transition-colors">Admin login</a>
     </nav>
   </header>
   
