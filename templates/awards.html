@@ -1,0 +1,283 @@
+{% extends "base.html" %}
+
+{% block title %}Awards - Buildaart Construction{% endblock %}
+
+{% block content %}
+<!-- Awards Hero Section -->
+<section class="relative">
+    <img src="\static\images\award.png" alt="Award Background" class="w-full h-[60vh] object-cover">
+    <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center p-10 md:p-20 text-white">
+        <h1 class="text-3xl md:text-5xl font-bold mb-4 text-center">Our Recognition & Awards</h1>
+        <p class="text-xl max-w-2xl text-center">Celebrating excellence in historic preservation and architectural craftsmanship</p>
+    </div>
+</section>
+
+<!-- Founder Biography Section -->
+<section class="p-10 bg-gray-100 text-gray-800">
+    <div class="max-w-4xl mx-auto space-y-6">
+        <h2 class="text-3xl font-bold mb-8 text-center text-yellow-700">About Our Founder</h2>
+        <div class="bg-white shadow-md rounded-xl p-6 space-y-4">
+            <p class="text-lg">Manjunath CN, a graduate from Siddaganga School of Architecture (SSA), Tumkur, Karnataka, began his remarkable journey in architecture with a UNESCO-sponsored project in Hampi immediately after his internship. His professional career took off while working with Edgar DeMello, and in 2012, he founded SWS.</p>
+            
+            <p class="text-lg">SWS, a young multidisciplinary design studio based in Bangalore, is led by Ar. Manjunath C.N and supported by a dedicated team of architects and engineers.</p>
+            
+            <div class="bg-gray-50 p-6 rounded-lg my-8 border-l-4 border-yellow-700">
+                <h3 class="text-xl font-semibold mb-4 text-yellow-700">Academic Contributions</h3>
+                <ul class="list-disc list-inside space-y-2">
+                    <li>Visiting faculty at SPA (School of Planning and Architecture), Vijayawada</li>
+                    <li>Current faculty at SSA (Siddaganga School of Architecture)</li>
+                    <li>Member of the selection committee at Anna University, Architecture Department, Chennai</li>
+                    <li>Regular jury member for architectural reviews at prestigious institutions including SSA, DSCE, and BMSCE</li>
+                    <li>Recipient of the Best Guide Award (Yuvaratna) for two consecutive years (2014 and 2015)</li>
+                </ul>
+            </div>
+
+            <p class="text-lg">His work has gained widespread recognition and has been featured in renowned magazines such as Inside Outside and Design Detail. Notable achievements include being named one of the top 50 promising architects of 2020 and receiving the Young Architect award by IA&B. He has also shared his insights on design through media appearances, including a radio interview "Square Foot" for casual conversation about design.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Admin Award Form - Only visible to admins -->
+{% if current_user.is_authenticated %}
+<section class="p-10 bg-gray-100">
+    <div class="max-w-4xl mx-auto">
+        <div class="bg-white shadow-md rounded-xl p-8">
+            <h2 class="text-2xl font-bold mb-6 text-yellow-700">Add New Award</h2>
+            <form action="{{ url_for('admin.add_award') }}" method="POST" class="space-y-4">
+                <div>
+                    <label class="block text-gray-700">Year</label>
+                    <input type="number" name="year" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
+                </div>
+                <div>
+                    <label class="block text-gray-700">Award Name</label>
+                    <input type="text" name="award_name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
+                </div>
+                <div>
+                    <label class="block text-gray-700">Project Name</label>
+                    <input type="text" name="project_name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
+                </div>
+                <div>
+                    <label class="block text-gray-700">Prize</label>
+                    <select name="prize" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
+                        <option value="Winner">Winner 🏆</option>
+                        <option value="Runner Up">Runner Up 🥈</option>
+                    </select>
+                </div>
+                <button type="submit" class="bg-yellow-700 text-white px-4 py-2 rounded-lg hover:bg-yellow-600">
+                    Add Award
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Awards by Year Section -->
+<section class="p-10 bg-gray-100 text-gray-800">
+  <h2 class="text-3xl font-bold mb-8 text-center">Awards by Year</h2>
+  <div class="space-y-8" id="awardsContainer">
+
+    <!-- 2022 -->
+    <div class="bg-white shadow-md rounded-xl p-6 text-center  justify-center" data-year="2022">
+      <h3 class="text-xl font-bold mb-4 text-yellow-700">2022</h3>
+      <ul class="space-y-2">
+        <li><strong>31st JK AYA Architect of the Year Award 2021 - Private Residence</strong> – <em>Le Tranquil, Pondicherry</em> – 🏆 Winner</li>
+        <li><strong>Glitz Architecture and Interiors Honours 2022 - Architecture Residential Category</strong> – <em>Le Tranquil, Pondicherry</em> – 🥈 Runner Up</li>
+      </ul>
+    </div>
+
+    <!-- 2021 -->
+    <div class="bg-white shadow-md rounded-xl p-6  justify-center" data-year="2021">
+      <h3 class="text-xl font-bold mb-4 text-yellow-700">2021</h3>
+      <ul class="space-y-2">
+        <li><strong>Glitz Architecture and Interiors Honours 2021 - Interior Residential Category</strong> – <em>Transient Nest, Bengaluru</em> – 🥈 Runner Up</li>
+        <li><strong>Glitz Architecture and Interiors Honours 2021 - Architecture Residential Category</strong> – <em>Transient Nest, Bengaluru</em> – 🥈 Runner Up</li>
+        <li><strong>FOAID 2021 - Interior Design - Restaurant Category</strong> – <em>Aarohana, Mysore</em> – 🏆 Winner</li>
+        <li><strong>Ace of Space Design Awards 2021 – Best Unbuilt Architecture Project of the Year</strong> – <em>Aarohana, Mysore</em> – 🏆 Winner</li>
+        <li><strong>UltraTech Awards 2021 - Best Residential Project - Bangalore Rural Region</strong> – <em>Sankalpa, Nelamangala</em> – 🏆 Winner</li>
+        <li><strong>UltraTech Awards 2021 - Outstanding Villa</strong> – <em>Transient Nest, Bengaluru</em> – 🏆 Winner</li>
+      </ul>
+    </div>
+
+    <!-- 2020 -->
+    <div class="bg-white shadow-md rounded-xl p-6  justify-center" data-year="2020"></div>
+      <h3 class="text-xl font-bold mb-4 text-yellow-700">2020</h3>
+      <ul class="space-y-2"></ul>
+        <li><strong>I Gen 2020 – India's Top 50 under 40 Architects and Designers</strong> – 🏆 Winner</li>
+        <li><strong>FOAID - Creative Mind Next – Architecture Category</strong> – <em>Project V3, Hosur</em> – 🥈 Runner Up</li>
+        <li><strong>Glitz Architecture and Interiors Honours 2020 – Interior Residential Category</strong> – <em>Coalesce, Bengaluru</em> – 🥈 Runner Up</li>
+        <li><strong>Glitz Architecture and Interiors Honours 2020 – Architecture Residential Category</strong> – <em>Casa Lux, Tumakuru</em> – 🥈 Runner Up</li>
+      </ul>
+    </div>
+
+    <!-- 2019 -->
+    <div class="bg-white shadow-md rounded-xl p-6 justify-center" data-year="2019">
+      <h3 class="text-xl font-bold mb-4 text-yellow-700">2019</h3>
+      <ul class="space-y-2">
+        <li><strong>FOAID - Creative Mind Next – Architecture Category</strong> – <em>The TCC, Tumakuru</em> – 🏆 Winner</li>
+        <li><strong>Ultra Tech Awards 2019 - Best Residential Project – Tumkur region</strong> – <em>Urban Envelope, Tumakuru</em> – 🏆 Winner</li>
+        <li><strong>FOAID - Creative Mind Next – Architecture Category</strong> – <em>Aarohana, Mysore</em> – 🥈 Runner Up</li>
+      </ul>
+    </div>
+
+    <!-- 2018 -->
+    <div class="bg-white shadow-md rounded-xl p-6  justify-center" data-year="2018">
+      <h3 class="text-xl font-bold mb-4 text-yellow-700">2018</h3>
+      <ul class="space-y-2">
+        <li><strong>Indian Architects and Builder's Young designers 2018 – Residential Interior Category</strong> – <em>Casa Lux, Tumakuru</em> – 🏆 Winner</li>
+      </ul>
+    </div>
+
+    <!-- 2016 -->
+    <div class="bg-white shadow-md rounded-xl p-6  justify-center" data-year="2016">
+      <h3 class="text-xl font-bold mb-4 text-yellow-700">2016</h3>
+      <ul class="space-y-2">
+        <li><strong>Ultra Tech Awards 2016 - Best Residential Project – Tumkur region</strong> – <em>House Hemanth, Tumakuru</em> – 🏆 Winner</li>
+      </ul>
+    </div>
+
+    <!-- 2014-2015 -->
+    <div class="bg-white shadow-md rounded-xl p-6  justify-center" data-year="2014-2015">
+      <h3 class="text-xl font-bold mb-4 text-yellow-700">2014 & 2015</h3>
+      <ul class="space-y-2">
+        <li><strong>Birla Super Yuvaratna Awards - Best Thesis Guide</strong> – 🏆 Winner (2014)</li>
+        <li><strong>Birla Super Yuvaratna Awards - Best Thesis Guide</strong> – 🏆 Winner (2015)</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- Image Gallery Section -->
+<section class="p-10 bg-white">
+  <h2 class="text-3xl font-bold mb-8 text-center text-yellow-700">Project Gallery</h2>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-6xl mx-auto">
+    <!-- Individual award images -->
+    <div class="cursor-pointer overflow-hidden rounded-lg shadow-md" onclick="openModal('/static/images/awards/award1.jpg')">
+      <img src="/static/images/awards/award1.jpg" alt="Le Tranquil, Pondicherry" class="w-full h-64 object-cover hover:scale-110 transition-transform duration-300">
+    </div>
+    
+    <div class="cursor-pointer overflow-hidden rounded-lg shadow-md" onclick="openModal('/static/images/awards/award2.jpg')">
+      <img src="/static/images/awards/award2.jpg" alt="Transient Nest, Bengaluru" class="w-full h-64 object-cover hover:scale-110 transition-transform duration-300">
+    </div>
+    
+    <div class="cursor-pointer overflow-hidden rounded-lg shadow-md" onclick="openModal('/static/images/awards/award3.jpg')">
+      <img src="/static/images/awards/award3.jpg" alt="Aarohana, Mysore" class="w-full h-64 object-cover hover:scale-110 transition-transform duration-300">
+    </div>
+    
+    <div class="cursor-pointer overflow-hidden rounded-lg shadow-md" onclick="openModal('/static/images/awards/award4.jpg')">
+      <img src="/static/images/awards/award4.jpg" alt="Sankalpa, Nelamangala" class="w-full h-64 object-cover hover:scale-110 transition-transform duration-300">
+    </div>
+    
+    <div class="cursor-pointer overflow-hidden rounded-lg shadow-md" onclick="openModal('/static/images/awards/award5.jpg')">
+      <img src="/static/images/awards/award5.jpg" alt="Casa Lux, Tumakuru" class="w-full h-64 object-cover hover:scale-110 transition-transform duration-300">
+    </div>
+    
+    <div class="cursor-pointer overflow-hidden rounded-lg shadow-md" onclick="openModal('/static/images/awards/award6.jpg')">
+      <img src="/static/images/awards/award6.jpg" alt="Urban Envelope, Tumakuru" class="w-full h-64 object-cover hover:scale-110 transition-transform duration-300">
+    </div>
+    
+    <div class="cursor-pointer overflow-hidden rounded-lg shadow-md" onclick="openModal('/static/images/awards/award7.jpg')">
+      <img src="/static/images/awards/award7.jpg" alt="Project V3, Hosur" class="w-full h-64 object-cover hover:scale-110 transition-transform duration-300">
+    </div>
+    
+    <div class="cursor-pointer overflow-hidden rounded-lg shadow-md" onclick="openModal('/static/images/awards/award8.jpg')">
+      <img src="/static/images/awards/award8.jpg" alt="The TCC, Tumakuru" class="w-full h-64 object-cover hover:scale-110 transition-transform duration-300">
+    </div>
+    
+    <div class="cursor-pointer overflow-hidden rounded-lg shadow-md" onclick="openModal('/static/images/awards/award9.jpg')">
+        
+    </div>
+      <img src="/static/images/awards/award9.jpg" alt="House Hemanth, Tumakuru" class="w-full h-64 object-cover hover:scale-110 transition-transform duration-300">
+    </div>
+  </div>
+</section>
+
+<!-- Modal for image popup -->
+<div id="imageModal" class="hidden fixed inset-0 z-50 bg-black bg-opacity-75 flex items-center justify-center p-4">
+  <div class="relative">
+    <button onclick="closeModal()" class="absolute -top-10 right-0 text-white text-3xl">&times;</button>
+    <img id="modalImage" src="" alt="Enlarged project image" class="max-w-full max-h-[90vh] object-contain">
+  </div>
+</div>
+
+<script>
+function openModal(imageSrc) {
+  const modal = document.getElementById('imageModal');
+  const modalImg = document.getElementById('modalImage');
+  modal.classList.remove('hidden');
+  modalImg.src = imageSrc;
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  const modal = document.getElementById('imageModal');
+  modal.classList.add('hidden');
+  document.body.style.overflow = 'auto';
+}
+
+// Close modal when clicking outside the image
+document.getElementById('imageModal').addEventListener('click', function(e) {
+  if (e.target === this) {
+    closeModal();
+  }
+});
+
+// Close modal on escape key press
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    closeModal();
+  }
+});
+
+// Add this after existing script
+function loadAwards() {
+    fetch('/static/data/awards.json')
+        .then(response => response.json())
+        .then(newAwards => {
+            const container = document.getElementById('awardsContainer');
+            
+            // Group awards by year
+            const groupedAwards = {};
+            newAwards.forEach(award => {
+                if (!groupedAwards[award.year]) {
+                    groupedAwards[award.year] = [];
+                }
+                groupedAwards[award.year].push(award);
+            });
+            
+            // Add new awards to existing years or create new year sections
+            Object.entries(groupedAwards)
+                .sort(([a], [b]) => b - a) // Sort years descending
+                .forEach(([year, awards]) => {
+                    let yearSection = container.querySelector(`[data-year="${year}"]`);
+                    if (!yearSection) {
+                        // Create new year section if it doesn't exist
+                        yearSection = document.createElement('div');
+                        yearSection.className = 'bg-white shadow-md rounded-xl p-6';
+                        yearSection.setAttribute('data-year', year);
+                        yearSection.innerHTML = `
+                            <h3 class="text-xl font-bold mb-4 text-yellow-700">${year}</h3>
+                            <ul class="space-y-2"></ul>
+                        `;
+                        container.appendChild(yearSection);
+                    }
+                    
+                    const awardsList = yearSection.querySelector('ul');
+                    awards.forEach(award => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `
+                            <strong>${award.award_name}</strong> – 
+                            <em>${award.project}</em> – 
+                            ${award.prize === 'Winner' ? '🏆' : '🥈'} ${award.prize}
+                        `;
+                        awardsList.appendChild(li);
+                    });
+                });
+        });
+}
+
+// Load new awards when page loads
+document.addEventListener('DOMContentLoaded', loadAwards);
+</script>
+{% endblock %}

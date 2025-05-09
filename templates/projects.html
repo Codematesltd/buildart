@@ -1,0 +1,272 @@
+{% extends "base.html" %}
+
+{% block title %}Projects - Buildaart Construction{% endblock %}
+
+{% block content %}
+<!-- Projects Hero Section -->
+<section class="relative">
+    <img src="\static\images\project.png" alt="Projects Background" class="w-full h-[60vh] object-cover">
+    <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center p-10 md:p-20 text-white">
+        <h1 class="text-3xl md:text-5xl font-bold mb-4 text-center">Recent Projects</h1>
+        <p class="text-xl max-w-2xl text-center">Crafting Excellence in Every Structure</p>
+    </div>
+</section>
+
+<!-- Project Overview Section -->
+<section class="p-10 bg-gray-100">
+    <div class="max-w-6xl mx-auto">
+        <div class="bg-white shadow-md rounded-xl p-8 space-y-6">
+            <p class="text-lg leading-relaxed">
+                At the heart of our work is a strong commitment to delivering quality construction with on-time completion. Our vision is to create sustainable and future-ready communities that blend natural surroundings, intelligent design, and outstanding craftsmanship.
+            </p>
+            
+            <p class="text-lg leading-relaxed">
+                Each project we undertake is thoughtfully planned to enrich urban living while promoting environmental responsibility. By integrating green spaces and modern technology, we shape vibrant neighborhoods that encourage connection, growth, and well-being.
+            </p>
+            
+            <p class="text-lg leading-relaxed">
+                Our dedication to excellence ensures that every structure we build not only meets current needs but also supports a more sustainable and connected tomorrow.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Project Gallery Section -->
+<section class="p-10 bg-white">
+    <div class="max-w-7xl mx-auto">
+        <div id="projectContainer" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Initial Projects -->
+            <div class="project-card bg-white shadow-lg rounded-xl overflow-hidden cursor-pointer" 
+                 onclick="openGallery('arohana', 12)" 
+                 data-project="Arohana Institute">
+                <img src="/static/images/projects/arohana/1.jpg" alt="Arohana Institute" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300">
+                <div class="p-4">
+                    <h3 class="text-xl font-bold text-yellow-700">Arohana Institute</h3>
+                </div>
+            </div>
+
+            <div class="project-card bg-white shadow-lg rounded-xl overflow-hidden cursor-pointer" 
+                 onclick="openGallery('brick', 8)" 
+                 data-project="House of Brick">
+                <img src="/static/images/projects/brick/1.jpg" alt="House of Brick" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300">
+                <div class="p-4">
+                    <h3 class="text-xl font-bold text-yellow-700">House of Brick</h3>
+                </div>
+            </div>
+
+            <div class="project-card bg-white shadow-lg rounded-xl overflow-hidden cursor-pointer" 
+                 onclick="openGallery('casa', 10)" 
+                 data-project="Casa Lux">
+                <img src="/static/images/projects/casa/1.jpg" alt="Casa Lux" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300">
+                <div class="p-4">
+                    <h3 class="text-xl font-bold text-yellow-700">Casa Lux</h3>
+                </div>
+            </div>
+
+            <div class="project-card bg-white shadow-lg rounded-xl overflow-hidden cursor-pointer" 
+                 onclick="openGallery('tranzient', 15)" 
+                 data-project="Tranzient Nest">
+                <img src="/static/images/projects/tranzient/1.jpg" alt="Tranzient Nest" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300">
+                <div class="p-4">
+                    <h3 class="text-xl font-bold text-yellow-700">Tranzient Nest</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Show More/Back Buttons -->
+        <div class="text-center mt-8 space-x-4">
+            <button id="loadMore" class="bg-yellow-700 text-white px-6 py-2 rounded-lg hover:bg-yellow-600 transition-colors">
+                Show More Projects
+            </button>
+            <button id="backToStart" class="hidden bg-gray-700 text-white px-6 py-2 rounded-lg hover:bg-gray-600 transition-colors">
+                Back to First Projects
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Gallery Modal -->
+<div id="galleryModal" class="hidden fixed inset-0 z-50 bg-black bg-opacity-90 flex items-center justify-center">
+    <div class="relative max-w-7xl mx-auto px-4">
+        <!-- Close Button -->
+        <button onclick="closeGallery()" class="absolute -top-12 right-4 text-white text-3xl">&times;</button>
+        
+        <!-- Project Title -->
+        <h2 id="modalTitle" class="text-white text-2xl font-bold mb-4 text-center"></h2>
+        
+        <!-- Main Image -->
+        <div class="relative">
+            <img id="mainImage" src="" alt="" class="max-h-[70vh] mx-auto">
+            <!-- Navigation Arrows -->
+            <button onclick="prevImage()" class="absolute left-0 top-1/2 -translate-y-1/2 text-white text-4xl px-4 hover:text-yellow-500">❮</button>
+            <button onclick="nextImage()" class="absolute right-0 top-1/2 -translate-y-1/2 text-white text-4xl px-4 hover:text-yellow-500">❯</button>
+        </div>
+        
+        <!-- Thumbnails -->
+        <div id="thumbnails" class="flex space-x-2 mt-4 overflow-x-auto pb-2"></div>
+    </div>
+</div>
+
+<script>
+const projects = [
+    { id: 'letranquil', name: 'Le Tranquil', count: 12 },
+    { id: 'catalyst', name: 'Catalyst', count: 8 },
+    { id: 'candour', name: 'Candour', count: 10 },
+    { id: 'blooming', name: 'The Blooming Haus', count: 15 },
+    { id: 'sanctum', name: 'Sanctum', count: 9 },
+    { id: 'urban', name: 'Urban Envelope', count: 11 },
+    { id: 'cantilever', name: 'The Cantilever', count: 7 },
+    { id: 'frames', name: 'The Frames Residence', count: 13 },
+    { id: 'metamorphosis', name: 'Meta Morphosis Public Building', count: 10 },
+    { id: 'wateredge', name: 'Water Edge Resort', count: 14 },
+    { id: 'bejewelled', name: 'Bejewelled Commercial Showroom', count: 8 },
+    { id: 'special', name: 'Something Special Commercial', count: 6 },
+    { id: 'cafe', name: 'Cafe', count: 9 },
+    { id: 'brewery', name: 'Brewery', count: 11 },
+    { id: 'neuron', name: 'Neuron School', count: 12 }
+];
+
+let currentIndex = 4; // Start after initial 4 projects
+let currentImages = [];
+let currentImageIndex = 0;
+
+// Load More Projects
+document.getElementById('loadMore').addEventListener('click', function() {
+    const container = document.getElementById('projectContainer');
+    const projectsToAdd = projects.slice(currentIndex, currentIndex + 4);
+    
+    // Hide all current project cards
+    const currentCards = container.querySelectorAll('.project-card');
+    currentCards.forEach(card => {
+        card.classList.add('hidden');
+    });
+    
+    // Add new project cards
+    projectsToAdd.forEach(project => {
+        const projectCard = `
+            <div class="project-card bg-white shadow-lg rounded-xl overflow-hidden cursor-pointer" 
+                 onclick="openGallery('${project.id}', ${project.count})" 
+                 data-project="${project.name}">
+                <img src="/static/images/projects/${project.id}/1.jpg" alt="${project.name}" 
+                     class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300">
+                <div class="p-4">
+                    <h3 class="text-xl font-bold text-yellow-700">${project.name}</h3>
+                </div>
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', projectCard);
+    });
+    
+    currentIndex += 4;
+    if (currentIndex >= projects.length) {
+        this.style.display = 'none';
+        document.getElementById('backToStart').classList.remove('hidden');
+    }
+});
+
+// Back to Start Function
+document.getElementById('backToStart').addEventListener('click', function() {
+    const container = document.getElementById('projectContainer');
+    
+    // Remove all current cards
+    container.innerHTML = '';
+    
+    // Add back initial 4 projects
+    projects.slice(0, 4).forEach(project => {
+        const projectCard = `
+            <div class="project-card bg-white shadow-lg rounded-xl overflow-hidden cursor-pointer" 
+                 onclick="openGallery('${project.id}', ${project.count})" 
+                 data-project="${project.name}">
+                <img src="/static/images/projects/${project.id}/1.jpg" alt="${project.name}" 
+                     class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300">
+                <div class="p-4">
+                    <h3 class="text-xl font-bold text-yellow-700">${project.name}</h3>
+                </div>
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', projectCard);
+    });
+    
+    // Reset state
+    currentIndex = 4;
+    this.classList.add('hidden');
+    document.getElementById('loadMore').style.display = 'inline-block';
+});
+
+// Gallery Functions
+function openGallery(projectId, imageCount) {
+    const modal = document.getElementById('galleryModal');
+    const title = document.querySelector(`[data-project="${projectName}"]`).getAttribute('data-project');
+    
+    currentImages = Array.from({length: imageCount}, (_, i) => `/static/images/projects/${projectId}/${i + 1}.jpg`);
+    currentImageIndex = 0;
+    
+    document.getElementById('modalTitle').textContent = title;
+    updateMainImage();
+    createThumbnails();
+    
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeGallery() {
+    document.getElementById('galleryModal').classList.add('hidden');
+    document.body.style.overflow = 'auto';
+}
+
+function updateMainImage() {
+    const mainImage = document.getElementById('mainImage');
+    mainImage.src = currentImages[currentImageIndex];
+}
+
+function createThumbnails() {
+    const container = document.getElementById('thumbnails');
+    container.innerHTML = '';
+    
+    currentImages.forEach((src, index) => {
+        const thumb = document.createElement('img');
+        thumb.src = src;
+        thumb.classList.add('h-20', 'w-20', 'object-cover', 'cursor-pointer');
+        if (index === currentImageIndex) {
+            thumb.classList.add('border-2', 'border-yellow-500');
+        }
+        thumb.onclick = () => {
+            currentImageIndex = index;
+            updateMainImage();
+            updateThumbnailSelection();
+        };
+        container.appendChild(thumb);
+    });
+}
+
+function updateThumbnailSelection() {
+    const thumbnails = document.querySelectorAll('#thumbnails img');
+    thumbnails.forEach((thumb, index) => {
+        if (index === currentImageIndex) {
+            thumb.classList.add('border-2', 'border-yellow-500');
+        } else {
+            thumb.classList.remove('border-2', 'border-yellow-500');
+        }
+    });
+}
+
+function nextImage() {
+    currentImageIndex = (currentImageIndex + 1) % currentImages.length;
+    updateMainImage();
+    updateThumbnailSelection();
+}
+
+function prevImage() {
+    currentImageIndex = (currentImageIndex - 1 + currentImages.length) % currentImages.length;
+    updateMainImage();
+    updateThumbnailSelection();
+}
+
+// Close modal on escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeGallery();
+    }
+});
+</script>
+{% endblock %}

@@ -1,25 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Buildaart Construction</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-white text-gray-800">
-  <!-- Navbar -->
-  <header class="flex justify-between items-center px-6 py-4 shadow-md sticky top-0 bg-white z-50">
-    <img src="\static\images\logo.png" alt="Buildaart Logo" class="h-20">
-    <nav class="space-x-4 text-lg font-semibold hidden md:block">
-      <a href="#" class="hover:text-yellow-600">Home</a>
-      <a href="#" class="hover:text-yellow-600">About us</a>
-      <a href="#" class="hover:text-yellow-600">Projects</a>
-      <a href="#" class="hover:text-yellow-600">Awards</a>
-      <a href="#" class="hover:text-yellow-600">Careers</a>
-      <a href="#" class="hover:text-yellow-600">Contact Us</a>
-    </nav>
-  </header>
+{% extends "base.html" %}
 
+{% block title %}Welcome to Buildaart Construction{% endblock %}
+
+{% block content %}
   <!-- Hero Section -->
   <section class="relative">
     <img src="\static\images\hero-image.png" alt="Hero" class="w-full h-[90vh] object-cover">
@@ -121,33 +104,4 @@
       </div>
     </div>
   </section>
-
-   <!-- Footer -->
-   <footer class="p-6 bg-gray-800 text-white mt-auto w-full">
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-      <div>
-        <h4 class="font-bold">Contact Info</h4>
-        <p>+91 8748899966</p>
-        <p>Ground Floor, Church Road,<br/> Basavanagudi, Bengaluru</p>
-      </div>
-      <div>
-        <h4 class="font-bold">Office Hours</h4>
-        <p>Mon to Fri: 9:00 AM - 5:00 PM</p>
-        <p>Weekends by appointment</p>
-      </div>
-      <div>
-        <h4 class="font-bold">Stay Connected</h4>
-        <div class="flex space-x-4 mt-2">
-          <img src="/static/images/fb-icon.svg" class="h-6" />
-          <img src="/static/images/twitter-icon.svg" class="h-6" />
-          <img src="/static/images/instagram-icon.svg" class="h-6" />
-        </div>
-      </div>
-      <div>
-        <h4 class="font-bold">Location</h4>
-        <img src="/static/images/qrcode.png" class="h-24" />
-      </div>
-    </div>
-  </footer>
-</body>
-</html>
+{% endblock %}

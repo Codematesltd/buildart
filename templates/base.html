@@ -9,21 +9,129 @@
 <body class="bg-white text-gray-800 flex flex-col min-h-screen">
   <!-- Navbar -->
   <header class="flex justify-between items-center px-6 py-4 shadow-md sticky top-0 bg-gray-900 z-50">
-    <img src="\static\images\logo.png" alt="Buildaart Logo" class="h-20">
-    <nav class="space-x-4 text-lg font-semibold hidden md:block text-white">
-      <a href="#" class="hover:text-yellow-500 transition-colors">Home</a>
-      <a href="#" class="hover:text-yellow-500 transition-colors">About us</a>
-      <a href="#" class="hover:text-yellow-500 transition-colors">Projects</a>
-      <a href="#" class="hover:text-yellow-500 transition-colors">Awards</a>
-      <a href="#" class="hover:text-yellow-500 transition-colors">Careers</a>
-      <a href="#" class="hover:text-yellow-500 transition-colors">Contact Us</a>
+    <a href="{{ url_for('main.index') }}">
+      <img src="\static\images\logo.png" alt="Buildaart Logo" class="h-20">
+    </a>
+    
+    <!-- Hamburger Menu Button -->
+    <button id="menuBtn" class="md:hidden text-white focus:outline-none">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-16 6h16"></path>
+      </svg>
+    </button>
+
+    <!-- Desktop Navigation -->
+    <nav class="hidden md:block space-x-4 text-lg font-semibold text-white">
+      <a href="{{ url_for('main.index') }}" class="hover:text-yellow-500 transition-colors">Home</a>
+      <a href="{{ url_for('main.about') }}" class="hover:text-yellow-500 transition-colors">About us</a>
+      <a href="{{ url_for('main.projects') }}" class="hover:text-yellow-500 transition-colors">Projects</a>
+      <a href="{{ url_for('main.awards') }}" class="hover:text-yellow-500 transition-colors">Awards</a>
+      <a href="{{ url_for('main.careers') }}" class="hover:text-yellow-500 transition-colors">Careers</a>
+      <a href="{{ url_for('main.contact') }}" class="hover:text-yellow-500 transition-colors">Contact Us</a>
     </nav>
+
+    <!-- Mobile Navigation Overlay -->
+    <div id="mobileMenu" class="fixed inset-y-0 right-0 w-64 bg-gray-900 transform translate-x-full transition-transform duration-300 ease-in-out z-50 shadow-2xl">
+      <div class="flex flex-col h-full">
+        <div class="flex justify-end p-4">
+          <button id="closeMenu" class="text-white hover:text-yellow-500 transition-colors">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+        <nav class="flex flex-col items-start space-y-6 text-lg font-semibold text-white mt-8 px-6">
+          <a href="{{ url_for('main.index') }}" class="hover:text-yellow-500 transition-colors">Home</a>
+          <a href="{{ url_for('main.about') }}" class="hover:text-yellow-500 transition-colors">About us</a>
+          <a href="{{ url_for('main.projects') }}" class="hover:text-yellow-500 transition-colors">Projects</a>
+          <a href="{{ url_for('main.awards') }}" class="hover:text-yellow-500 transition-colors">Awards</a>
+          <a href="{{ url_for('main.careers') }}" class="hover:text-yellow-500 transition-colors">Careers</a>
+          <a href="{{ url_for('main.contact') }}" class="hover:text-yellow-500 transition-colors">Contact Us</a>
+        </nav>
+      </div>
+    </div>
   </header>
   
   <main class="flex-grow">
     {% block content %}{% endblock %}
   </main>
 
- 
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-8">
+    <div class="container mx-auto px-6">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <!-- Company Info -->
+        <div>
+          <h3 class="text-xl font-semibold mb-4">Buildaart Construction</h3>
+          <p class="text-gray-400">Excellence in construction since 1995</p>
+        </div>
+        
+        <!-- Quick Links -->
+        <div>
+          <h3 class="text-xl font-semibold mb-4">Quick Links</h3>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-gray-400 hover:text-yellow-500">Home</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-yellow-500">About Us</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-yellow-500">Projects</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-yellow-500">Contact</a></li>
+          </ul>
+        </div>
+        
+        <!-- Contact Info -->
+        <div>
+          <h3 class="text-xl font-semibold mb-4">Contact Us</h3>
+          <ul class="text-gray-400 space-y-2">
+            <li>123 Construction Ave</li>
+            <li>City, State 12345</li>
+            <li>Phone: (555) 123-4567</li>
+            <li>Email: info@buildaart.com</li>
+          </ul>
+        </div>
+        
+        <!-- Social Links -->
+        <div>
+          <h3 class="text-xl font-semibold mb-4">Follow Us</h3>
+          <div class="flex space-x-4">
+            <a href="#" class="text-gray-400 hover:text-yellow-500">Facebook</a>
+            <a href="#" class="text-gray-400 hover:text-yellow-500">Twitter</a>
+            <a href="#" class="text-gray-400 hover:text-yellow-500">LinkedIn</a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+        <p>&copy; 2023 Buildaart Construction. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu functionality
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const closeMenu = document.getElementById('closeMenu');
+
+    menuBtn.addEventListener('click', () => {
+        mobileMenu.classList.remove('translate-x-full');
+        document.body.style.overflow = 'hidden';
+    });
+
+    closeMenu.addEventListener('click', () => {
+        mobileMenu.classList.add('translate-x-full');
+        setTimeout(() => {
+            document.body.style.overflow = 'auto';
+        }, 300);
+    });
+
+    // Close menu on link click
+    mobileMenu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            mobileMenu.classList.add('translate-x-full');
+            setTimeout(() => {
+                document.body.style.overflow = 'auto';
+            }, 300);
+        });
+    });
+  </script>
 </body>
 </html>

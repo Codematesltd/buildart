@@ -1,7 +1,9 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app
 from flask_login import login_user, login_required, logout_user, current_user
 from werkzeug.security import check_password_hash, generate_password_hash
 from extensions import login_manager
+import os
+import json
 
 admin_bp = Blueprint('admin', __name__)
 
@@ -46,3 +48,37 @@ def dashboard():
 def logout():
     logout_user()
     return redirect(url_for('admin.login'))
+
+@admin_bp.route('/add_award', methods=['POST'])
+@login_required
+def add_award():
+    if request.method == 'POST':
+        year = request.form.get('year')
+        award_name = request.form.get('award_name')
+        project_name = request.form.get('project_name')
+        prize = request.form.get('prize')
+        
+        # Add to database or JSON file
+        new_award = {
+            'year': year,
+            'award_name': award_name,
+            'project': project_name,
+            'prize': prize
+        }
+        
+        # Save to JSON file
+        awards_file = os.path.join(current_app.static_folder, 'data', 'awards.json')
+        awards = []
+        if os.path.exists(awards_file):
+            with open(awards_file, 'r') as f:
+                awards = json.load(f)
+        
+        awards.append(new_award)
+        
+        with open(awards_file, 'w') as f:
+            json.dump(awards, f)
+            
+        flash('Award added successfully!', 'success')
+        return redirect(url_for('main.awards'))
+
+    return render_template('admin/add_award.html')
