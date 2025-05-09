@@ -3,12 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' cdn.tailwindcss.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:;">
   <title>{% block title %}Buildaart Construction{% endblock %}</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style type="text/tailwindcss">
+    @layer utilities {
+      /* Your custom styles */
+    }
+  </style>
+  {% block styles %}{% endblock %}
 </head>
 <body class="bg-white text-gray-800 flex flex-col min-h-screen">
   <!-- Navbar -->
   <header class="flex justify-between items-center px-6 py-4 shadow-md sticky top-0 bg-gray-900 z-50">
+<<<<<<< HEAD
     <a href="{{ url_for('main.index') }}">
       <img src="\static\images\logo.png" alt="Buildaart Logo" class="h-20">
     </a>
@@ -22,12 +30,22 @@
 
     <!-- Desktop Navigation -->
     <nav class="hidden md:block space-x-4 text-lg font-semibold text-white">
+=======
+    <img src="\static\images\logo.png" alt="Buildaart Logo" class="h-20">
+    <nav class="space-x-4 text-lg font-semibold hidden md:block text-white">
+>>>>>>> 018c4ac538a3de0d093ffa992b346265a128dbd5
       <a href="{{ url_for('main.index') }}" class="hover:text-yellow-500 transition-colors">Home</a>
       <a href="{{ url_for('main.about') }}" class="hover:text-yellow-500 transition-colors">About us</a>
       <a href="{{ url_for('main.projects') }}" class="hover:text-yellow-500 transition-colors">Projects</a>
       <a href="{{ url_for('main.awards') }}" class="hover:text-yellow-500 transition-colors">Awards</a>
+<<<<<<< HEAD
       <a href="{{ url_for('main.careers') }}" class="hover:text-yellow-500 transition-colors">Careers</a>
       <a href="{{ url_for('main.contact') }}" class="hover:text-yellow-500 transition-colors">Contact Us</a>
+=======
+      <a href="#" class="hover:text-yellow-500 transition-colors">Careers</a>
+      <a href="{{ url_for('main.enquiry') }}" class="hover:text-yellow-500 transition-colors">Contact Us</a>
+      <a href="{{ url_for('admin.login') }}" class="hover:text-yellow-500 transition-colors">Admin login</a>
+>>>>>>> 018c4ac538a3de0d093ffa992b346265a128dbd5
     </nav>
 
     <!-- Mobile Navigation Overlay -->
@@ -56,6 +74,7 @@
     {% block content %}{% endblock %}
   </main>
 
+<<<<<<< HEAD
   <!-- Footer -->
   <footer class="bg-gray-900 text-white py-8">
     <div class="container mx-auto px-6">
@@ -133,5 +152,8 @@
         });
     });
   </script>
+=======
+  {% block scripts %}{% endblock %}
+>>>>>>> 018c4ac538a3de0d093ffa992b346265a128dbd5
 </body>
 </html>

@@ -6,3 +6,5 @@ load_dotenv()
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'dev-secret-key'
     UPLOAD_FOLDER = os.path.join('static', 'uploads')
+    SUPABASE_URL = os.environ.get('SUPABASE_URL')
+    SUPABASE_KEY = os.environ.get('SUPABASE_KEY')

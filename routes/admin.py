@@ -36,12 +36,12 @@ def login():
             login_user(user)
             return redirect(url_for('admin.dashboard'))
         flash('Invalid credentials')
-    return render_template('admin/login.html')
+    return render_template('admin_login.html')
 
 @admin_bp.route('/dashboard')
 @login_required
 def dashboard():
-    return render_template('admin/dashboard.html')
+    return render_template('admin_dashboard.html')
 
 @admin_bp.route('/logout')
 @login_required
