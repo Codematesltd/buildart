@@ -3,7 +3,7 @@
 {% block title %}Contact Us - Buildaart Construction{% endblock %}
 
 {% block content %}
-<div class="container mx-auto px-4 py-12 bg-gray-100">
+<div class="container mx-auto px-4 py-8 sm:py-12 bg-gray-100">
     <!-- Page Header -->
     <div class="text-center mb-12">
         <h1 class="text-4xl font-bold mb-4">Contact Us</h1>
@@ -11,9 +11,9 @@
     </div>
 
     <!-- Map and Contact Info Section -->
-    <div class="grid md:grid-cols-2 gap-8 mb-12">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-8 sm:mb-12">
         <!-- Google Map -->
-        <div class="rounded-lg shadow-lg overflow-hidden h-[400px]">
+        <div class="rounded-lg shadow-lg overflow-hidden h-[300px] sm:h-[400px]">
             <iframe 
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.3460054733003!2d77.56999!3d12.945100!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae158b11e34d2f%3A0x5f4adbdbab8bd80f!2sBasavanagudi%2C%20Bengaluru%2C%20Karnataka!5e0!3m2!1sen!2sin!4v1679900000000!5m2!1sen!2sin"
                 width="100%" 
@@ -57,7 +57,7 @@
     </div>
 
     <!-- General Inquiries Section -->
-    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8 mb-12">
+    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-4 sm:p-8 mb-8 sm:mb-12">
         <h2 class="text-2xl font-bold mb-6">General Inquiries</h2>
         <p class="text-gray-600 mb-6">For project details, collaborations, or other queries, reach out to us here.</p>
         <form method="POST" action="{{ url_for('main.contact') }}" class="space-y-6">
@@ -100,9 +100,9 @@
     </div>
 
     <!-- Labels Section -->
-    <div class="max-w-4xl mx-auto mt-12">
+    <div class="max-w-4xl mx-auto mt-8 sm:mt-12 px-2 sm:px-0">
         <h2 class="text-2xl font-bold mb-6">Labels</h2>
-        <div class="flex flex-wrap gap-3">
+        <div class="flex flex-wrap gap-2 sm:gap-3">
             <!-- Project Categories -->
             <span class="px-4 py-2 bg-pink-100 text-pink-800 rounded-full hover:bg-pink-200 cursor-pointer transition-colors">All Projects</span>
             

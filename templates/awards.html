@@ -5,15 +5,15 @@
 {% block content %}
 <!-- Awards Hero Section -->
 <section class="relative">
-    <img src="\static\images\award.png" alt="Award Background" class="w-full h-[60vh] object-cover">
-    <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center p-10 md:p-20 text-white">
-        <h1 class="text-3xl md:text-5xl font-bold mb-4 text-center">Our Recognition & Awards</h1>
-        <p class="text-xl max-w-2xl text-center">Celebrating excellence in historic preservation and architectural craftsmanship</p>
+    <img src="\static\images\award.png" alt="Award Background" class="w-full h-[40vh] sm:h-[50vh] md:h-[60vh] object-cover">
+    <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center p-4 sm:p-10 md:p-20 text-white">
+        <h1 class="text-2xl sm:text-3xl md:text-5xl font-bold mb-2 sm:mb-4 text-center">Our Recognition & Awards</h1>
+        <p class="text-base sm:text-lg md:text-xl max-w-2xl text-center px-4">Celebrating excellence in historic preservation and architectural craftsmanship</p>
     </div>
 </section>
 
 <!-- Founder Biography Section -->
-<section class="p-10 bg-gray-100 text-gray-800">
+<section class="p-4 sm:p-6 md:p-10 bg-gray-100 text-gray-800">
     <div class="max-w-4xl mx-auto space-y-6">
         <h2 class="text-3xl font-bold mb-8 text-center text-yellow-700">About Our Founder</h2>
         <div class="bg-white shadow-md rounded-xl p-6 space-y-4">
@@ -39,7 +39,7 @@
 
 <!-- Admin Award Form - Only visible to admins -->
 {% if current_user.is_authenticated %}
-<section class="p-10 bg-gray-100">
+<section class="p-4 sm:p-6 md:p-10 bg-gray-100">
     <div class="max-w-4xl mx-auto">
         <div class="bg-white shadow-md rounded-xl p-8">
             <h2 class="text-2xl font-bold mb-6 text-yellow-700">Add New Award</h2>
@@ -73,9 +73,9 @@
 {% endif %}
 
 <!-- Awards by Year Section -->
-<section class="p-10 bg-gray-100 text-gray-800">
-  <h2 class="text-3xl font-bold mb-8 text-center">Awards by Year</h2>
-  <div class="space-y-8" id="awardsContainer">
+<section class="p-4 sm:p-6 md:p-10 bg-gray-100 text-gray-800">
+    <h2 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-8 text-center">Awards by Year</h2>
+    <div class="space-y-4 sm:space-y-8" id="awardsContainer">
 
     <!-- 2022 -->
     <div class="bg-white shadow-md rounded-xl p-6 text-center  justify-center" data-year="2022">
@@ -147,53 +147,62 @@
 </section>
 
 <!-- Image Gallery Section -->
-<section class="p-10 bg-white">
-  <h2 class="text-3xl font-bold mb-8 text-center text-yellow-700">Project Gallery</h2>
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-6xl mx-auto">
-    <!-- Individual award images -->
-    <div class="cursor-pointer overflow-hidden rounded-lg shadow-md" onclick="openModal('/static/images/awards/award1.jpg')">
-      <img src="/static/images/awards/award1.jpg" alt="Le Tranquil, Pondicherry" class="w-full h-64 object-cover hover:scale-110 transition-transform duration-300">
+<section class="p-4 sm:p-6 md:p-10 bg-white">
+    <h2 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-8 text-center text-yellow-700">Project Gallery</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 max-w-6xl mx-auto">
+        <div class="cursor-pointer overflow-hidden rounded-lg shadow-md" onclick="openModal('/static/images/awards/award1.jpg')">
+            <img src="/static/images/awards/award1.jpg" alt="Le Tranquil, Pondicherry" 
+                class="w-full h-48 sm:h-56 md:h-64 object-cover hover:scale-110 transition-transform duration-300">
+        </div>
+        
+        <div class="cursor-pointer overflow-hidden rounded-lg shadow-md" onclick="openModal('/static/images/awards/award2.jpg')">
+            <img src="/static/images/awards/award2.jpg" alt="Transient Nest, Bengaluru" 
+                class="w-full h-48 sm:h-56 md:h-64 object-cover hover:scale-110 transition-transform duration-300">
+        </div>
+        
+        <div class="cursor-pointer overflow-hidden rounded-lg shadow-md" onclick="openModal('/static/images/awards/award3.jpg')">
+            <img src="/static/images/awards/award3.jpg" alt="Aarohana, Mysore" 
+                class="w-full h-48 sm:h-56 md:h-64 object-cover hover:scale-110 transition-transform duration-300">
+        </div>
+        
+        <div class="cursor-pointer overflow-hidden rounded-lg shadow-md" onclick="openModal('/static/images/awards/award4.jpg')">
+            <img src="/static/images/awards/award4.jpg" alt="Sankalpa, Nelamangala" 
+                class="w-full h-48 sm:h-56 md:h-64 object-cover hover:scale-110 transition-transform duration-300">
+        </div>
+        
+        <div class="cursor-pointer overflow-hidden rounded-lg shadow-md" onclick="openModal('/static/images/awards/award5.jpg')">
+            <img src="/static/images/awards/award5.jpg" alt="Casa Lux, Tumakuru" 
+                class="w-full h-48 sm:h-56 md:h-64 object-cover hover:scale-110 transition-transform duration-300">
+        </div>
+        
+        <div class="cursor-pointer overflow-hidden rounded-lg shadow-md" onclick="openModal('/static/images/awards/award6.jpg')">
+            <img src="/static/images/awards/award6.jpg" alt="Urban Envelope, Tumakuru" 
+                class="w-full h-48 sm:h-56 md:h-64 object-cover hover:scale-110 transition-transform duration-300">
+        </div>
+        
+        <div class="cursor-pointer overflow-hidden rounded-lg shadow-md" onclick="openModal('/static/images/awards/award7.jpg')">
+            <img src="/static/images/awards/award7.jpg" alt="Project V3, Hosur" 
+                class="w-full h-48 sm:h-56 md:h-64 object-cover hover:scale-110 transition-transform duration-300">
+        </div>
+        
+        <div class="cursor-pointer overflow-hidden rounded-lg shadow-md" onclick="openModal('/static/images/awards/award8.jpg')">
+            <img src="/static/images/awards/award8.jpg" alt="The TCC, Tumakuru" 
+                class="w-full h-48 sm:h-56 md:h-64 object-cover hover:scale-110 transition-transform duration-300">
+        </div>
+        
+        <div class="cursor-pointer overflow-hidden rounded-lg shadow-md" onclick="openModal('/static/images/awards/award9.jpg')">
+            <img src="/static/images/awards/award9.jpg" alt="House Hemanth, Tumakuru" 
+                class="w-full h-48 sm:h-56 md:h-64 object-cover hover:scale-110 transition-transform duration-300">
+        </div>
     </div>
-    
-    <div class="cursor-pointer overflow-hidden rounded-lg shadow-md" onclick="openModal('/static/images/awards/award2.jpg')">
-      <img src="/static/images/awards/award2.jpg" alt="Transient Nest, Bengaluru" class="w-full h-64 object-cover hover:scale-110 transition-transform duration-300">
-    </div>
-    
-    <div class="cursor-pointer overflow-hidden rounded-lg shadow-md" onclick="openModal('/static/images/awards/award3.jpg')">
-      <img src="/static/images/awards/award3.jpg" alt="Aarohana, Mysore" class="w-full h-64 object-cover hover:scale-110 transition-transform duration-300">
-    </div>
-    
-    <div class="cursor-pointer overflow-hidden rounded-lg shadow-md" onclick="openModal('/static/images/awards/award4.jpg')">
-      <img src="/static/images/awards/award4.jpg" alt="Sankalpa, Nelamangala" class="w-full h-64 object-cover hover:scale-110 transition-transform duration-300">
-    </div>
-    
-    <div class="cursor-pointer overflow-hidden rounded-lg shadow-md" onclick="openModal('/static/images/awards/award5.jpg')">
-      <img src="/static/images/awards/award5.jpg" alt="Casa Lux, Tumakuru" class="w-full h-64 object-cover hover:scale-110 transition-transform duration-300">
-    </div>
-    
-    <div class="cursor-pointer overflow-hidden rounded-lg shadow-md" onclick="openModal('/static/images/awards/award6.jpg')">
-      <img src="/static/images/awards/award6.jpg" alt="Urban Envelope, Tumakuru" class="w-full h-64 object-cover hover:scale-110 transition-transform duration-300">
-    </div>
-    
-    <div class="cursor-pointer overflow-hidden rounded-lg shadow-md" onclick="openModal('/static/images/awards/award7.jpg')">
-      <img src="/static/images/awards/award7.jpg" alt="Project V3, Hosur" class="w-full h-64 object-cover hover:scale-110 transition-transform duration-300">
-    </div>
-    
-    <div class="cursor-pointer overflow-hidden rounded-lg shadow-md" onclick="openModal('/static/images/awards/award8.jpg')">
-      <img src="/static/images/awards/award8.jpg" alt="The TCC, Tumakuru" class="w-full h-64 object-cover hover:scale-110 transition-transform duration-300">
-    </div>
-      <div class="cursor-pointer overflow-hidden rounded-lg shadow-md" onclick="openModal('/static/images/awards/award9.jpg')">
-      <img src="/static/images/awards/award9.jpg" alt="House Hemanth, Tumakuru" class="w-full h-64 object-cover hover:scale-110 transition-transform duration-300">
-    </div>
-  </div>
 </section>
 
 <!-- Modal for image popup -->
-<div id="imageModal" class="hidden fixed inset-0 z-50 bg-black bg-opacity-75 flex items-center justify-center p-4">
-  <div class="relative">
-    <button onclick="closeModal()" class="absolute -top-10 right-0 text-white text-3xl">&times;</button>
-    <img id="modalImage" src="" alt="Enlarged project image" class="max-w-full max-h-[90vh] object-contain">
-  </div>
+<div id="imageModal" class="hidden fixed inset-0 z-50 bg-black bg-opacity-75 flex items-center justify-center p-2 sm:p-4">
+    <div class="relative max-w-[95vw] sm:max-w-[90vw] md:max-w-[85vw]">
+        <button onclick="closeModal()" class="absolute -top-8 sm:-top-10 right-0 text-white text-2xl sm:text-3xl">&times;</button>
+        <img id="modalImage" src="" alt="Enlarged project image" class="max-w-full max-h-[85vh] sm:max-h-[90vh] object-contain">
+    </div>
 </div>
 
 <script>

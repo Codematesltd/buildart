@@ -5,15 +5,15 @@
 {% block content %}
 <!-- Hero Section -->
 <section class="relative">
-    <img src="{{ url_for('static', filename='images/hero-image.png') }}" alt="Hero" class="w-full h-[90vh] object-cover">
-    <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-start p-10 md:p-20 text-white">
-        <h1 class="text-3xl md:text-5xl font-bold mb-4 max-w-xl">Shaping tomorrow’s spaces with luxury, comfort, and a vision for the future.</h1>
-        <button class="bg-white text-black px-6 py-2 rounded shadow-md hover:bg-gray-200 font-semibold">GET IN TOUCH</button>
+    <img src="{{ url_for('static', filename='images/hero-image.png') }}" alt="Hero" class="w-full h-[60vh] sm:h-[90vh] object-cover">
+    <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-start p-6 sm:p-10 md:p-20 text-white">
+        <h1 class="text-2xl sm:text-3xl md:text-5xl font-bold mb-4 max-w-xl">Shaping tomorrow’s spaces with luxury, comfort, and a vision for the future.</h1>
+        <a href="{{ url_for('main.contact') }}" class="bg-white text-black px-4 sm:px-6 py-2 rounded shadow-md hover:bg-gray-200 font-semibold text-sm sm:text-base transition-colors">GET IN TOUCH</a>
     </div>
 </section>
 
 <!-- About Section -->
-<section class="flex flex-col text-center md:flex-row justify-between items-center gap-6 p-6 bg-gray-200">
+<section class="flex flex-col text-center md:flex-row justify-between items-center gap-4 sm:gap-6 p-4 sm:p-6 bg-gray-200">
     <div class="md:w-1/2 space-y-4">
         <h2 class="text-2xl font-bold">We are a local business focusing on historic preservation, using traditional materials and techniques.</h2>
         <p>Write a paragraph that talks about your company here. You can talk about your company's background, history, mission, vision, or philosophy. Anything that will introduce your brand's persona to your clients. This will help build a connection between you and them, that hopefully leads into a working relationship.</p>
@@ -22,15 +22,15 @@
 </section>
 
 <!-- Services -->
-<section class="relative text-center text-center">
+<section class="relative text-center min-h-[600px] sm:min-h-[800px]">
     <img src="{{ url_for('static', filename='images/service.png') }}" alt="Service Background" class="absolute inset-0 w-full h-full object-cover opacity-75" />
-    <div class="relative z-10 bg-white/10 p-6">
-        <h2 class="text-2xl font-bold mb-4">Services</h2>
-        <div class="md:w-1/2 space-y-4 text-center mx-auto mb-8">
+    <div class="relative z-10 bg-white/10 p-4 sm:p-6">
+        <h2 class="text-xl sm:text-2xl font-bold mb-4">Services</h2>
+        <div class="w-full md:w-1/2 space-y-4 text-center mx-auto mb-6 sm:mb-8 px-4 sm:px-0">
             <p>Write a paragraph that talks about your construction company here. Convince your prospective clients to choose you and your team for their construction needs by talking about your unique services, as well as your commitment to getting the job done.</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8 max-w-5xl mx-auto px-4 sm:px-6">
             <div class="text-center space-y-4">
                 <img src="{{ url_for('static', filename='images/service3.jpg') }}" class="w-full h-52 object-cover rounded-md" />
                 <p class="font-semibold mt-4">Lead Paint Removal</p>
@@ -48,9 +48,9 @@
 </section>
 
 <!-- Projects -->
-<section class="p-6 bg-black text-white text-center">
-    <h2 class="text-2xl font-bold mb-4">Projects</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+<section class="p-4 sm:p-6 bg-black text-white text-center">
+    <h2 class="text-xl sm:text-2xl font-bold mb-4">Projects</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8 max-w-5xl mx-auto">
         <div class="text-center space-y-4">
             <img src="{{ url_for('static', filename='images/project1.jpg') }}" class="w-full h-56 object-cover rounded-md" />
             <p class="mt-2">CASA LUX</p>
@@ -67,11 +67,11 @@
 </section>
 
 <!-- Stats Section -->
-<section class="p-16 bg-gray-400 text-white text-center">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-        <div class="py-8">
-            <h3 class="text-2xl font-semibold mb-4">Year Established</h3>
-            <p class="text-5xl font-bold">1902</p>
+<section class="p-6 sm:p-16 bg-gray-400 text-white text-center">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
+        <div class="py-4 sm:py-8">
+            <h3 class="text-xl sm:text-2xl font-semibold mb-2 sm:mb-4">Year Established</h3>
+            <p class="text-3xl sm:text-5xl font-bold">1902</p>
         </div>
         <div class="py-8">
             <h3 class="text-2xl font-semibold mb-4">Skilled Artisans</h3>
@@ -85,19 +85,19 @@
 </section>
 
 <!-- Awards -->
-<section class="relative text-center">
+<section class="relative text-center min-h-[400px] sm:min-h-[600px]">
     <img src="{{ url_for('static', filename='images/award.png') }}" alt="Award Background" class="absolute inset-0 w-full h-full object-cover" />
-    <div class="relative z-10 bg-black/40 p-6">
-        <h2 class="text-2xl font-bold mb-4 text-white">Awards</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+    <div class="relative z-10 bg-black/40 p-4 sm:p-6">
+        <h2 class="text-xl sm:text-2xl font-bold mb-4 text-white">Awards</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8 max-w-5xl mx-auto px-4 sm:px-0">
             <div class="text-center space-y-4">
-                <img src="{{ url_for('static', filename='images/award1.jpg') }}" class="w-full h-52 object-cover rounded-md" />
+                <img src="{{ url_for('static', filename='images/awards/award1.jpg') }}" class="w-full h-52 object-cover rounded-md" />
             </div>
             <div class="text-center space-y-4">
-                <img src="{{ url_for('static', filename='images/award2.jpg') }}" class="w-full h-52 object-cover rounded-md" />
+                <img src="{{ url_for('static', filename='images/awards/award2.jpg') }}" class="w-full h-52 object-cover rounded-md" />
             </div>
             <div class="text-center space-y-4 md:col-span-2 mx-auto" style="width: calc(50% - 1rem)">
-                <img src="{{ url_for('static', filename='images/award3.jpg') }}" class="w-full h-52 object-cover rounded-md" />
+                <img src="{{ url_for('static', filename='images/awards/award3.jpg') }}" class="w-full h-52 object-cover rounded-md" />
             </div>
         </div>
     </div>
