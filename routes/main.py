@@ -1,4 +1,5 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request, flash, redirect, url_for
+from routes.admin import supabase
 
 main_bp = Blueprint('main', __name__)
 
@@ -25,3 +26,12 @@ def careers():
 @main_bp.route('/contact')
 def contact():
     return render_template('contact.html')
+
+@main_bp.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            # Your login logic here
+            return redirect(url_for('main.index'))
+    return render_template('login.html', form=form)

@@ -1,42 +1,60 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app
-from flask_login import login_user, login_required, logout_user, current_user
-from werkzeug.security import check_password_hash, generate_password_hash
-from extensions import login_manager
+from flask import Blueprint, render_template, redirect, url_for, flash, request
+from flask_login import LoginManager, login_user, login_required, logout_user
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField
+from wtforms.validators import DataRequired
+from supabase import create_client
 import os
-import json
 
+# Setup
 admin_bp = Blueprint('admin', __name__)
+login_manager = LoginManager()
+login_manager.login_view = 'admin.login'
+
+# Initialize Supabase
+supabase = create_client(
+    os.getenv('SUPABASE_URL'),
+    os.getenv('SUPABASE_KEY')
+)
+
+class LoginForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
 
 class Admin:
-    def __init__(self, username):
+    def __init__(self, id, username):
+        self.id = id
         self.username = username
         self.is_authenticated = True
         self.is_active = True
         self.is_anonymous = False
 
     def get_id(self):
-        return self.username
+        return str(self.id)
+
+def init_extensions(app):
+    login_manager.init_app(app)
 
 @login_manager.user_loader
-def load_user(username):
-    # This is a simple example. In production, you should implement proper user storage
-    if username == "admin":
-        return Admin(username)
+def load_user(user_id):
+    response = supabase.table('admin_users').select('*').eq('id', user_id).execute()
+    if response.data:
+        user_data = response.data[0]
+        return Admin(user_data['id'], user_data['username'])
     return None
 
 @admin_bp.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
-        username = request.form.get('username')
-        password = request.form.get('password')
-        
-        # In production, implement proper authentication
-        if username == "admin" and password == "admin":
-            user = Admin(username)
+    form = LoginForm()
+    if form.validate_on_submit():
+        response = supabase.table('admin_users').select('*').eq('username', form.username.data).execute()
+        if response.data and response.data[0]['password_hash'] == form.password.data:
+            user_data = response.data[0]
+            user = Admin(user_data['id'], user_data['username'])
             login_user(user)
             return redirect(url_for('admin.dashboard'))
         flash('Invalid credentials')
-    return render_template('admin_login.html')
+    return render_template('admin_login.html', form=form)
 
 @admin_bp.route('/dashboard')
 @login_required
@@ -53,32 +71,13 @@ def logout():
 @login_required
 def add_award():
     if request.method == 'POST':
-        year = request.form.get('year')
-        award_name = request.form.get('award_name')
-        project_name = request.form.get('project_name')
-        prize = request.form.get('prize')
-        
-        # Add to database or JSON file
-        new_award = {
-            'year': year,
-            'award_name': award_name,
-            'project': project_name,
-            'prize': prize
+        award_data = {
+            'year': request.form.get('year'),
+            'award_name': request.form.get('award_name'),
+            'project': request.form.get('project_name'),
+            'prize': request.form.get('prize')
         }
-        
-        # Save to JSON file
-        awards_file = os.path.join(current_app.static_folder, 'data', 'awards.json')
-        awards = []
-        if os.path.exists(awards_file):
-            with open(awards_file, 'r') as f:
-                awards = json.load(f)
-        
-        awards.append(new_award)
-        
-        with open(awards_file, 'w') as f:
-            json.dump(awards, f)
-            
-        flash('Award added successfully!', 'success')
+        response = supabase.table('awards').insert(award_data).execute()
+        if response.data:
+            flash('Award added successfully!', 'success')
         return redirect(url_for('main.awards'))
-
-    return render_template('admin/add_award.html')
