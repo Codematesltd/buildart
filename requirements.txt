@@ -9,3 +9,4 @@ bleach
 redis
 pyOpenSSL
 supabase
+waitress
