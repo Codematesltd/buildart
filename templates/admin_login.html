@@ -3,8 +3,8 @@
 {% block title %}Admin Login - Buildaart Construction{% endblock %}
 
 {% block content %}
-<div class="min-h-screen flex items-center justify-center bg-white py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-md w-full bg-white rounded-2xl shadow-xl p-10 space-y-8 transform transition-all">
+<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-2xl p-10 space-y-8 transform transition-all border border-gray-100">
         <!-- Logo and Title -->
         <div class="text-center">
             <img class="mx-auto h-24 w-auto transform hover:scale-105 transition-transform duration-300" 
@@ -40,7 +40,7 @@
 
         <!-- Login Form -->
         <form class="mt-8 space-y-6" action="{{ url_for('admin.login') }}" method="POST">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <!-- Remove csrf_token input, Flask-WTF handles it -->
             <div class="space-y-4">
                 <!-- Username Field -->
                 <div>
@@ -68,7 +68,6 @@
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-                            </svg>
                         </div>
                         <input id="password" name="password" type="password" required 
                             class="pl-10 pr-10 appearance-none block w-full px-3 py-3 border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all text-gray-900 text-sm"
