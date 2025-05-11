@@ -1,117 +1,188 @@
 {% extends "base.html" %}
 
 {% block content %}
-<style>
-    .admin-dashboard {
-        max-width: 800px;
-        margin: 2rem auto;
-        padding: 2rem;
-        background: #fff;
-        box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        border-radius: 8px;
-    }
-
-    .admin-dashboard h1 {
-        color: #333;
-        margin-bottom: 2rem;
-        border-bottom: 2px solid #eee;
-        padding-bottom: 1rem;
-    }
-
-    .admin-controls {
-        display: grid;
-        gap: 2rem;
-    }
-
-    .admin-controls form {
-        background: #f9f9f9;
-        padding: 1.5rem;
-        border-radius: 6px;
-        border: 1px solid #eee;
-    }
-
-    .form-group {
-        margin-bottom: 1rem;
-    }
-
-    .form-group label {
-        display: block;
-        margin-bottom: 0.5rem;
-        color: #555;
-        font-weight: 500;
-    }
-
-    .form-group input {
-        width: 100%;
-        padding: 0.5rem;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        font-size: 1rem;
-    }
-
-    button {
-        background: #007bff;
-        color: white;
-        border: none;
-        padding: 0.75rem 1.5rem;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 1rem;
-        transition: background 0.3s;
-    }
-
-    button:hover {
-        background: #0056b3;
-    }
-
-    .logout-form {
-        text-align: right;
-        margin-bottom: 1rem;
-    }
-
-    .logout-form button {
-        background: #dc3545;
-    }
-
-    .logout-form button:hover {
-        background: #c82333;
-    }
-</style>
-
-<div class="admin-dashboard">
-    <h1>Admin Dashboard</h1>
-    
-    <div class="admin-controls">
-        <!-- Logout form -->
-        <form class="logout-form" action="{{ url_for('admin.logout') }}" method="GET">
-            <button type="submit">Logout</button>
-        </form>
-
-        <!-- Add Award Form -->
-        <form class="award-form" action="{{ url_for('admin.add_award') }}" method="POST">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <div class="form-group">
-                <label for="year">Year:</label>
-                <input type="text" name="year" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="award_name">Award Name:</label>
-                <input type="text" name="award_name" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="project_name">Project Name:</label>
-                <input type="text" name="project_name" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="prize">Prize:</label>
-                <input type="text" name="prize" required>
-            </div>
-            
-            <button type="submit">Add Award</button>
-        </form>
+<div class="admin-dashboard p-6 bg-gray-100 min-h-screen">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-800">Admin Dashboard</h1>
+        <a href="{{ url_for('admin.logout') }}" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Logout</a>
     </div>
+
+    <!-- Main Content -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Projects Section -->
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">Projects</h2>
+                <button onclick="openModal('projectModal')" class="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700 transition-colors">
+                    Add Project
+                </button>
+            </div>
+            <!-- Projects List -->
+            <div class="space-y-4">
+                {% for project in projects %}
+                <div class="border-b pb-4">
+                    <h3 class="font-bold text-lg">{{ project.name }}</h3>
+                    <p class="text-gray-600 text-sm">{{ project.description }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Awards Section -->
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">Awards</h2>
+                <button onclick="openModal('awardModal')" class="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700 transition-colors">
+                    Add Award
+                </button>
+            </div>
+            <!-- Awards List -->
+            <div class="space-y-4">
+                {% for award in awards %}
+                <div class="border-b pb-4">
+                    <h3 class="font-bold text-lg">{{ award.award_name }}</h3>
+                    <p class="text-gray-600 text-sm">{{ award.year }} - {{ award.project }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Project Modal -->
+    <div id="projectModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gray-800">Add New Project</h3>
+                <button onclick="closeModal('projectModal')" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+            </div>
+            <form action="{{ url_for('admin.manage_projects') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Project Name</label>
+                    <input type="text" name="name" required class="w-full p-2 border rounded focus:ring-2 focus:ring-yellow-500">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                    <textarea name="description" required class="w-full p-2 border rounded focus:ring-2 focus:ring-yellow-500" rows="4"></textarea>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Images</label>
+                    <input type="file" name="images[]" multiple accept="image/*" required 
+                           class="w-full p-2 border rounded focus:ring-2 focus:ring-yellow-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-yellow-50 file:text-yellow-700 hover:file:bg-yellow-100">
+                </div>
+                
+                <button type="submit" class="w-full bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700 transition-colors">
+                    Save Project
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Award Modal -->
+    <div id="awardModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gray-800">Add New Award</h3>
+                <button onclick="closeModal('awardModal')" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+            </div>
+            <form action="{{ url_for('admin.manage_awards') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Year</label>
+                        <input type="number" name="year" required class="w-full p-2 border rounded focus:ring-2 focus:ring-yellow-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Prize</label>
+                        <select name="prize" required class="w-full p-2 border rounded focus:ring-2 focus:ring-yellow-500">
+                            <option value="Winner">Winner</option>
+                            <option value="Runner Up">Runner Up</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Award Name</label>
+                    <input type="text" name="award_name" required class="w-full p-2 border rounded focus:ring-2 focus:ring-yellow-500">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Project</label>
+                    <input type="text" name="project" required class="w-full p-2 border rounded focus:ring-2 focus:ring-yellow-500">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                    <select name="category" required class="w-full p-2 border rounded focus:ring-2 focus:ring-yellow-500">
+                        <option value="Architecture">Architecture</option>
+                        <option value="Interior Design">Interior Design</option>
+                        <option value="Residential">Residential</option>
+                        <option value="Commercial">Commercial</option>
+                        <option value="Public Building">Public Building</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Images</label>
+                    <input type="file" name="images[]" multiple accept="image/*" required 
+                           class="w-full p-2 border rounded focus:ring-2 focus:ring-yellow-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-yellow-50 file:text-yellow-700 hover:file:bg-yellow-100">
+                </div>
+                
+                <button type="submit" class="w-full bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700 transition-colors">
+                    Save Award
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('fixed')) {
+                closeModal(event.target.id);
+            }
+        });
+
+        // Close modal when pressing Escape
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal('projectModal');
+                closeModal('awardModal');
+            }
+        });
+
+        // Show flash messages with better styling
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    const notification = document.createElement('div');
+                    notification.className = `fixed top-4 right-4 p-4 rounded-lg ${category === 'success' ? 'bg-green-500' : 'bg-red-500'} text-white`;
+                    notification.textContent = '{{ message }}';
+                    document.body.appendChild(notification);
+                    setTimeout(() => notification.remove(), 3000);
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </script>
 </div>
 {% endblock %}
