@@ -11,3 +11,4 @@ pyOpenSSL
 supabase
 waitress
 flask-minify
+config
