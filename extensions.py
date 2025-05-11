@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from flask_login import LoginManager
 from flask_wtf import CSRFProtect  # Modified import
 from flask_talisman import Talisman
@@ -21,3 +22,5 @@ def init_extensions(app):
     # Enforce HTTPS and set secure headers
     Talisman(app, content_security_policy=None)
 
+=======
+>>>>>>> 3edbd9158125721aae2d1d367eb2a8182792acde

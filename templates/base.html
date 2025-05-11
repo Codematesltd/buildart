@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' cdn.tailwindcss.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:;">
   <title>{% block title %}Buildaart Construction{% endblock %}</title>
+  {% block head %}{% endblock %}
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
   <style type="text/tailwindcss">
@@ -75,7 +76,7 @@
       <a href="{{ url_for('main.awards') }}" class="hover:text-yellow-500 transition-colors">Awards</a>
       <a href="{{ url_for('main.careers') }}" class="hover:text-yellow-500 transition-colors">Careers</a>
       <a href="{{ url_for('main.contact') }}" class="hover:text-yellow-500 transition-colors">Contact Us</a>
-      
+      <a href="{{ url_for('admin.login') }}" class="hover:text-yellow-500 transition-colors">Admin login</a>
     </nav>
 
     <!-- Mobile Navigation Overlay -->
