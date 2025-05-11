@@ -30,6 +30,13 @@ def create_app():
         WTF_CSRF_ENABLED=True
     )
 
+    # Remove any CSP or X-Frame-Options headers (allow all external links and CDNs)
+    @app.after_request
+    def after_request(response):
+        response.headers.pop('X-Frame-Options', None)
+        response.headers.pop('Content-Security-Policy', None)
+        return response
+    
     # Initialize CSRF protection first
     csrf = CSRFProtect()
     csrf.init_app(app)
