@@ -1,7 +1,6 @@
 from flask import Flask
-from flask_wtf.csrf import CSRFProtect
 from config import Config
-from extensions import login_manager
+from extensions import init_extensions
 from routes.admin import admin_bp
 from routes.main import main_bp
 from flask_minify import Minify
@@ -10,12 +9,8 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
     
-    # Initialize CSRF protection
-    csrf = CSRFProtect()
-    csrf.init_app(app)
-    
-    # Initialize extensions
-    login_manager.init_app(app)
+    # Initialize all extensions
+    init_extensions(app)
     
     # Register blueprints
     app.register_blueprint(main_bp)  # Register main routes at root URL

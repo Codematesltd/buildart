@@ -1,5 +1,5 @@
 from flask_login import LoginManager
-from flask_wtf.csrf import CSRFProtect
+from flask_wtf import CSRFProtect  # Modified import
 from flask_talisman import Talisman
 
 login_manager = LoginManager()

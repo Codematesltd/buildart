@@ -2,76 +2,401 @@
 
 {% block title %}Welcome to Buildaart Construction{% endblock %}
 
+{% block head %}
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="theme-color" content="#c0392b">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<style>
+    :root {
+        touch-action: pan-x pan-y;
+        height: 100%;
+    }
+    * {
+        -webkit-tap-highlight-color: transparent;
+    }
+    .touch-action-none {
+        touch-action: none;
+    }
+    @media (max-width: 640px) {
+        .text-responsive {
+            font-size: calc(1rem + 2vw);
+            line-height: 1.4;
+        }
+        .card-grid-responsive {
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <!-- Hero Section -->
 <section class="relative">
-    <img src="{{ url_for('static', filename='images/hero-image.png') }}" alt="Hero" class="w-full h-[60vh] sm:h-[90vh] object-cover">
-    <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-start p-6 sm:p-10 md:p-20 text-white">
-        <h1 class="text-2xl sm:text-3xl md:text-5xl font-bold mb-4 max-w-xl">Shaping tomorrow’s spaces with luxury, comfort, and a vision for the future.</h1>
-        <a href="{{ url_for('main.contact') }}" class="bg-white text-black px-4 sm:px-6 py-2 rounded shadow-md hover:bg-gray-200 font-semibold text-sm sm:text-base transition-colors">GET IN TOUCH</a>
-    </div>
-</section>
 
-<!-- About Section -->
-<section class="flex flex-col text-center md:flex-row justify-between items-center gap-4 sm:gap-6 p-4 sm:p-6 bg-gray-200">
-    <div class="md:w-1/2 space-y-4">
-        <h2 class="text-2xl font-bold">We are a local business focusing on historic preservation, using traditional materials and techniques.</h2>
-        <p>Write a paragraph that talks about your company here. You can talk about your company's background, history, mission, vision, or philosophy. Anything that will introduce your brand's persona to your clients. This will help build a connection between you and them, that hopefully leads into a working relationship.</p>
-    </div>
-    <img src="{{ url_for('static', filename='images/about.JPG') }}" class="w-full md:w-1/2 rounded-lg shadow-lg" alt="About image">
-</section>
-
-<!-- Services -->
-<section class="relative text-center min-h-[600px] sm:min-h-[800px]">
-    <img src="{{ url_for('static', filename='images/service.png') }}" alt="Service Background" class="absolute inset-0 w-full h-full object-cover opacity-75" />
-    <div class="relative z-10 bg-white/10 p-4 sm:p-6">
-        <h2 class="text-xl sm:text-2xl font-bold mb-4">Services</h2>
-        <div class="w-full md:w-1/2 space-y-4 text-center mx-auto mb-6 sm:mb-8 px-4 sm:px-0">
-            <p>Write a paragraph that talks about your construction company here. Convince your prospective clients to choose you and your team for their construction needs by talking about your unique services, as well as your commitment to getting the job done.</p>
+    <!-- Image Carousel -->
+    <div class="relative h-[80vh] sm:h-[90vh]">
+        <!-- Carousel Images -->
+        <div class="carousel-container h-full">
+            <img src="{{ url_for('static', filename='images/hero1.jpg') }}" alt="Hero 1" class="absolute inset-0 w-full h-full object-cover brightness-75 transition-opacity duration-1000" data-active>
+            <img src="{{ url_for('static', filename='images/hero2.jpg') }}" alt="Hero 2" class="absolute inset-0 w-full h-full object-cover brightness-75 transition-opacity duration-1000 opacity-0">
+            <img src="{{ url_for('static', filename='images/hero3.jpg') }}" alt="Hero 3" class="absolute inset-0 w-full h-full object-cover brightness-75 transition-opacity duration-1000 opacity-0">
+            <img src="{{ url_for('static', filename='images/hero4.jpg') }}" alt="Hero 4" class="absolute inset-0 w-full h-full object-cover brightness-75 transition-opacity duration-1000 opacity-0">
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8 max-w-5xl mx-auto px-4 sm:px-6">
-            <div class="text-center space-y-4">
-                <img src="{{ url_for('static', filename='images/service3.jpg') }}" class="w-full h-52 object-cover rounded-md" />
-                <p class="font-semibold mt-4">Lead Paint Removal</p>
+        <!-- Navigation Arrows -->
+        <button class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-2 rounded-full transition-all z-20" id="prevBtn">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+        </button>
+        <button class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-2 rounded-full transition-all z-20" id="nextBtn">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+        </button>
+
+        <!-- Slide Indicators -->
+        <div class="absolute bottom-5 left-1/2 -translate-x-1/2 flex space-x-2 z-20">
+            <button class="w-2 h-2 rounded-full bg-white opacity-50 transition-opacity" data-active></button>
+            <button class="w-2 h-2 rounded-full bg-white opacity-50 transition-opacity"></button>
+            <button class="w-2 h-2 rounded-full bg-white opacity-50 transition-opacity"></button>
+            <button class="w-2 h-2 rounded-full bg-white opacity-50 transition-opacity"></button>
+        </div>
+
+        <!-- Content Overlay (Unchanged) -->
+        <div class="absolute inset-0 bg-black bg-opacity-40 z-10">
+            <div class="container mx-auto h-full flex flex-col justify-center items-center px-6 sm:px-10">
+                <div class="max-w-4xl space-y-8 text-center">
+                    <h1 class="text-5xl sm:text-7xl font-bold text-white text-shadow-lg animate-fade-in tracking-wide" style="font-family: 'Playfair Display', serif;">
+                        Welcome to Buildaart
+                    </h1>
+                    <div class="space-y-2">
+                        <p class="text-2xl sm:text-3xl text-white opacity-90 font-light animate-slide-up delay-500 leading-relaxed" style="font-family: 'Times New Roman', serif;">
+                            Where Visions Rise,
+                            Communities Thrive,
+                            and Every Brick Builds a Legacy.
+                        </p>
+                    </div>
+                    <div class="pt-8 animate-fade-in delay-1000">
+                        <a href="{{ url_for('main.contact') }}" 
+                           class="inline-block bg-gradient-primary text-white px-10 py-4 rounded-md shadow-xl 
+                                  transition-all duration-300 transform hover:scale-105 font-semibold text-lg 
+                                  border-2 border-transparent hover:border-white hover:shadow-2xl
+                                  hover:brightness-110">
+                            Begin Your Journey
+                        </a>
+                    </div>
+                </div>
             </div>
-            <div class="text-center space-y-4">
-                <img src="{{ url_for('static', filename='images/service2.webp') }}" class="w-full h-52 object-cover rounded-md" />
-                <p class="font-semibold mt-4">Woodwork Replication</p>
+        </div>
+    </div>
+</section>
+
+<script>
+    // Carousel functionality
+    document.addEventListener('DOMContentLoaded', () => {
+        const images = document.querySelectorAll('.carousel-container img');
+        const indicators = document.querySelectorAll('.bottom-5 button');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        let currentIndex = 0;
+
+        function showImage(index) {
+            images.forEach(img => img.classList.add('opacity-0'));
+            indicators.forEach(ind => ind.classList.remove('opacity-100'));
+            
+            images[index].classList.remove('opacity-0');
+            indicators[index].classList.add('opacity-100');
+        }
+
+        function nextImage() {
+            currentIndex = (currentIndex + 1) % images.length;
+            showImage(currentIndex);
+        }
+
+        function prevImage() {
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
+            showImage(currentIndex);
+        }
+
+        // Event listeners
+        nextBtn.addEventListener('click', nextImage);
+        prevBtn.addEventListener('click', prevImage);
+        
+        // Auto advance every 5 seconds
+        setInterval(nextImage, 5000);
+
+        // Initialize first image
+        showImage(0);
+
+        // Add touch swipe support
+        let touchstartX = 0;
+        let touchendX = 0;
+        
+        const carousel = document.querySelector('.carousel-container');
+        
+        carousel.addEventListener('touchstart', e => {
+            touchstartX = e.changedTouches[0].screenX;
+        }, {passive: true});
+
+        carousel.addEventListener('touchend', e => {
+            touchendX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, {passive: true});
+
+        function handleSwipe() {
+            if (touchendX < touchstartX) nextImage();
+            if (touchendX > touchstartX) prevImage();
+        }
+    });
+</script>
+
+<!-- About Section -->
+<section class="relative p-8 sm:p-12 overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 opacity-90"></div>
+    
+    <!-- Decorative Elements -->
+    <div class="absolute top-0 left-0 w-32 h-32 -translate-x-1/4 -translate-y-1/4 opacity-10">
+        <svg viewBox="0 0 100 100" class="w-full h-full fill-current text-accent animate-spin-slow">
+            <path d="M50 0 C60 20 80 20 100 50 C80 80 60 80 50 100 C40 80 20 80 0 50 C20 20 40 20 50 0Z"/>
+        </svg>
+    </div>
+    <div class="absolute top-0 right-0 w-24 h-24 translate-x-1/4 -translate-y-1/4 opacity-10">
+        <svg viewBox="0 0 100 100" class="w-full h-full fill-current text-highlight rotate-45">
+            <path d="M50 0 L100 50 L50 100 L0 50Z M50 20 L80 50 L50 80 L20 50Z"/>
+        </svg>
+    </div>
+    <div class="absolute bottom-0 left-0 w-28 h-28 -translate-x-1/4 translate-y-1/4 opacity-10">
+        <svg viewBox="0 0 100 100" class="w-full h-full fill-current text-primary rotate-12">
+            <circle cx="50" cy="50" r="45"/>
+            <circle cx="50" cy="50" r="35"/>
+            <circle cx="50" cy="50" r="25"/>
+        </svg>
+    </div>
+    <div class="absolute bottom-0 right-0 w-36 h-36 translate-x-1/4 translate-y-1/4 opacity-10">
+        <svg viewBox="0 0 100 100" class="w-full h-full fill-current text-accent -rotate-12">
+            <path d="M50 0 L60 40 L100 50 L60 60 L50 100 L40 60 L0 50 L40 40Z"/>
+        </svg>
+    </div>
+
+    <div class="container mx-auto max-w-3xl text-center space-y-12 relative">
+        <!-- Add decorative line before heading -->
+        <div class="flex items-center justify-center mb-8">
+            <div class="h-px w-16 bg-accent"></div>
+            <div class="mx-4">
+                <svg class="w-8 h-8 text-highlight" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="50" class="fill-current opacity-20"/>
+                    <circle cx="50" cy="50" r="35" class="fill-current opacity-40"/>
+                    <circle cx="50" cy="50" r="20" class="fill-current"/>
+                </svg>
             </div>
-            <div class="text-center space-y-4 md:col-span-2 mx-auto" style="width: calc(50% - 1rem)">
-                <img src="{{ url_for('static', filename='images/service1.webp') }}" class="w-full h-52 object-cover rounded-md" />
-                <p class="font-semibold mt-4">Window Restoration</p>
+            <div class="h-px w-16 bg-accent"></div>
+        </div>
+        
+        <h2 class="text-4xl sm:text-5xl font-bold mb-12 text-primary tracking-wide" style="font-family: 'Playfair Display', serif;">
+            BUILD · TRANSFORM · INSPIRE
+        </h2>
+        <div class="space-y-8 px-4" style="font-family: 'Times New Roman', Times, serif">
+            <p class="text-xl leading-loose">
+                Pioneering the future of urban living, Buildaart redefines modern construction with 
+                <span class="text-accent font-semibold">precision</span>, 
+                <span class="text-highlight font-semibold">quality</span>, and 
+                <span class="text-accent font-semibold">sustainability</span> at its core. 
+                <span class="block mt-4">Our projects go beyond structures—they shape communities, elevate lifestyles, and stand as testaments to enduring excellence.</span>
+            </p>
+            <p class="text-lg leading-loose">
+                As a <span class="text-accent font-semibold">leading real estate developer</span>, 
+                we are committed to delivering projects that seamlessly blend 
+                <span class="text-highlight font-semibold">innovation</span>, 
+                <span class="text-accent font-semibold">functionality</span>, and 
+                <span class="text-highlight font-semibold">long-term value</span>. 
+                <span class="block mt-4">Every development is meticulously planned to offer unparalleled living and commercial experiences, built to stand the test of time.</span>
+            </p>
+        </div>
+        
+        <!-- Add decorative line after content -->
+        <div class="flex items-center justify-center mt-8">
+            <div class="h-px w-16 bg-accent"></div>
+            <div class="mx-4">
+                <svg class="w-8 h-8 text-highlight" viewBox="0 0 100 100">
+                    <path d="M50 0 L60 40 L100 50 L60 60 L50 100 L40 60 L0 50 L40 40Z" class="fill-current"/>
+                </svg>
+            </div>
+            <div class="h-px w-16 bg-accent"></div>
+        </div>
+    </div>
+</section>
+
+<!-- Vision Section -->
+<section class="relative py-16 px-4 sm:px-6 bg-white">
+    <div class="container mx-auto max-w-6xl">
+        <div class="flex flex-col md:flex-row items-center gap-8 md:gap-16">
+            <!-- Left side image -->
+            <div class="w-full md:w-1/2">
+                <img src="{{ url_for('static', filename='images/vision.jpg') }}" 
+                     alt="Buildaart Vision" 
+                     class="w-full h-[400px] object-cover rounded-lg shadow-2xl">
+            </div>
+            
+            <!-- Right side content -->
+            <div class="w-full md:w-1/2 space-y-8 text-left">
+                <h2 class="text-3xl sm:text-4xl font-bold leading-tight" style="font-family: 'Playfair Display', serif;">
+                    BUILDING THE FUTURE WITH BUILDART
+                </h2>
+                <div class="space-y-6" style="font-family: 'Times New Roman', Times, serif">
+                    <p class="text-gray-700 leading-loose text-lg">
+                        Rooted in Bengaluru, Karnataka, Buildaart is a driving force in modern real estate, shaping skylines with efficiency and vision. Under the leadership of Architect Manjunath, our projects merge cutting-edge engineering with progressive urban planning.
+                    </p>
+                    <p class="text-gray-700 leading-loose text-lg">
+                        At Buildaart, we don't just construct buildings—we create dynamic, future-ready environments that set new benchmarks in quality and timely execution. As one of the fastest-evolving real estate companies, we take pride in delivering developments that not only meet expectations but surpass them.
+                    </p>
+                </div>
             </div>
         </div>
     </div>
 </section>
 
 <!-- Projects -->
-<section class="p-4 sm:p-6 bg-black text-white text-center">
-    <h2 class="text-xl sm:text-2xl font-bold mb-4">Projects</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8 max-w-5xl mx-auto">
-        <div class="text-center space-y-4">
-            <img src="{{ url_for('static', filename='images/project1.jpg') }}" class="w-full h-56 object-cover rounded-md" />
-            <p class="mt-2">CASA LUX</p>
+<section class="relative py-24 overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 opacity-90"></div>
+    
+    <!-- Decorative Elements -->
+    <div class="absolute -bottom-24 -right-24 w-96 h-96 opacity-10">
+        <svg viewBox="0 0 100 100" class="w-full h-full fill-current text-accent animate-spin-slow">
+            <path d="M50 0 C60 20 80 20 100 50 C80 80 60 80 50 100 C40 80 20 80 0 50 C20 20 40 20 50 0Z"/>
+        </svg>
+    </div>
+
+    <div class="container mx-auto max-w-7xl relative px-4">
+        <!-- Section Header -->
+        <div class="text-center mb-20">
+            <h2 class="text-4xl sm:text-5xl font-bold text-primary mb-6" style="font-family: 'Playfair Display', serif;">
+                Our Featured Projects
+            </h2>
+            <div class="w-24 h-1 bg-accent mx-auto mb-8"></div>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed" style="font-family: 'Times New Roman', serif;">
+                We believe in quality construction and timely delivery, creating sustainable communities that seamlessly blend innovation with excellence.
+            </p>
         </div>
-        <div class="text-center space-y-4">
-            <img src="{{ url_for('static', filename='images/project2.jpg') }}" class="w-full h-56 object-cover rounded-md" />
-            <p class="mt-2">CONDUR</p>
+
+        <!-- Project Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Project Card 1 -->
+            <div class="bg-white rounded-xl overflow-hidden shadow-lg">
+                <div class="relative h-64">
+                    <img src="{{ url_for('static', filename='images/project1.jpg') }}" 
+                         alt="Residential Projects" 
+                         class="w-full h-full object-cover">
+                </div>
+                <div class="p-6">
+                    <h3 class="text-2xl font-bold mb-3 text-gray-800" style="font-family: 'Playfair Display', serif;">
+                        Premium Residential
+                    </h3>
+                    <p class="text-gray-600">Luxury apartments and villas designed for modern living</p>
+                </div>
+            </div>
+
+            <!-- Project Card 2 -->
+            <div class="bg-white rounded-xl overflow-hidden shadow-lg">
+                <div class="relative h-64">
+                    <img src="{{ url_for('static', filename='images/project2.png') }}" 
+                         alt="Commercial Projects" 
+                         class="w-full h-full object-cover">
+                </div>
+                <div class="p-6">
+                    <h3 class="text-2xl font-bold mb-3 text-gray-800" style="font-family: 'Playfair Display', serif;">
+                        Commercial Hubs
+                    </h3>
+                    <p class="text-gray-600">Sustainable business spaces</p>
+                </div>
+            </div>
+
+            <!-- Project Card 3 -->
+            <div class="bg-white rounded-xl overflow-hidden shadow-lg">
+                <div class="relative h-64">
+                    <img src="{{ url_for('static', filename='images/project33.jpg') }}" 
+                         alt="Smart Living" 
+                         class="w-full h-full object-cover">
+                </div>
+                <div class="p-6">
+                    <h3 class="text-2xl font-bold mb-3 text-gray-800" style="font-family: 'Playfair Display', serif;">
+                        Smart Living
+                    </h3>
+                    <p class="text-gray-600">Integrated living spaces</p>
+                </div>
+            </div>
         </div>
-        <div class="text-center space-y-4 md:col-span-2 mx-auto" style="width: calc(50% - 1rem)">
-            <img src="{{ url_for('static', filename='images/project3.jpg') }}" class="w-full h-56 object-cover rounded-md" />
-            <p class="mt-2">SANCTUM</p>
+
+        <!-- Bottom CTA -->
+        <div class="mt-16 flex justify-center">
+            <a href="{{ url_for('main.projects') }}" 
+               class="inline-flex items-center px-12 py-4 bg-gradient-primary text-white rounded-lg 
+                      shadow-xl text-lg font-semibold">
+                View All Projects
+                <svg class="w-5 h-5 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                </svg>
+            </a>
         </div>
     </div>
 </section>
 
+<!-- Innovation Section -->
+<section class="relative py-24 overflow-hidden">
+    <!-- Background Elements -->
+    <div class="absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-800"></div>
+    <div class="absolute inset-0 opacity-20" style="background-image: url('{{ url_for('static', filename='images/pattern-bg.png') }}');"></div>
+    
+    <!-- Decorative Element -->
+    <div class="absolute bottom-0 left-0 w-96 h-96 translate-y-1/2 -translate-x-1/2 opacity-10">
+        <svg viewBox="0 0 100 100" class="w-full h-full fill-current text-accent animate-spin-slow">
+            <path d="M50 0 C60 20 80 20 100 50 C80 80 60 80 50 100 C40 80 20 80 0 50 C20 20 40 20 50 0Z"/>
+        </svg>
+    </div>
+
+    <div class="container mx-auto max-w-6xl relative">
+        <div class="grid md:grid-cols-2 gap-12 items-center">
+            <!-- Left Content -->
+            <div class="text-white space-y-8">
+                <div class="flex items-center space-x-4">
+                    <div class="h-px w-16 bg-accent"></div>
+                    <h2 class="text-4xl font-bold" style="font-family: 'Playfair Display', serif;">
+                        INNOVATING THE CITYSCAPE
+                    </h2>
+                </div>
+                <div class="space-y-6" style="font-family: 'Times New Roman', serif;">
+                    <p class="text-xl leading-relaxed text-gray-300">
+                        We envision spaces not just as structures, but as hubs for life, business, and growth. Every Buildaart project is designed to redefine luxury, enhance comfort, and shape the future of real estate.
+                    </p>
+                    <p class="text-xl leading-relaxed text-gray-300">
+                        As Bangalore's urban landscape evolves, we are committed to leading that transformation—one project at a time.
+                    </p>
+                    <p class="text-2xl text-accent font-semibold mt-8" style="font-family: 'Playfair Display', serif;">
+                        Build with Buildaart. Build for the future.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Right Image -->
+            <div class="relative group">
+                <div class="absolute -inset-4 bg-gradient-primary opacity-20 blur-xl rounded-lg"></div>
+                <img src="{{ url_for('static', filename='images/cityscape.jpg') }}" 
+                     alt="Innovative Cityscape" 
+                     class="relative w-full h-[600px] object-cover rounded-lg shadow-2xl">
+            </div>
+        </div>
+    </div>
+</section>
 <!-- Stats Section -->
 <section class="p-6 sm:p-16 bg-gray-400 text-white text-center">
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
         <div class="py-4 sm:py-8">
             <h3 class="text-xl sm:text-2xl font-semibold mb-2 sm:mb-4">Year Established</h3>
-            <p class="text-3xl sm:text-5xl font-bold">1902</p>
+            <p class="text-3xl sm:text-5xl font-bold">2012</p>
         </div>
         <div class="py-8">
             <h3 class="text-2xl font-semibold mb-4">Skilled Artisans</h3>
@@ -84,22 +409,4 @@
     </div>
 </section>
 
-<!-- Awards -->
-<section class="relative text-center min-h-[400px] sm:min-h-[600px]">
-    <img src="{{ url_for('static', filename='images/award.png') }}" alt="Award Background" class="absolute inset-0 w-full h-full object-cover" />
-    <div class="relative z-10 bg-black/40 p-4 sm:p-6">
-        <h2 class="text-xl sm:text-2xl font-bold mb-4 text-white">Awards</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8 max-w-5xl mx-auto px-4 sm:px-0">
-            <div class="text-center space-y-4">
-                <img src="{{ url_for('static', filename='images/awards/award1.jpg') }}" class="w-full h-52 object-cover rounded-md" />
-            </div>
-            <div class="text-center space-y-4">
-                <img src="{{ url_for('static', filename='images/awards/award2.jpg') }}" class="w-full h-52 object-cover rounded-md" />
-            </div>
-            <div class="text-center space-y-4 md:col-span-2 mx-auto" style="width: calc(50% - 1rem)">
-                <img src="{{ url_for('static', filename='images/awards/award3.jpg') }}" class="w-full h-52 object-cover rounded-md" />
-            </div>
-        </div>
-    </div>
-</section>
 {% endblock %}

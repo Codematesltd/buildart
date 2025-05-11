@@ -1,7 +1,7 @@
-flask
-flask-login
-flask-talisman
-flask-wtf
+Flask>=2.0.0
+Flask-Login>=0.6.0
+Flask-WTF>=1.0.0
+flask-talisman>=0.8.0
 flask-limiter
 flask-caching
 python-dotenv
@@ -10,3 +10,4 @@ redis
 pyOpenSSL
 supabase
 waitress
+flask-minify
