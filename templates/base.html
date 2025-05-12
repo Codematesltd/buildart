@@ -84,54 +84,6 @@
       .nav-link-underline:hover::after {
         transform: scaleX(1);
       }
-
-      /* Hamburger Menu Styles */
-      .hamburger-line {
-        width: 24px;
-        height: 2px;
-        background-color: #374151;
-        transition: all 0.3s ease-in-out;
-      }
-
-      .hamburger-open .line-1 {
-        transform: translateY(7px) rotate(45deg);
-        background-color: #eab308;
-      }
-
-      .hamburger-open .line-2 {
-        opacity: 0;
-      }
-
-      .hamburger-open .line-3 {
-        transform: translateY(-7px) rotate(-45deg);
-        background-color: #eab308;
-      }
-
-      .mobile-nav-item {
-        position: relative;
-        overflow: hidden;
-        background-image: linear-gradient(to right, #eab308 50%, transparent 50%);
-        background-size: 200% 100%;
-        background-position: right bottom;
-        transition: all 0.3s ease-in-out;
-      }
-
-      .mobile-nav-item:hover {
-        background-position: left bottom;
-        color: #000000;
-      }
-
-      .menu-open {
-        visibility: visible;
-        opacity: 1;
-        transform: translateX(0);
-      }
-
-      .menu-closed {
-        visibility: hidden;
-        opacity: 0;
-        transform: translateX(100%);
-      }
     }
   </style>
   {% block styles %}{% endblock %}
@@ -162,21 +114,18 @@
                     transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
             Contact Us
           </a>
-        </div>
-
-        <!-- Mobile Menu Button -->
+        </div>        <!-- Mobile Menu Button -->
         <button id="menuBtn" class="md:hidden flex flex-col justify-center items-center w-12 h-12 rounded-lg hover:bg-gray-100 focus:outline-none transition-all duration-300 relative z-50">
-          <span class="hamburger-line line-1 mb-1.5"></span>
-          <span class="hamburger-line line-2 mb-1.5"></span>
-          <span class="hamburger-line line-3"></span>
+          <span class="w-6 h-0.5 bg-gray-700 transition-all duration-300 line-1 mb-1.5"></span>
+          <span class="w-6 h-0.5 bg-gray-700 transition-all duration-300 line-2 mb-1.5"></span>
+          <span class="w-6 h-0.5 bg-gray-700 transition-all duration-300 line-3"></span>
         </button>
       </div>
     </div>
   </header>
-
   <!-- Mobile Menu Overlay -->
-  <div id="mobileMenu" class="fixed inset-0 bg-black/60 backdrop-blur-sm transition-all duration-300 menu-closed md:hidden z-40">
-    <div class="absolute right-0 top-0 h-full w-72 bg-white shadow-2xl">
+  <div id="mobileMenu" class="fixed inset-0 bg-black/60 backdrop-blur-sm transition-transform duration-300 translate-x-full md:hidden z-40">
+    <div class="absolute right-0 top-0 h-full w-72 bg-white shadow-2xl transform transition-transform duration-300">
       <div class="flex flex-col h-full">
         <!-- Menu Header -->
         <div class="h-20 flex items-center justify-center border-b border-gray-100 relative">
@@ -185,8 +134,7 @@
 
         <!-- Navigation Items -->
         <nav class="py-6">
-          <div class="space-y-0.5">
-            <a href="{{ url_for('main.index') }}" class="mobile-nav-item flex items-center px-6 py-4 text-gray-800 hover:font-medium">
+          <div class="space-y-0.5">            <a href="{{ url_for('main.index') }}" class="flex items-center px-6 py-4 text-gray-800 hover:bg-yellow-500/10 hover:text-yellow-500 transition-all duration-300">
               <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
               </svg>
@@ -317,23 +265,24 @@
       </div>
     </div>
   </footer>
-
   <script>
     // Mobile Menu Functionality
     const menuBtn = document.getElementById('menuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
     
     function toggleMenu() {
-        menuBtn.classList.toggle('hamburger-open');
-        if (mobileMenu.classList.contains('menu-closed')) {
-            mobileMenu.classList.remove('menu-closed');
-            mobileMenu.classList.add('menu-open');
-            document.body.style.overflow = 'hidden';
-        } else {
-            mobileMenu.classList.remove('menu-open');
-            mobileMenu.classList.add('menu-closed');
-            document.body.style.overflow = 'auto';
-        }
+        const spans = menuBtn.getElementsByTagName('span');
+        spans[0].classList.toggle('rotate-45');
+        spans[0].classList.toggle('translate-y-2');
+        spans[0].classList.toggle('bg-yellow-500');
+        spans[1].classList.toggle('opacity-0');
+        spans[2].classList.toggle('-rotate-45');
+        spans[2].classList.toggle('-translate-y-2');
+        spans[2].classList.toggle('bg-yellow-500');
+        
+        mobileMenu.classList.toggle('translate-x-full');
+        mobileMenu.classList.toggle('translate-x-0');
+        document.body.style.overflow = mobileMenu.classList.contains('translate-x-full') ? 'auto' : 'hidden';
     }
 
     menuBtn.addEventListener('click', toggleMenu);
