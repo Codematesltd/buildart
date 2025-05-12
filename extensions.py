@@ -1,5 +1,7 @@
 from flask_login import LoginManager
 from supabase import create_client, Client
+from flask_wtf.csrf import CSRFProtect
+from flask_talisman import Talisman
 import os
 
 # Initialize Supabase client
@@ -8,9 +10,10 @@ supabase: Client = create_client(
     os.getenv('SUPABASE_KEY', '')
 )
 
-# Initialize Flask-Login
+# Initialize Flask-Login and CSRF protection
 login_manager = LoginManager()
 login_manager.login_view = 'admin.login'
+csrf = CSRFProtect()
 
 def init_extensions(app):
     """Initialize Flask extensions"""
@@ -26,3 +29,17 @@ def init_extensions(app):
         except Exception as e:
             print(f"Error loading user: {e}")
         return None
+
+    csrf.init_app(app)
+    # Set Flask security configs
+    app.config['SESSION_COOKIE_SECURE'] = True
+    app.config['REMEMBER_COOKIE_SECURE'] = True
+    app.config['SESSION_COOKIE_HTTPONLY'] = True
+    app.config['REMEMBER_COOKIE_HTTPONLY'] = True
+    app.config['WTF_CSRF_TIME_LIMIT'] = 3600  # 1 hour CSRF token expiry
+
+    # Enforce HTTPS and set secure headers
+    Talisman(app, content_security_policy=None)
+
+
+

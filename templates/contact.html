@@ -5,45 +5,62 @@
 {% block content %}
 <div class="container mx-auto px-4 py-8 sm:py-12 bg-gray-100">
     
+    <!-- Flash Messages with Animation -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="max-w-4xl mx-auto mb-4 p-4 rounded-lg animate-fade-in {{ 'bg-green-100 text-green-800' if category == 'success' else 'bg-red-100 text-red-800' }}">
+                    <div class="flex items-center">
+                        {% if category == 'success' %}
+                            <svg class="w-5 h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        {% else %}
+                            <svg class="w-5 h-5 mr-2 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        {% endif %}
+                        {{ message }}
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
     <!-- General Inquiries Section -->
     <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-4 sm:p-8 mb-8 sm:mb-12">
         <h2 class="text-2xl font-bold mb-6">General Inquiries</h2>
         <p class="text-gray-600 mb-6">For project details, collaborations, or other queries, reach out to us here.</p>
-        <form method="POST" action="{{ url_for('main.contact') }}" class="space-y-6">
+        <form id="inquiryForm" method="POST" action="{{ url_for('main.contact') }}" class="space-y-6" novalidate>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             <div class="grid md:grid-cols-2 gap-6">
                 <div>
                     <label class="block text-gray-700 font-semibold mb-2">Name *</label>
-                    <input type="text" name="name" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-pink-500">
+                    <input type="text" name="name" id="name"
+                           oninput="validateField('name')"
+                           class="w-full px-4 py-2 border rounded-lg focus:outline-none transition-colors"
+                           data-validation="name">
+                    <span class="text-red-500 text-sm mt-1 hidden" id="nameError"></span>
                 </div>
                 <div>
                     <label class="block text-gray-700 font-semibold mb-2">Email *</label>
-                    <input type="email" name="email" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-pink-500">
+                    <input type="email" name="email" id="email"
+                           oninput="validateField('email')"
+                           class="w-full px-4 py-2 border rounded-lg focus:outline-none transition-colors"
+                           data-validation="email">
+                    <span class="text-red-500 text-sm mt-1 hidden" id="emailError"></span>
                 </div>
             </div>
             <div>
                 <label class="block text-gray-700 font-semibold mb-2">Message *</label>
-                <textarea name="message" rows="4" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-pink-500"></textarea>
+                <textarea name="message" id="message" rows="4"
+                          oninput="validateField('message')"
+                          class="w-full px-4 py-2 border rounded-lg focus:outline-none transition-colors"
+                          data-validation="message"></textarea>
+                <span class="text-red-500 text-sm mt-1 hidden" id="messageError"></span>
             </div>
-            <button type="submit" class="bg-pink-600 text-white px-6 py-2 rounded-lg hover:bg-pink-700 transition-colors">
+            <button type="submit" id="submitButton" class="bg-pink-600 text-white px-6 py-2 rounded-lg hover:bg-pink-700 transition-colors">
                 Submit Inquiry
-            </button>
-        </form>
-    </div>
-
-    <!-- Quick Contact Form -->
-    <div class="max-w-4xl mx-auto bg-gradient-to-r from-gray-800 to-gray-900 rounded-lg shadow-lg p-8 text-white">
-        <h2 class="text-2xl font-bold mb-6">Quick Contact</h2>
-        <form method="POST" action="{{ url_for('main.contact') }}" class="space-y-6">
-            <div class="grid md:grid-cols-2 gap-6">
-                <input type="text" placeholder="Name" name="quick_name" required 
-                    class="w-full px-4 py-2 rounded-lg bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500">
-                <input type="email" placeholder="Email" name="quick_email" required 
-                    class="w-full px-4 py-2 rounded-lg bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500">
-            </div>
-            <textarea placeholder="Message" name="quick_message" rows="3" required 
-                class="w-full px-4 py-2 rounded-lg bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500"></textarea>
-            <button type="submit" class="bg-pink-600 text-white px-6 py-2 rounded-lg hover:bg-pink-700 transition-colors">
-                Send Message
             </button>
         </form>
     </div>
@@ -128,4 +145,172 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const validations = {
+    name: {
+        min: 3,
+        max: 50,
+        validate: (value) => {
+            if (value.length < 3) return 'Name must be at least 3 characters';
+            if (value.length > 50) return 'Name cannot exceed 50 characters';
+            if (!/^[a-zA-Z\s]*$/.test(value)) return 'Name can only contain letters and spaces';
+            return '';
+        }
+    },
+    email: {
+        validate: (value) => {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(value) ? '' : 'Please enter a valid email address';
+        }
+    },
+    message: {
+        min: 10,
+        max: 1000,
+        validate: (value) => {
+            if (value.length < 10) return 'Message must be at least 10 characters';
+            if (value.length > 1000) return 'Message cannot exceed 1000 characters';
+            return '';
+        }
+    }
+};
+
+function validateField(fieldId) {
+    const field = document.getElementById(fieldId);
+    const errorElement = document.getElementById(fieldId + 'Error');
+    const value = field.value.trim();
+    
+    const error = validations[fieldId].validate(value);
+    
+    if (error) {
+        field.classList.add('border-red-500');
+        field.classList.remove('border-green-500');
+        errorElement.textContent = error;
+        errorElement.classList.remove('hidden');
+    } else {
+        field.classList.remove('border-red-500');
+        field.classList.add('border-green-500');
+        errorElement.classList.add('hidden');
+    }
+    
+    updateSubmitButton();
+}
+
+function updateSubmitButton() {
+    const submitButton = document.getElementById('submitButton');
+    const isValid = ['name', 'email', 'message'].every(fieldId => {
+        const field = document.getElementById(fieldId);
+        return !validations[fieldId].validate(field.value.trim());
+    });
+    
+    submitButton.disabled = !isValid;
+    submitButton.classList.toggle('opacity-50', !isValid);
+    submitButton.classList.toggle('cursor-not-allowed', !isValid);
+}
+
+// Initialize validation on page load
+document.addEventListener('DOMContentLoaded', () => {
+    ['name', 'email', 'message'].forEach(validateField);
+});
+
+document.getElementById('inquiryForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Reset errors
+    hideAllErrors();
+    
+    // Get form values
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const message = document.getElementById('message').value.trim();
+    
+    let isValid = true;
+    
+    // Name validation
+    if (name.length < 3) {
+        showError('name', 'Name must be at least 3 characters long');
+        isValid = false;
+    } else if (name.length > 50) {
+        showError('name', 'Name cannot exceed 50 characters');
+        isValid = false;
+    }
+    
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        showError('email', 'Please enter a valid email address');
+        isValid = false;
+    }
+    
+    // Message validation
+    if (message.length < 10) {
+        showError('message', 'Message must be at least 10 characters long');
+        isValid = false;
+    } else if (message.length > 1000) {
+        showError('message', 'Message cannot exceed 1000 characters');
+        isValid = false;
+    }
+    
+    if (isValid) {
+        // Show loading state
+        const submitButton = document.getElementById('submitButton');
+        const loadingIcon = document.getElementById('loadingIcon');
+        const buttonText = submitButton.querySelector('span');
+        
+        submitButton.disabled = true;
+        buttonText.textContent = 'Sending...';
+        loadingIcon.classList.remove('hidden');
+        
+        // Submit the form
+        this.submit();
+    }
+});
+
+function showError(fieldId, message) {
+    const errorElement = document.getElementById(fieldId + 'Error');
+    errorElement.textContent = message;
+    errorElement.classList.remove('hidden');
+    document.getElementById(fieldId).classList.add('border-red-500');
+}
+
+function hideAllErrors() {
+    ['name', 'email', 'message'].forEach(field => {
+        document.getElementById(field + 'Error').classList.add('hidden');
+        document.getElementById(field).classList.remove('border-red-500');
+    });
+}
+
+// Auto-hide flash messages
+document.addEventListener('DOMContentLoaded', function() {
+    const flashMessages = document.querySelectorAll('[class*="animate-fade-in"]');
+    flashMessages.forEach(message => {
+        setTimeout(() => {
+            message.classList.add('animate-fade-out');
+            setTimeout(() => message.remove(), 500);
+        }, 5000);
+    });
+});
+</script>
+
+<style>
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(-10px); }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.5s ease-out;
+}
+
+.animate-fade-out {
+    animation: fadeOut 0.5s ease-out;
+}
+</style>
 {% endblock %}
