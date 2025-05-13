@@ -57,6 +57,9 @@ def create_app():
         REMEMBER_COOKIE_HTTPONLY=True,      # HTTPOnly remember-me cookie
         PERMANENT_SESSION_LIFETIME=1800     # 30 minutes session timeout
     )
+    
+    # Add Supabase client to app config
+    app.config['supabase'] = supabase
 
     # Force HTTPS (redirect HTTP to HTTPS except in debug/local)
     @app.before_request
@@ -119,6 +122,15 @@ def create_app():
     @app.context_processor
     def inject_csrf():
         return dict(csrf_token=generate_csrf)
+    
+    # Provide a dummy form with csrf_token for templates if not using WTForms
+    @app.context_processor
+    def inject_form():
+        class DummyForm:
+            @property
+            def csrf_token(self):
+                return generate_csrf()
+        return dict(form=DummyForm())
     
     # Make supabase available to templates
     @app.context_processor

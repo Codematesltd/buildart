@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request, jsonify
+from flask import Blueprint, render_template, redirect, url_for, flash, request, jsonify, current_app
 from flask_login import login_user, login_required, logout_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField
@@ -8,6 +8,7 @@ import os
 import uuid
 from werkzeug.utils import secure_filename
 from datetime import datetime
+import io
 
 # Setup
 admin_bp = Blueprint('admin', __name__)
@@ -64,18 +65,84 @@ def logout():
     logout_user()
     return redirect(url_for('admin.login'))
 
-# Add @login_required decorator to all admin routes
+def get_supabase():
+    """Get Supabase client from app config"""
+    return current_app.config['supabase']
+
 @admin_bp.route('/dashboard')
 @login_required
 def dashboard():
-    form = CSRFForm()
-    # Get existing projects and awards
-    projects = supabase.table('projects').select('*').execute()
-    awards = supabase.table('awards').select('*').execute()
-    return render_template('admin_dashboard.html', 
-                         form=form, 
-                         projects=projects.data if projects.data else [],
-                         awards=awards.data if awards.data else [])
+    section = request.args.get('section', 'applications')  # Default to applications view
+    queries = []
+    careers = []
+    
+    try:
+        supabase = current_app.config['supabase']
+        
+        # Always fetch both queries and careers
+        queries_response = supabase.table('general_inquiries').select('*').execute()
+        careers_response = supabase.table('careers').select('*').execute()
+        
+        queries = queries_response.data if queries_response.data else []
+        careers = careers_response.data if careers_response.data else []
+        
+        print(f"Fetched {len(careers)} career applications")  # Debug print
+        
+    except Exception as e:
+        print(f"Error fetching data: {str(e)}")
+    
+    return render_template(
+        'admin_dashboard.html',
+        section=section,
+        queries=queries,
+        careers=careers
+    )
+
+@admin_bp.route('/update_query_status', methods=['POST'])
+@login_required
+def update_query_status():
+    try:
+        data = request.get_json()
+        query_id = data.get('query_id')
+        new_status = data.get('status')
+        
+        if not query_id or not new_status:
+            return jsonify({'success': False, 'error': 'Missing required data'})
+        
+        # Update the status in Supabase
+        supabase = current_app.config['supabase']
+        response = supabase.table('general_inquiries').update(
+            {'status': new_status}
+        ).eq('id', query_id).execute()
+        
+        if response.data:
+            return jsonify({'success': True})
+        return jsonify({'success': False, 'error': 'Failed to update status'})
+        
+    except Exception as e:
+        print(f"Error updating status: {str(e)}")
+        return jsonify({'success': False, 'error': str(e)})
+
+@admin_bp.route('/update_career_status', methods=['POST'])
+@login_required
+def update_career_status():
+    try:
+        data = request.get_json()
+        career_id = data.get('career_id')
+        new_status = data.get('status')
+        
+        if not career_id or not new_status:
+            return jsonify({'success': False, 'error': 'Missing data'})
+            
+        supabase = current_app.config['supabase']
+        response = supabase.table('careers').update(
+            {'status': new_status}
+        ).eq('id', career_id).execute()
+        
+        return jsonify({'success': True if response.data else False})
+        
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
 
 @admin_bp.route('/add_award', methods=['POST'])
 @login_required
@@ -93,118 +160,97 @@ def add_award():
             flash('Award added successfully!', 'success')
         return redirect(url_for('main.awards'))
 
-@admin_bp.route('/projects', methods=['GET', 'POST'])
+@admin_bp.route('/manage/projects', methods=['POST'])
 @login_required
 def manage_projects():
     if request.method == 'POST':
+        supabase = get_supabase()
         try:
-            files = request.files.getlist('images[]')
-            image_urls = []
-            
-            if not files or files[0].filename == '':
-                flash('No files selected', 'error')
-                return redirect(url_for('admin.dashboard'))
-
-            for file in files:
-                if file and allowed_file(file.filename):
-                    try:
-                        filename = f"projects/{uuid.uuid4()}_{secure_filename(file.filename)}"
-                        file_content = file.read()
-                        
-                        storage_response = supabase.storage \
-                            .from_('project-images') \
-                            .upload(filename, file_content)
-                        
-                        if hasattr(storage_response, 'path'):
-                            bucket_url = f"{os.getenv('SUPABASE_URL')}/storage/v1/object/public/project-images"
-                            public_url = f"{bucket_url}/{storage_response.path}"
-                            image_urls.append(public_url)
-                            print(f"Image URL added: {public_url}")
-                        else:
-                            print(f"Upload failed, unexpected response: {storage_response}")
-                            
-                    except Exception as e:
-                        print(f"File upload error: {str(e)}")
-                        continue
-
-            # Simplified project data without thumbnail_url
+            # Create new project data
+            project_id = str(uuid.uuid4())
             project_data = {
+                'id': project_id,
                 'name': request.form.get('name'),
                 'description': request.form.get('description'),
-                'image_urls': image_urls,
-                'created_at': datetime.utcnow().isoformat()
+                'images': []
             }
             
-            print("Project data being inserted:", project_data)
-            
+            # Handle image uploads
+            if 'images[]' in request.files:
+                images = request.files.getlist('images[]')
+                for image in images:
+                    if image and image.filename:
+                        # Secure the filename and create a unique name
+                        filename = secure_filename(image.filename)
+                        unique_filename = f"{uuid.uuid4()}_{filename}"
+                        file_path = f"projects/{project_id}/{unique_filename}"
+                        
+                        # Read the file into memory
+                        file_data = image.read()
+                        
+                        # Upload to Supabase storage using bytes
+                        supabase.storage.from_('project-images').upload(
+                            path=file_path,
+                            file=file_data,
+                            file_options={"content-type": image.content_type}
+                        )
+                        
+                        # Get the public URL and add to project data
+                        file_url = supabase.storage.from_('project-images').get_public_url(file_path)
+                        project_data['images'].append(file_url)
+                        
+            # Insert project data into Supabase
             response = supabase.table('projects').insert(project_data).execute()
-            if hasattr(response, 'data'):
-                flash('Project added successfully!', 'success')
-            return redirect(url_for('admin.dashboard'))
             
+            if response.data:
+                flash('Project added successfully!', 'success')
+            else:
+                flash('Error adding project', 'error')
+                
         except Exception as e:
-            print(f"Error: {str(e)}")
+            print(f"Error adding project: {str(e)}")
             flash(f'Error: {str(e)}', 'error')
-            return redirect(url_for('admin.dashboard'))
+            
+        return redirect(url_for('admin.dashboard', section='projects'))
 
-    # GET request handling remains the same
-    return render_template('admin_dashboard.html')
-
-@admin_bp.route('/awards', methods=['GET', 'POST'])
+@admin_bp.route('/manage/awards', methods=['POST'])
 @login_required
 def manage_awards():
     if request.method == 'POST':
-        try:
-            files = request.files.getlist('images[]')
-            image_urls = []
+        supabase = get_supabase()
+        
+        # Create new award
+        award_data = {
+            'id': str(uuid.uuid4()),
+            'year': request.form.get('year'),
+            'award_name': request.form.get('award_name'),
+            'project': request.form.get('project'),
+            'category': request.form.get('category'),
+            'prize': request.form.get('prize'),
+            'images': []  # We'll handle image upload separately
+        }
+        
+        # Handle image uploads
+        if 'images[]' in request.files:
+            images = request.files.getlist('images[]')
+            for image in images:
+                if image.filename:
+                    # Handle image upload to Supabase storage
+                    filename = secure_filename(image.filename)
+                    file_path = f"awards/{award_data['id']}/{filename}"
+                    
+                    # Upload to Supabase storage
+                    supabase.storage.from_('award-images').upload(file_path, image)
+                    
+                    # Add image URL to award data
+                    award_data['images'].append(file_path)
+        
+        # Insert into Supabase
+        response = supabase.table('awards').insert(award_data).execute()
+        
+        if response.data:
+            flash('Award added successfully!', 'success')
+        else:
+            flash('Error adding award', 'error')
             
-            if not files or files[0].filename == '':
-                flash('No files selected', 'error')
-                return redirect(url_for('admin.dashboard'))
-
-            for file in files:
-                if file and allowed_file(file.filename):
-                    try:
-                        filename = f"awards/{uuid.uuid4()}_{secure_filename(file.filename)}"
-                        file_content = file.read()
-                        
-                        storage_response = supabase.storage \
-                            .from_('project-images') \
-                            .upload(filename, file_content)
-                        
-                        if hasattr(storage_response, 'path'):
-                            bucket_url = f"{os.getenv('SUPABASE_URL')}/storage/v1/object/public/project-images"
-                            public_url = f"{bucket_url}/{storage_response.path}"
-                            image_urls.append(public_url)
-                            print(f"Image URL added: {public_url}")
-                        else:
-                            print(f"Upload failed, unexpected response: {storage_response}")
-                            
-                    except Exception as e:
-                        print(f"File upload error: {str(e)}")
-                        continue
-
-            award_data = {
-                'year': request.form.get('year'),
-                'award_name': request.form.get('award_name'),
-                'project': request.form.get('project'),
-                'category': request.form.get('category'),  # Add this line
-                'prize': request.form.get('prize'),
-                'image_urls': image_urls,  # This should now contain valid URLs
-                'created_at': datetime.utcnow().isoformat()
-            }
-
-            print("Award data being inserted:", award_data)  # Debug log
-            
-            response = supabase.table('awards').insert(award_data).execute()
-            if hasattr(response, 'data'):
-                flash('Award added successfully!', 'success')
-            return redirect(url_for('admin.dashboard'))
-
-        except Exception as e:
-            print(f"Error: {str(e)}")
-            flash(f'Error: {str(e)}', 'error')
-            return redirect(url_for('admin.dashboard'))
-
-    # GET request handling remains the same
-    return render_template('admin_dashboard.html')
+        return redirect(url_for('admin.dashboard', section='awards'))
