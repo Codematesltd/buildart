@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request, jsonify
-from flask_login import LoginManager, login_user, login_required, logout_user
+from flask_login import login_user, login_required, logout_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired
@@ -11,8 +11,6 @@ from datetime import datetime
 
 # Setup
 admin_bp = Blueprint('admin', __name__)
-login_manager = LoginManager()
-login_manager.login_view = 'admin.login'
 
 # Initialize Supabase
 supabase = create_client(
@@ -26,12 +24,12 @@ MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+class CSRFForm(FlaskForm):
+    pass
+
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
-
-class CSRFForm(FlaskForm):
-    pass
 
 class Admin:
     def __init__(self, id, username):
@@ -44,30 +42,29 @@ class Admin:
     def get_id(self):
         return str(self.id)
 
-def init_extensions(app):
-    login_manager.init_app(app)
-
-@login_manager.user_loader
-def load_user(user_id):
-    response = supabase.table('admin_users').select('*').eq('id', user_id).execute()
-    if response.data:
-        user_data = response.data[0]
-        return Admin(user_data['id'], user_data['username'])
-    return None
-
 @admin_bp.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        response = supabase.table('admin_users').select('*').eq('username', form.username.data).execute()
-        if response.data and response.data[0]['password_hash'] == form.password.data:
-            user_data = response.data[0]
-            user = Admin(user_data['id'], user_data['username'])
-            login_user(user)
-            return redirect(url_for('admin.dashboard'))
-        flash('Invalid credentials')
+        try:
+            response = supabase.table('admin_users').select('*').eq('username', form.username.data).execute()
+            if response.data and response.data[0]['password_hash'] == form.password.data:
+                user_data = response.data[0]
+                user = Admin(user_data['id'], user_data['username'])
+                login_user(user)
+                return redirect(url_for('admin.dashboard'))
+            flash('Invalid username or password', 'error')
+        except Exception as e:
+            flash(f'Login error: {str(e)}', 'error')
     return render_template('admin_login.html', form=form)
 
+@admin_bp.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('admin.login'))
+
+# Add @login_required decorator to all admin routes
 @admin_bp.route('/dashboard')
 @login_required
 def dashboard():
@@ -79,12 +76,6 @@ def dashboard():
                          form=form, 
                          projects=projects.data if projects.data else [],
                          awards=awards.data if awards.data else [])
-
-@admin_bp.route('/logout')
-@login_required
-def logout():
-    logout_user()
-    return redirect(url_for('admin.login'))
 
 @admin_bp.route('/add_award', methods=['POST'])
 @login_required
