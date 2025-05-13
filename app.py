@@ -2,7 +2,7 @@ import os
 import click
 import uuid
 from dotenv import load_dotenv
-from flask import Flask
+from flask import Flask, request
 from flask_wtf.csrf import CSRFProtect, generate_csrf
 from supabase import create_client
 from flask_login import LoginManager
@@ -41,6 +41,9 @@ def create_app():
     def after_request(response):
         response.headers.pop('X-Frame-Options', None)
         response.headers.pop('Content-Security-Policy', None)
+        # Set cache headers for static files (5 minutes)
+        if app.static_url_path and app.static_url_path in str(getattr(request, 'path', '')):
+            response.headers['Cache-Control'] = 'public, max-age=300'
         return response
     
     # Initialize CSRF protection first

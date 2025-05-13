@@ -15,7 +15,7 @@
   {% block head_extra %}{% endblock %}
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='images/fav.ico') }}">
 
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -95,7 +95,7 @@
       <div class="flex items-center justify-between h-20">
         <!-- Logo -->
         <a href="{{ url_for('main.index') }}" class="flex-shrink-0 transition-transform duration-300 hover:scale-105">
-          <img src="\static\images\logo.png" alt="Buildaart Logo" class="h-16">
+          <img src="\static\images\LOGO.jpg" alt="Buildaart Logo" class="h-16">
         </a>
 
         <!-- Desktop Navigation - Centered -->
@@ -309,6 +309,22 @@
   </script>
 
   {% block scripts %}{% endblock %}
+
+  <!-- TARS Chatbot Script -->
+  <script>
+    (function(){
+      var js, fs, d = document, id = "tars-widget-script", b = "https://tars-file-upload.s3.amazonaws.com/bulb/";
+      if (!d.getElementById(id)) {
+        js = d.createElement("script");
+        js.id = id;
+        js.type = "text/javascript";
+        js.src = b + "js/widget.js";
+        fs = d.getElementsByTagName("script")[0];
+        fs.parentNode.insertBefore(js, fs);
+      }
+    })();
+    window.tarsSettings = { "convid": "quIsq4" };
+  </script>
 
 </body>
 </html>
