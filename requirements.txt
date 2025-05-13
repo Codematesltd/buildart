@@ -13,3 +13,4 @@ waitress
 flask-minify
 config
 gunicorn
+Flask-Compress

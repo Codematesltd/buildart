@@ -6,6 +6,7 @@ from flask import Flask, request
 from flask_wtf.csrf import CSRFProtect, generate_csrf
 from supabase import create_client
 from flask_login import LoginManager
+# from flask_compress import Compress  # <-- Remove this import
 
 # Load environment variables first
 load_dotenv()
@@ -25,6 +26,21 @@ from flask_minify import Minify
 # Initialize login manager globally
 login_manager = LoginManager()
 
+# Example: Reading a text file with unknown encoding
+def read_file(filepath):
+    try:
+        with open(filepath, encoding='utf-8') as f:
+            return f.read()
+    except UnicodeDecodeError:
+        # Try a fallback encoding
+        with open(filepath, encoding='latin-1') as f:
+            return f.read()
+
+# Example: Reading a binary file
+def read_binary_file(filepath):
+    with open(filepath, 'rb') as f:
+        return f.read()
+
 def create_app():
     app = Flask(__name__)
     
@@ -33,17 +49,43 @@ def create_app():
         SECRET_KEY=os.getenv('SECRET_KEY', 'default-secret-key'),
         SUPABASE_URL=os.getenv('SUPABASE_URL'),
         SUPABASE_KEY=os.getenv('SUPABASE_KEY'),
-        WTF_CSRF_ENABLED=True
+        WTF_CSRF_ENABLED=True,
+        SESSION_COOKIE_SECURE=True,         # Only send cookies over HTTPS
+        SESSION_COOKIE_HTTPONLY=True,       # Prevent JavaScript access to session cookie
+        SESSION_COOKIE_SAMESITE='Lax',      # Restrict cross-site cookie sending
+        REMEMBER_COOKIE_SECURE=True,        # Secure remember-me cookie
+        REMEMBER_COOKIE_HTTPONLY=True,      # HTTPOnly remember-me cookie
+        PERMANENT_SESSION_LIFETIME=1800     # 30 minutes session timeout
     )
+
+    # Force HTTPS (redirect HTTP to HTTPS except in debug/local)
+    @app.before_request
+    def before_request_https():
+        if not app.debug and not request.is_secure:
+            # Allow localhost for development
+            if request.host.startswith('localhost') or request.host.startswith('127.0.0.1'):
+                return
+            url = request.url.replace("http://", "https://", 1)
+            return app.redirect(url, code=301)
 
     # Remove any CSP or X-Frame-Options headers (allow all external links and CDNs)
     @app.after_request
     def after_request(response):
         response.headers.pop('X-Frame-Options', None)
         response.headers.pop('Content-Security-Policy', None)
+        # Set secure headers
+        response.headers['Strict-Transport-Security'] = 'max-age=600; includeSubDomains; preload'
+        response.headers['Referrer-Policy'] = 'no-referrer-when-downgrade'
+        response.headers['X-Content-Type-Options'] = 'nosniff'
+        response.headers['X-XSS-Protection'] = '1; mode=block'
         # Set cache headers for static files (5 minutes)
         if app.static_url_path and app.static_url_path in str(getattr(request, 'path', '')):
-            response.headers['Cache-Control'] = 'public, max-age=300'
+            # Image cache: 1 day for common image extensions
+            image_exts = ('.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg', '.ico')
+            if any(str(request.path).lower().endswith(ext) for ext in image_exts):
+                response.headers['Cache-Control'] = 'public, max-age=86400'
+            else:
+                response.headers['Cache-Control'] = 'public, max-age=300'
         return response
     
     # Initialize CSRF protection first
@@ -84,6 +126,9 @@ def create_app():
         return dict(supabase=supabase)
 
     Minify(app=app, html=True, js=False, cssless=False)
+
+    # Enable Gzip/Brotli compression
+    # Compress(app)  # <-- Remove this line
 
     @app.cli.command("create-admin")
     @click.argument("username")
