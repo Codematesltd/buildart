@@ -8,6 +8,18 @@
 {% endblock %}
 
 {% block content %}
+<!-- Debug Info Section -->
+<div class="bg-gray-100 p-4 mb-4 rounded">
+    <h3 class="font-bold">Data Overview:</h3>
+    <p>Active Section: {{ section }}</p>
+    {% if queries is defined %}
+    <p>Total Queries: {{ queries|length }}</p>
+    {% endif %}
+    {% if careers is defined %}
+    <p>Total Career Applications: {{ careers|length }}</p>
+    {% endif %}
+</div>
+
 <div class="flex min-h-screen bg-gray-100">
     <!-- Sidebar -->
     <div class="w-64 bg-[#66605f] p-5 text-white shadow-md">
@@ -44,21 +56,111 @@
         <div class="bg-white rounded-lg shadow-md p-6">
             <!-- Queries Section -->
             <div class="{% if section == 'queries' %}block{% else %}hidden{% endif %}" id="queries">
-                <h2 class="text-xl font-bold mb-5 pb-2 border-b-2 border-gray-800">Queries</h2>
-                <p>Query management functionality will be implemented soon.</p>
+                <h2 class="text-xl font-bold mb-5">General Inquiries</h2>
+                {% if queries and queries|length > 0 %}
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white rounded-lg overflow-hidden text-sm">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Message</th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200 text-sm">
+                            {% for query in queries %}
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2 whitespace-nowrap text-xs">{{ query.name }}</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-xs">{{ query.email }}</td>
+                                <td class="px-4 py-2 text-xs">
+                                    <p class="max-w-xs truncate">{{ query.message }}</p>
+                                </td>
+                                <td class="px-4 py-2 whitespace-nowrap">
+                                    <span class="px-2 py-0.5 text-[10px] leading-4 font-medium rounded-full 
+                                        {% if query.status == 'completed' %}
+                                            bg-green-100 text-green-800
+                                        {% else %}
+                                            bg-yellow-100 text-yellow-800
+                                        {% endif %}">
+                                        {{ query.status|default('pending')|title }}
+                                    </span>
+                                </td>
+                                <td class="px-4 py-2 whitespace-nowrap">
+                                    <button onclick="updateQueryStatus('{{ query.id }}', '{{ 'completed' if query.status == 'pending' else 'pending' }}')"
+                                            class="px-2 py-0.5 text-[10px] font-medium rounded 
+                                            {% if query.status == 'completed' %}
+                                                bg-yellow-100 text-yellow-700 hover:bg-yellow-200
+                                            {% else %}
+                                                bg-green-100 text-green-700 hover:bg-green-200
+                                            {% endif %}">
+                                        Mark {{ 'Completed' if query.status == 'pending' else 'Pending' }}
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-gray-500 text-center py-8">No queries found</p>
+                {% endif %}
             </div>
 
             <!-- Job Applications Section -->
             <div class="{% if section == 'applications' %}block{% else %}hidden{% endif %}" id="applications">
-                <h2 class="text-xl font-bold mb-5 pb-2 border-b-2 border-gray-800">Job Applications</h2>
-                <p>Job application management functionality will be implemented soon.</p>
+                <h2 class="text-xl font-bold mb-5">Job Applications</h2>
+                {% if careers %}
+                    <div class="overflow-x-auto bg-white rounded-lg shadow">
+                        <table class="min-w-full divide-y divide-gray-200 text-sm">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Position</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Message</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200 text-sm">
+                                {% for career in careers %}
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-4 py-2 whitespace-nowrap text-xs">{{ career.name }}</td>
+                                        <td class="px-4 py-2 whitespace-nowrap text-xs">{{ career.email }}</td>
+                                        <td class="px-4 py-2 whitespace-nowrap text-xs">{{ career.phone }}</td>
+                                        <td class="px-4 py-2 whitespace-nowrap text-xs">{{ career.position }}</td>
+                                        <td class="px-4 py-2 text-xs"><div class="max-w-[200px] truncate">{{ career.message }}</div></td>
+                                        <td class="px-4 py-2 whitespace-nowrap">
+                                            <span class="px-2 py-0.5 text-[10px] leading-4 font-medium rounded-full 
+                                                {% if career.status == 'completed' %}bg-green-100 text-green-800{% else %}bg-yellow-100 text-yellow-800{% endif %}">
+                                                {{ career.status|default('pending')|title }}
+                                            </span>
+                                        </td>
+                                        <td class="px-4 py-2 whitespace-nowrap">
+                                            <button onclick="updateCareerStatus('{{ career.id }}', '{{ 'completed' if career.status == 'pending' else 'pending' }}')"
+                                                    class="px-2 py-0.5 text-[10px] font-medium rounded 
+                                                    {% if career.status == 'completed' %}bg-yellow-100 text-yellow-700 hover:bg-yellow-200{% else %}bg-green-100 text-green-700 hover:bg-green-200{% endif %}">
+                                                {{ 'Mark Pending' if career.status == 'completed' else 'Mark Completed' }}
+                                            </button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-gray-500 text-center py-8">No job applications found.</p>
+                {% endif %}
             </div>
 
             <!-- Projects Section -->
             <div class="{% if section == 'projects' %}block{% else %}hidden{% endif %}" id="projects">
                 <h2 class="text-xl font-bold mb-5 pb-2 border-b-2 border-gray-800">Add New Project</h2>
                 <form method="POST" action="{{ url_for('admin.manage_projects') }}" enctype="multipart/form-data" class="space-y-4">
-                    {{ form.csrf_token }}
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <div>
                         <label class="block text-gray-700 font-bold mb-2">Project Name:</label>
                         <input type="text" name="name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-800 focus:ring-2 focus:ring-gray-800/10">
@@ -81,7 +183,7 @@
             <div class="{% if section == 'awards' %}block{% else %}hidden{% endif %}" id="awards">
                 <h2 class="text-xl font-bold mb-5 pb-2 border-b-2 border-gray-800">Add New Award</h2>
                 <form method="POST" action="{{ url_for('admin.manage_awards') }}" enctype="multipart/form-data" class="space-y-4">
-                    {{ form.csrf_token }}
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <div>
                         <label class="block text-gray-700 font-bold mb-2">Year:</label>
                         <input type="text" name="year" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-800 focus:ring-2 focus:ring-gray-800/10">
@@ -111,7 +213,130 @@
                     </button>
                 </form>
             </div>
+
+            <!-- Careers Section -->
+            <div class="{% if section == 'careers' %}block{% else %}hidden{% endif %}" id="careers">
+                <h2 class="text-xl font-bold mb-5">Career Applications</h2>
+                {% if careers and careers|length > 0 %}
+                <div class="overflow-x-auto bg-white rounded-lg shadow">
+                    <table class="min-w-full divide-y divide-gray-200 text-sm">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Position</th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cover Letter</th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200 text-sm">
+                            {% for career in careers %}
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2 whitespace-nowrap text-xs">{{ career.name }}</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-xs">{{ career.email }}</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-xs">{{ career.phone }}</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-xs">{{ career.position }}</td>
+                                <td class="px-4 py-2 text-xs">
+                                    <div class="max-w-[200px] truncate">{{ career.message }}</div>
+                                </td>
+                                <td class="px-4 py-2 whitespace-nowrap">
+                                    <span class="px-2 py-0.5 text-[10px] leading-4 font-medium rounded-full 
+                                        {% if career.status == 'completed' %}
+                                            bg-green-100 text-green-800
+                                        {% else %}
+                                            bg-yellow-100 text-yellow-800
+                                        {% endif %}">
+                                        {{ career.status|default('pending')|title }}
+                                    </span>
+                                </td>
+                                <td class="px-4 py-2 whitespace-nowrap">
+                                    <button onclick="updateCareerStatus('{{ career.id }}', '{{ 'completed' if career.status == 'pending' else 'pending' }}')"
+                                            class="px-2 py-0.5 text-[10px] font-medium rounded 
+                                            {% if career.status == 'completed' %}
+                                                bg-yellow-100 text-yellow-700 hover:bg-yellow-200
+                                            {% else %}
+                                                bg-green-100 text-green-700 hover:bg-green-200
+                                            {% endif %}">
+                                        {{ 'Mark Pending' if career.status == 'completed' else 'Mark Completed' }}
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-gray-500 text-center py-8">No career applications found</p>
+                {% endif %}
+            </div>
         </div>
     </div>
 </div>
+
+<script>
+function updateQueryStatus(queryId, newStatus) {
+    fetch('/admin/update_query_status', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token() }}'
+        },
+        body: JSON.stringify({
+            query_id: queryId,
+            status: newStatus
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            window.location.reload();
+        } else {
+            alert('Error updating status: ' + (data.error || 'Unknown error'));
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error updating status. Please try again.');
+    });
+}
+
+function updateCareerStatus(careerId, newStatus) {
+    fetch('/admin/update_career_status', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token() }}'
+        },
+        body: JSON.stringify({
+            career_id: careerId,
+            status: newStatus
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            window.location.reload();
+        } else {
+            alert('Error updating status: ' + (data.error || 'Unknown error'));
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error updating status. Please try again.');
+    });
+}
+
+// Simpler debug logging
+console.log('Current Section:', '{{ section }}');
+{% if queries is defined %}
+console.log('Queries Count:', {{ queries|length }});
+{% endif %}
+{% if careers is defined %}
+console.log('Careers Count:', {{ careers|length }});
+{% endif %}
+
+// ...existing code...
+</script>
 {% endblock %}
