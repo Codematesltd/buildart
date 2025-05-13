@@ -3,291 +3,114 @@
 {% block title %}Admin Dashboard{% endblock %}
 
 {% block custom_styles %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-<style>
-    /* Import website theme styles */
-    /* Assuming your website's main CSS is in static/css/style.css */
-    /* You'll need to manually copy relevant styles from that file */
-
-    /* Example styles (replace with your actual theme styles) */
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f4;
-        color: #333;
-    }
-
-    header {
-        background-color: #333;
-        color: #fff;
-        padding: 10px 0;
-        text-align: center;
-    }
-
-    nav a {
-        color: #fff;
-        text-decoration: none;
-        padding: 0 10px;
-    }
-
-    /* Admin dashboard specific styles */
-    .admin-container {
-        display: flex;
-        min-height: 100vh;
-        background: #f0f2f5;
-        margin: 0;
-        padding: 0;
-    }
-
-    .sidebar {
-        width: 250px;
-        background:rgb(50, 48, 48); /* A shade of orange */
-        padding: 20px;
-        color: white;
-        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-    }
-
-    .sidebar h2 {
-        color: white;
-        margin-bottom: 20px;
-        font-size: 18px;
-        border-bottom: 1px solid #ffb74d; /* A lighter orange color */
-        padding-bottom: 10px;
-    }
-
-    .nav-item {
-        padding: 12px 15px;
-        margin: 8px 0;
-        cursor: pointer;
-        border-radius: 5px;
-        color: white !important;
-        text-decoration: none !important;
-        display: flex;
-        align-items: center;
-        transition: all 0.3s ease;
-        font-size: 15px;
-    }
-
-    .nav-item:hover {
-        background: #ffb74d; /* A lighter orange color */
-        transform: translateX(5px);
-    }
-
-    .nav-item.active {
-        background: #444;
-        border-left: 4px solid #ffd700;
-    }
-
-    .nav-item i {
-        margin-right: 10px;
-        width: 20px;
-        text-align: center;
-    }
-
-    .content {
-        flex: 1;
-        padding: 30px;
-        background: #ffffff;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-        margin: 20px;
-    }
-
-    .section {
-        display: none;
-        animation: fadeIn 0.3s ease;
-    }
-
-    .section.active {
-        display: block;
-    }
-
-    .section h2 {
-        margin-bottom: 20px;
-        color: #1a1a1a;
-        border-bottom: 2px solid #1a1a1a;
-        padding-bottom: 10px;
-        font-size: 20px;
-    }
-
-    form div {
-        margin-bottom: 15px;
-    }
-
-    label {
-        display: block;
-        margin-bottom: 5px;
-        font-weight: bold;
-        color: #333;
-    }
-
-    input[type="text"],
-    textarea,
-    input[type="file"] {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        background: #f9f9f9;
-        font-size: 14px;
-    }
-
-    textarea {
-        min-height: 100px;
-        resize: vertical;
-    }
-
-    button[type="submit"] {
-        background: #ff9800; /* A shade of orange */
-        color: white;
-        padding: 12px 25px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 15px;
-        font-weight: bold;
-        transition: all 0.3s ease;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        display: inline-block;
-        min-width: 150px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    button[type="submit"]:hover {
-        background: #ffb74d; /* A lighter orange color */
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
-
-    button[type="submit"]:active {
-        transform: translateY(0);
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    input[type="text"]:focus,
-    textarea:focus,
-    input[type="file"]:focus {
-        outline: none;
-        border-color: #1a1a1a;
-        box-shadow: 0 0 0 2px rgba(26, 26, 26, 0.1);
-    }
-
-    @media (max-width: 768px) {
-        .admin-container {
-            flex-direction: column;
-        }
-
-        .sidebar {
-            width: 100%;
-            box-shadow: none;
-        }
-
-        .content {
-            margin: 10px;
-        }
-    }
-
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-        }
-        to {
-            opacity: 1;
-        }
-    }
-</style>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
 {% endblock %}
 
 {% block content %}
-<div class="admin-container">
-    <div class="sidebar">
-        <h2>Admin Panel</h2>
+<div class="flex min-h-screen bg-gray-100">
+    <!-- Sidebar -->
+    <div class="w-64 bg-[#66605f] p-5 text-white shadow-md">
+        <h2 class="text-lg font-semibold mb-5 pb-2 border-b border-[#ffb74d]">Admin Panel</h2>
+        
         <a href="{{ url_for('admin.dashboard', section='queries') }}" 
-           class="nav-item {% if section == 'queries' %}active{% endif %}">
-            <i class="fas fa-question-circle"></i> Queries
+           class="flex items-center py-3 px-4 my-2 rounded-lg hover:bg-[#ffb74d] hover:translate-x-1 transition-all duration-300 {% if section == 'queries' %}bg-gray-700 border-l-4 border-yellow-400{% endif %}">
+            <i class="fas fa-question-circle w-5 mr-3"></i> Queries
         </a>
+        
         <a href="{{ url_for('admin.dashboard', section='applications') }}" 
-           class="nav-item {% if section == 'applications' %}active{% endif %}">
-            <i class="fas fa-briefcase"></i> Job Applications
+           class="flex items-center py-3 px-4 my-2 rounded-lg hover:bg-[#ffb74d] hover:translate-x-1 transition-all duration-300 {% if section == 'applications' %}bg-gray-700 border-l-4 border-yellow-400{% endif %}">
+            <i class="fas fa-briefcase w-5 mr-3"></i> Job Applications
         </a>
+        
         <a href="{{ url_for('admin.dashboard', section='projects') }}" 
-           class="nav-item {% if section == 'projects' %}active{% endif %}">
-            <i class="fas fa-project-diagram"></i> Add Projects
+           class="flex items-center py-3 px-4 my-2 rounded-lg hover:bg-[#ffb74d] hover:translate-x-1 transition-all duration-300 {% if section == 'projects' %}bg-gray-700 border-l-4 border-yellow-400{% endif %}">
+            <i class="fas fa-project-diagram w-5 mr-3"></i> Add Projects
         </a>
+        
         <a href="{{ url_for('admin.dashboard', section='awards') }}" 
-           class="nav-item {% if section == 'awards' %}active{% endif %}">
-            <i class="fas fa-trophy"></i> Add Awards
+           class="flex items-center py-3 px-4 my-2 rounded-lg hover:bg-[#ffb74d] hover:translate-x-1 transition-all duration-300 {% if section == 'awards' %}bg-gray-700 border-l-4 border-yellow-400{% endif %}">
+            <i class="fas fa-trophy w-5 mr-3"></i> Add Awards
         </a>
-        <a href="{{ url_for('admin.logout') }}" class="nav-item">
-            <i class="fas fa-sign-out-alt"></i> Logout
+        
+        <a href="{{ url_for('admin.logout') }}" 
+           class="flex items-center py-3 px-4 my-2 rounded-lg hover:bg-[#ffb74d] hover:translate-x-1 transition-all duration-300">
+            <i class="fas fa-sign-out-alt w-5 mr-3"></i> Logout
         </a>
     </div>
-    
-    <div class="content">
-        <!-- Queries Section -->
-        <div class="section {% if section == 'queries' %}active{% endif %}" id="queries">
-            <h2>Queries</h2>
-            <p>Query management functionality will be implemented soon.</p>
-        </div>
 
-        <!-- Job Applications Section -->
-        <div class="section {% if section == 'applications' %}active{% endif %}" id="applications">
-            <h2>Job Applications</h2>
-            <p>Job application management functionality will be implemented soon.</p>
-        </div>
+    <!-- Main Content -->
+    <div class="flex-1 p-8">
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <!-- Queries Section -->
+            <div class="{% if section == 'queries' %}block{% else %}hidden{% endif %}" id="queries">
+                <h2 class="text-xl font-bold mb-5 pb-2 border-b-2 border-gray-800">Queries</h2>
+                <p>Query management functionality will be implemented soon.</p>
+            </div>
 
-        <!-- Projects Section -->
-        <div class="section {% if section == 'projects' %}active{% endif %}" id="projects">
-            <h2>Add New Project</h2>
-            <form method="POST" action="{{ url_for('admin.manage_projects') }}" enctype="multipart/form-data">
-                {{ form.csrf_token }}
-                <div>
-                    <label>Project Name:</label>
-                    <input type="text" name="name" required>
-                </div>
-                <div>
-                    <label>Description:</label>
-                    <textarea name="description" required></textarea>
-                </div>
-                <div>
-                    <label>Images:</label>
-                    <input type="file" name="images[]" multiple accept="image/*" required>
-                </div>
-                <button type="submit">Add Project</button>
-            </form>
-        </div>
+            <!-- Job Applications Section -->
+            <div class="{% if section == 'applications' %}block{% else %}hidden{% endif %}" id="applications">
+                <h2 class="text-xl font-bold mb-5 pb-2 border-b-2 border-gray-800">Job Applications</h2>
+                <p>Job application management functionality will be implemented soon.</p>
+            </div>
 
-        <!-- Awards Section -->
-        <div class="section {% if section == 'awards' %}active{% endif %}" id="awards">
-            <h2>Add New Award</h2>
-            <form method="POST" action="{{ url_for('admin.manage_awards') }}" enctype="multipart/form-data">
-                {{ form.csrf_token }}
-                <div>
-                    <label>Year:</label>
-                    <input type="text" name="year" required>
-                </div>
-                <div>
-                    <label>Award Name:</label>
-                    <input type="text" name="award_name" required>
-                </div>
-                <div>
-                    <label>Project:</label>
-                    <input type="text" name="project" required>
-                </div>
-                <div>
-                    <label>Category:</label>
-                    <input type="text" name="category" required>
-                </div>
-                <div>
-                    <label>Prize:</label>
-                    <input type="text" name="prize" required>
-                </div>
-                <div>
-                    <label>Images:</label>
-                    <input type="file" name="images[]" multiple accept="image/*" required>
-                </div>
-                <button type="submit">Add Award</button>
-            </form>
+            <!-- Projects Section -->
+            <div class="{% if section == 'projects' %}block{% else %}hidden{% endif %}" id="projects">
+                <h2 class="text-xl font-bold mb-5 pb-2 border-b-2 border-gray-800">Add New Project</h2>
+                <form method="POST" action="{{ url_for('admin.manage_projects') }}" enctype="multipart/form-data" class="space-y-4">
+                    {{ form.csrf_token }}
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2">Project Name:</label>
+                        <input type="text" name="name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-800 focus:ring-2 focus:ring-gray-800/10">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2">Description:</label>
+                        <textarea name="description" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-800 focus:ring-2 focus:ring-gray-800/10 min-h-[100px]"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2">Images:</label>
+                        <input type="file" name="images[]" multiple accept="image/*" required class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50">
+                    </div>
+                    <button type="submit" class="bg-[#ff9800] hover:bg-[#ffb74d] text-white font-bold py-3 px-6 rounded-lg transform transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg min-w-[150px] uppercase tracking-wide">
+                        Add Project
+                    </button>
+                </form>
+            </div>
+
+            <!-- Awards Section -->
+            <div class="{% if section == 'awards' %}block{% else %}hidden{% endif %}" id="awards">
+                <h2 class="text-xl font-bold mb-5 pb-2 border-b-2 border-gray-800">Add New Award</h2>
+                <form method="POST" action="{{ url_for('admin.manage_awards') }}" enctype="multipart/form-data" class="space-y-4">
+                    {{ form.csrf_token }}
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2">Year:</label>
+                        <input type="text" name="year" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-800 focus:ring-2 focus:ring-gray-800/10">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2">Award Name:</label>
+                        <input type="text" name="award_name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-800 focus:ring-2 focus:ring-gray-800/10">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2">Project:</label>
+                        <input type="text" name="project" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-800 focus:ring-2 focus:ring-gray-800/10">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2">Category:</label>
+                        <input type="text" name="category" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-800 focus:ring-2 focus:ring-gray-800/10">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2">Prize:</label>
+                        <input type="text" name="prize" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-800 focus:ring-2 focus:ring-gray-800/10">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2">Images:</label>
+                        <input type="file" name="images[]" multiple accept="image/*" required class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50">
+                    </div>
+                    <button type="submit" class="bg-[#ff9800] hover:bg-[#ffb74d] text-white font-bold py-3 px-6 rounded-lg transform transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg min-w-[150px] uppercase tracking-wide">
+                        Add Award
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 </div>
