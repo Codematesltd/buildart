@@ -7,12 +7,10 @@
     <!-- Carousel Container -->
     <div class="relative h-screen" id="carousel-wrapper">
         <div class="carousel-container h-full">
-            <!-- Awards 1-18 -->
+            <!-- Awards 1-17 -->
             <img src="/static/images/awards/1.jpg" alt="Award 1"
                  class="absolute inset-0 w-full h-full object-cover brightness-75 transition-opacity duration-1000" data-active>
-            <img src="/static/images/awards/2.jpg" alt="Award 2" 
-                 class="absolute inset-0 w-full h-full object-cover brightness-75 transition-opacity duration-1000 opacity-0">
-            {% for i in range(3, 17) %}
+            {% for i in range(2, 18) %}  {# Changed to include image 17 #}
             <img src="/static/images/awards/{{ i }}.jpg" 
                  alt="Award {{ i }}" 
                  class="absolute inset-0 w-full h-full object-cover brightness-75 transition-opacity duration-1000 opacity-0">
@@ -282,27 +280,43 @@
 </style>
 
 <!-- Modal for image popup -->
-<div id="imageModal" class="hidden fixed inset-0 z-50 bg-black bg-opacity-75 flex items-center justify-center p-2 sm:p-4">
-    <div class="relative max-w-[95vw] sm:max-w-[90vw] md:max-w-[85vw]">
-        <button onclick="closeModal()" class="absolute -top-8 sm:-top-10 right-0 text-white text-2xl sm:text-3xl">&times;</button>
-        <img id="modalImage" src="" alt="Enlarged project image" class="max-w-full max-h-[85vh] sm:max-h-[90vh] object-contain">
+<div id="imageModal" class="hidden fixed inset-0 z-50 bg-black bg-opacity-75 flex items-center justify-center p-4">
+    <div class="relative max-w-4xl mx-auto">
+        <button onclick="closeModal()" 
+                class="absolute -top-10 right-0 text-white text-4xl hover:text-gray-300 focus:outline-none"
+                aria-label="Close modal">
+            &times;
+        </button>
+        <img id="modalImage" src="" alt="Award image" class="max-h-[85vh] object-contain">
     </div>
 </div>
 
 <script>
-const totalSlides = 17;
 let currentSlide = 0;
 let autoplayInterval;
+const totalSlides = 17;
 
 function showSlide(index) {
     const images = document.querySelectorAll('.carousel-container img');
+    
+    // Handle wrapping
+    if (index >= totalSlides) {
+        index = 0;
+    } else if (index < 0) {
+        index = totalSlides - 1;
+    }
+
+    // Fade out all images
     images.forEach(img => {
+        img.style.opacity = '0';
         img.removeAttribute('data-active');
-        img.classList.add('opacity-0');
     });
     
-    images[index].setAttribute('data-active', '');
-    images[index].classList.remove('opacity-0');
+    // Fade in new image
+    setTimeout(() => {
+        images[index].style.opacity = '1';
+        images[index].setAttribute('data-active', '');
+    }, 50);
     
     currentSlide = index;
     updateProgress();
@@ -310,29 +324,25 @@ function showSlide(index) {
 }
 
 function autoScroll() {
-    showSlide((currentSlide + 1) % totalSlides);
+    const nextIndex = (currentSlide + 1) % totalSlides;
+    showSlide(nextIndex);
 }
 
-// Initialize carousel on page load
+// Initialize carousel
 document.addEventListener('DOMContentLoaded', () => {
     const wrapper = document.getElementById('carousel-wrapper');
     
-    // Create dot indicators
+    // Create dot indicators for all 17 slides
     const dotsContainer = document.querySelector('.dots-container');
-    dotsContainer.innerHTML = Array(totalSlides)
-        .fill()
-        .map((_, i) => `
-            <button class="dot-indicator ${i === 0 ? 'active bg-white w-8' : 'bg-white/30'}"
-                    onclick="goToSlide(${i})">
-            </button>
-        `).join('');
+    dotsContainer.innerHTML = Array.from({length: totalSlides}, (_, i) => `
+        <button class="dot-indicator ${i === 0 ? 'active bg-white w-8' : 'bg-white/30'}"
+                onclick="goToSlide(${i})">
+        </button>
+    `).join('');
 
-    // Initialize first slide
     showSlide(0);
-    
-    // Start autoscroll
     autoplayInterval = setInterval(autoScroll, 6000);
-
+    
     // Pause on hover
     wrapper.addEventListener('mouseenter', () => {
         clearInterval(autoplayInterval);
@@ -346,13 +356,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // Manual navigation
     window.prevSlide = () => {
         clearInterval(autoplayInterval);
-        showSlide((currentSlide - 1 + totalSlides) % totalSlides);
+        let newIndex = currentSlide - 1;
+        if (newIndex < 0) newIndex = totalSlides - 1;
+        showSlide(newIndex);
         autoplayInterval = setInterval(autoScroll, 4000);
     };
 
     window.nextSlide = () => {
         clearInterval(autoplayInterval);
-        showSlide((currentSlide + 1) % totalSlides);
+        let newIndex = currentSlide + 1;
+        if (newIndex >= totalSlides) newIndex = 0;
+        showSlide(newIndex);
         autoplayInterval = setInterval(autoScroll, 6000);
     };
 
@@ -361,6 +375,20 @@ document.addEventListener('DOMContentLoaded', () => {
         showSlide(index);
         autoplayInterval = setInterval(autoScroll, 4000);
     };
+
+    // Add keyboard event listener for Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeModal();
+        }
+    });
+
+    // Close modal when clicking outside the image
+    document.getElementById('imageModal').addEventListener('click', (e) => {
+        if (e.target.id === 'imageModal') {
+            closeModal();
+        }
+    });
 });
 
 function updateProgress() {
@@ -392,8 +420,10 @@ function openModal(index) {
 
 function closeModal() {
     const modal = document.getElementById('imageModal');
-    modal.classList.add('hidden');
-    document.body.style.overflow = 'auto';
+    if (modal) {
+        modal.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
 }
 
 // Close modal when clicking outside the image
