@@ -1,188 +1,294 @@
 {% extends "base.html" %}
 
-{% block content %}
-<div class="admin-dashboard p-6 bg-gray-100 min-h-screen">
-    <!-- Header -->
-    <div class="flex justify-between items-center mb-8">
-        <h1 class="text-3xl font-bold text-gray-800">Admin Dashboard</h1>
-        <a href="{{ url_for('admin.logout') }}" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Logout</a>
-    </div>
+{% block title %}Admin Dashboard{% endblock %}
 
-    <!-- Main Content -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+{% block custom_styles %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+    /* Import website theme styles */
+    /* Assuming your website's main CSS is in static/css/style.css */
+    /* You'll need to manually copy relevant styles from that file */
+
+    /* Example styles (replace with your actual theme styles) */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+    }
+
+    header {
+        background-color: #333;
+        color: #fff;
+        padding: 10px 0;
+        text-align: center;
+    }
+
+    nav a {
+        color: #fff;
+        text-decoration: none;
+        padding: 0 10px;
+    }
+
+    /* Admin dashboard specific styles */
+    .admin-container {
+        display: flex;
+        min-height: 100vh;
+        background: #f0f2f5;
+        margin: 0;
+        padding: 0;
+    }
+
+    .sidebar {
+        width: 250px;
+        background:rgb(50, 48, 48); /* A shade of orange */
+        padding: 20px;
+        color: white;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar h2 {
+        color: white;
+        margin-bottom: 20px;
+        font-size: 18px;
+        border-bottom: 1px solid #ffb74d; /* A lighter orange color */
+        padding-bottom: 10px;
+    }
+
+    .nav-item {
+        padding: 12px 15px;
+        margin: 8px 0;
+        cursor: pointer;
+        border-radius: 5px;
+        color: white !important;
+        text-decoration: none !important;
+        display: flex;
+        align-items: center;
+        transition: all 0.3s ease;
+        font-size: 15px;
+    }
+
+    .nav-item:hover {
+        background: #ffb74d; /* A lighter orange color */
+        transform: translateX(5px);
+    }
+
+    .nav-item.active {
+        background: #444;
+        border-left: 4px solid #ffd700;
+    }
+
+    .nav-item i {
+        margin-right: 10px;
+        width: 20px;
+        text-align: center;
+    }
+
+    .content {
+        flex: 1;
+        padding: 30px;
+        background: #ffffff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        margin: 20px;
+    }
+
+    .section {
+        display: none;
+        animation: fadeIn 0.3s ease;
+    }
+
+    .section.active {
+        display: block;
+    }
+
+    .section h2 {
+        margin-bottom: 20px;
+        color: #1a1a1a;
+        border-bottom: 2px solid #1a1a1a;
+        padding-bottom: 10px;
+        font-size: 20px;
+    }
+
+    form div {
+        margin-bottom: 15px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    input[type="text"],
+    textarea,
+    input[type="file"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background: #f9f9f9;
+        font-size: 14px;
+    }
+
+    textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+
+    button[type="submit"] {
+        background: #ff9800; /* A shade of orange */
+        color: white;
+        padding: 12px 25px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 15px;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        display: inline-block;
+        min-width: 150px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    button[type="submit"]:hover {
+        background: #ffb74d; /* A lighter orange color */
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    button[type="submit"]:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    input[type="text"]:focus,
+    textarea:focus,
+    input[type="file"]:focus {
+        outline: none;
+        border-color: #1a1a1a;
+        box-shadow: 0 0 0 2px rgba(26, 26, 26, 0.1);
+    }
+
+    @media (max-width: 768px) {
+        .admin-container {
+            flex-direction: column;
+        }
+
+        .sidebar {
+            width: 100%;
+            box-shadow: none;
+        }
+
+        .content {
+            margin: 10px;
+        }
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    <div class="sidebar">
+        <h2>Admin Panel</h2>
+        <a href="{{ url_for('admin.dashboard', section='queries') }}" 
+           class="nav-item {% if section == 'queries' %}active{% endif %}">
+            <i class="fas fa-question-circle"></i> Queries
+        </a>
+        <a href="{{ url_for('admin.dashboard', section='applications') }}" 
+           class="nav-item {% if section == 'applications' %}active{% endif %}">
+            <i class="fas fa-briefcase"></i> Job Applications
+        </a>
+        <a href="{{ url_for('admin.dashboard', section='projects') }}" 
+           class="nav-item {% if section == 'projects' %}active{% endif %}">
+            <i class="fas fa-project-diagram"></i> Add Projects
+        </a>
+        <a href="{{ url_for('admin.dashboard', section='awards') }}" 
+           class="nav-item {% if section == 'awards' %}active{% endif %}">
+            <i class="fas fa-trophy"></i> Add Awards
+        </a>
+        <a href="{{ url_for('admin.logout') }}" class="nav-item">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+    </div>
+    
+    <div class="content">
+        <!-- Queries Section -->
+        <div class="section {% if section == 'queries' %}active{% endif %}" id="queries">
+            <h2>Queries</h2>
+            <p>Query management functionality will be implemented soon.</p>
+        </div>
+
+        <!-- Job Applications Section -->
+        <div class="section {% if section == 'applications' %}active{% endif %}" id="applications">
+            <h2>Job Applications</h2>
+            <p>Job application management functionality will be implemented soon.</p>
+        </div>
+
         <!-- Projects Section -->
-        <div class="bg-white rounded-lg shadow-lg p-6">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-gray-800">Projects</h2>
-                <button onclick="openModal('projectModal')" class="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700 transition-colors">
-                    Add Project
-                </button>
-            </div>
-            <!-- Projects List -->
-            <div class="space-y-4">
-                {% for project in projects %}
-                <div class="border-b pb-4">
-                    <h3 class="font-bold text-lg">{{ project.name }}</h3>
-                    <p class="text-gray-600 text-sm">{{ project.description }}</p>
+        <div class="section {% if section == 'projects' %}active{% endif %}" id="projects">
+            <h2>Add New Project</h2>
+            <form method="POST" action="{{ url_for('admin.manage_projects') }}" enctype="multipart/form-data">
+                {{ form.csrf_token }}
+                <div>
+                    <label>Project Name:</label>
+                    <input type="text" name="name" required>
                 </div>
-                {% endfor %}
-            </div>
+                <div>
+                    <label>Description:</label>
+                    <textarea name="description" required></textarea>
+                </div>
+                <div>
+                    <label>Images:</label>
+                    <input type="file" name="images[]" multiple accept="image/*" required>
+                </div>
+                <button type="submit">Add Project</button>
+            </form>
         </div>
 
         <!-- Awards Section -->
-        <div class="bg-white rounded-lg shadow-lg p-6">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-gray-800">Awards</h2>
-                <button onclick="openModal('awardModal')" class="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700 transition-colors">
-                    Add Award
-                </button>
-            </div>
-            <!-- Awards List -->
-            <div class="space-y-4">
-                {% for award in awards %}
-                <div class="border-b pb-4">
-                    <h3 class="font-bold text-lg">{{ award.award_name }}</h3>
-                    <p class="text-gray-600 text-sm">{{ award.year }} - {{ award.project }}</p>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-
-    <!-- Project Modal -->
-    <div id="projectModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-        <div class="bg-white rounded-lg p-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-2xl font-bold text-gray-800">Add New Project</h3>
-                <button onclick="closeModal('projectModal')" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
-            </div>
-            <form action="{{ url_for('admin.manage_projects') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                
+        <div class="section {% if section == 'awards' %}active{% endif %}" id="awards">
+            <h2>Add New Award</h2>
+            <form method="POST" action="{{ url_for('admin.manage_awards') }}" enctype="multipart/form-data">
+                {{ form.csrf_token }}
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Project Name</label>
-                    <input type="text" name="name" required class="w-full p-2 border rounded focus:ring-2 focus:ring-yellow-500">
+                    <label>Year:</label>
+                    <input type="text" name="year" required>
                 </div>
-                
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
-                    <textarea name="description" required class="w-full p-2 border rounded focus:ring-2 focus:ring-yellow-500" rows="4"></textarea>
+                    <label>Award Name:</label>
+                    <input type="text" name="award_name" required>
                 </div>
-                
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Images</label>
-                    <input type="file" name="images[]" multiple accept="image/*" required 
-                           class="w-full p-2 border rounded focus:ring-2 focus:ring-yellow-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-yellow-50 file:text-yellow-700 hover:file:bg-yellow-100">
+                    <label>Project:</label>
+                    <input type="text" name="project" required>
                 </div>
-                
-                <button type="submit" class="w-full bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700 transition-colors">
-                    Save Project
-                </button>
+                <div>
+                    <label>Category:</label>
+                    <input type="text" name="category" required>
+                </div>
+                <div>
+                    <label>Prize:</label>
+                    <input type="text" name="prize" required>
+                </div>
+                <div>
+                    <label>Images:</label>
+                    <input type="file" name="images[]" multiple accept="image/*" required>
+                </div>
+                <button type="submit">Add Award</button>
             </form>
         </div>
     </div>
-
-    <!-- Award Modal -->
-    <div id="awardModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-        <div class="bg-white rounded-lg p-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-2xl font-bold text-gray-800">Add New Award</h3>
-                <button onclick="closeModal('awardModal')" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
-            </div>
-            <form action="{{ url_for('admin.manage_awards') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Year</label>
-                        <input type="number" name="year" required class="w-full p-2 border rounded focus:ring-2 focus:ring-yellow-500">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Prize</label>
-                        <select name="prize" required class="w-full p-2 border rounded focus:ring-2 focus:ring-yellow-500">
-                            <option value="Winner">Winner</option>
-                            <option value="Runner Up">Runner Up</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Award Name</label>
-                    <input type="text" name="award_name" required class="w-full p-2 border rounded focus:ring-2 focus:ring-yellow-500">
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Project</label>
-                    <input type="text" name="project" required class="w-full p-2 border rounded focus:ring-2 focus:ring-yellow-500">
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
-                    <select name="category" required class="w-full p-2 border rounded focus:ring-2 focus:ring-yellow-500">
-                        <option value="Architecture">Architecture</option>
-                        <option value="Interior Design">Interior Design</option>
-                        <option value="Residential">Residential</option>
-                        <option value="Commercial">Commercial</option>
-                        <option value="Public Building">Public Building</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Images</label>
-                    <input type="file" name="images[]" multiple accept="image/*" required 
-                           class="w-full p-2 border rounded focus:ring-2 focus:ring-yellow-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-yellow-50 file:text-yellow-700 hover:file:bg-yellow-100">
-                </div>
-                
-                <button type="submit" class="w-full bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700 transition-colors">
-                    Save Award
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <script>
-        function openModal(modalId) {
-            const modal = document.getElementById(modalId);
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeModal(modalId) {
-            const modal = document.getElementById(modalId);
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-            document.body.style.overflow = 'auto';
-        }
-
-        // Close modal when clicking outside
-        document.addEventListener('click', function(event) {
-            if (event.target.classList.contains('fixed')) {
-                closeModal(event.target.id);
-            }
-        });
-
-        // Close modal when pressing Escape
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                closeModal('projectModal');
-                closeModal('awardModal');
-            }
-        });
-
-        // Show flash messages with better styling
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    const notification = document.createElement('div');
-                    notification.className = `fixed top-4 right-4 p-4 rounded-lg ${category === 'success' ? 'bg-green-500' : 'bg-red-500'} text-white`;
-                    notification.textContent = '{{ message }}';
-                    document.body.appendChild(notification);
-                    setTimeout(() => notification.remove(), 3000);
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-    </script>
 </div>
 {% endblock %}
