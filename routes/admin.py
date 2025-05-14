@@ -160,59 +160,6 @@ def add_award():
             flash('Award added successfully!', 'success')
         return redirect(url_for('main.awards'))
 
-@admin_bp.route('/manage/projects', methods=['POST'])
-@login_required
-def manage_projects():
-    if request.method == 'POST':
-        supabase = get_supabase()
-        try:
-            # Create new project data
-            project_id = str(uuid.uuid4())
-            project_data = {
-                'id': project_id,
-                'name': request.form.get('name'),
-                'description': request.form.get('description'),
-                'images': []
-            }
-            
-            # Handle image uploads
-            if 'images[]' in request.files:
-                images = request.files.getlist('images[]')
-                for image in images:
-                    if image and image.filename:
-                        # Secure the filename and create a unique name
-                        filename = secure_filename(image.filename)
-                        unique_filename = f"{uuid.uuid4()}_{filename}"
-                        file_path = f"projects/{project_id}/{unique_filename}"
-                        
-                        # Read the file into memory
-                        file_data = image.read()
-                        
-                        # Upload to Supabase storage using bytes
-                        supabase.storage.from_('project-images').upload(
-                            path=file_path,
-                            file=file_data,
-                            file_options={"content-type": image.content_type}
-                        )
-                        
-                        # Get the public URL and add to project data
-                        file_url = supabase.storage.from_('project-images').get_public_url(file_path)
-                        project_data['images'].append(file_url)
-                        
-            # Insert project data into Supabase
-            response = supabase.table('projects').insert(project_data).execute()
-            
-            if response.data:
-                flash('Project added successfully!', 'success')
-            else:
-                flash('Error adding project', 'error')
-                
-        except Exception as e:
-            print(f"Error adding project: {str(e)}")
-            flash(f'Error: {str(e)}', 'error')
-            
-        return redirect(url_for('admin.dashboard', section='projects'))
-
 @admin_bp.route('/manage/awards', methods=['POST'])
 @login_required
 def manage_awards():
