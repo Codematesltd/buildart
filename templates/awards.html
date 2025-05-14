@@ -89,41 +89,6 @@
     </div>
 </section>
 
-<!-- Admin Award Form - Only visible to admins -->
-{% if current_user.is_authenticated %}
-<section class="p-4 sm:p-6 md:p-10 bg-gray-100">
-    <div class="max-w-4xl mx-auto">
-        <div class="bg-white shadow-md rounded-xl p-8">
-            <h2 class="text-2xl font-bold mb-6 text-yellow-700">Add New Award</h2>
-            <form action="{{ url_for('admin.add_award') }}" method="POST" class="space-y-4">
-                <div>
-                    <label class="block text-gray-700">Year</label>
-                    <input type="number" name="year" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
-                </div>
-                <div>
-                    <label class="block text-gray-700">Award Name</label>
-                    <input type="text" name="award_name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
-                </div>
-                <div>
-                    <label class="block text-gray-700">Project Name</label>
-                    <input type="text" name="project_name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
-                </div>
-                <div>
-                    <label class="block text-gray-700">Prize</label>
-                    <select name="prize" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
-                        <option value="Winner">Winner 🏆</option>
-                        <option value="Runner Up">Runner Up 🥈</option>
-                    </select>
-                </div>
-                <button type="submit" class="bg-yellow-700 text-white px-4 py-2 rounded-lg hover:bg-yellow-600">
-                    Add Award
-                </button>
-            </form>
-        </div>
-    </div>
-</section>
-{% endif %}
-
 <!-- Awards Timeline Section -->
 <section class="bg-[#f9f5f0] py-16 px-4 md:px-20">
     <div class="max-w-5xl mx-auto text-center">
@@ -132,7 +97,38 @@
         </h2>
 
         <div class="relative border-l-2 border-[#b87542] pl-6 space-y-12 text-left">
-            <!-- 2022 -->
+            <!-- Dynamic Awards from Database -->
+            {% if db_awards %}
+                {% set ns = namespace(current_year=none) %}
+                {% for award in db_awards|sort(attribute='year', reverse=true) %}
+                    {% if award.year != ns.current_year %}
+                        {% if not loop.first %}
+                            </ul>
+                        </div>
+                    </div>
+                        {% endif %}
+                        <div class="ml-2 relative">
+                            <div class="absolute -left-[33px] top-2 w-6 h-6 rounded-full bg-[#b87542] border-4 border-[#f9f5f0]"></div>
+                            <h3 class="text-xl font-bold text-[#1e1e1e]">{{ award.year }}</h3>
+                            <div class="bg-white/50 backdrop-blur-sm rounded-lg p-4 mt-2 shadow-sm hover:shadow-md transition-shadow">
+                                <ul class="text-sm text-gray-700 space-y-2">
+                        {% set ns.current_year = award.year %}
+                    {% endif %}
+                    <li>
+                        {{ award.award_name }} – <em>{{ award.project }}</em> – 
+                        <span class="font-semibold {% if award.prize == 'Winner' %}text-[#b87542]{% else %}text-[#15224f]{% endif %}">
+                            {{ award.prize }}
+                        </span>
+                    </li>
+                    {% if loop.last %}
+                            </ul>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+
+            <!-- Existing hardcoded awards -->
             <div class="ml-2 relative">
                 <div class="absolute -left-[33px] top-2 w-6 h-6 rounded-full bg-[#b87542] border-4 border-[#f9f5f0]"></div>
                 <h3 class="text-xl font-bold text-[#1e1e1e]">2022</h3>
@@ -143,7 +139,6 @@
                 </div>
             </div>
 
-            <!-- 2021 -->
             <div class="ml-2 relative">
                 <div class="absolute -left-[33px] top-2 w-6 h-6 rounded-full bg-[#b87542] border-4 border-[#f9f5f0]"></div>
                 <h3 class="text-xl font-bold text-[#1e1e1e]">2021</h3>
@@ -158,8 +153,6 @@
                 </div>
             </div>
 
-            <!-- Continue pattern for remaining years... -->
-            <!-- 2020 -->
             <div class="ml-2 relative">
                 <div class="absolute -left-[33px] top-2 w-6 h-6 rounded-full bg-[#b87542] border-4 border-[#f9f5f0]"></div>
                 <h3 class="text-xl font-bold text-[#1e1e1e]">2020</h3>
@@ -173,7 +166,6 @@
                 </div>
             </div>
 
-            <!-- 2019 -->
             <div class="ml-2 relative">
                 <div class="absolute -left-[33px] top-2 w-6 h-6 rounded-full bg-[#b87542] border-4 border-[#f9f5f0]"></div>
                 <h3 class="text-xl font-bold text-[#1e1e1e]">2019</h3>
@@ -186,7 +178,6 @@
                 </div>
             </div>
 
-            <!-- 2018 -->
             <div class="ml-2 relative">
                 <div class="absolute -left-[33px] top-2 w-6 h-6 rounded-full bg-[#b87542] border-4 border-[#f9f5f0]"></div>
                 <h3 class="text-xl font-bold text-[#1e1e1e]">2018</h3>
@@ -197,7 +188,6 @@
                 </div>
             </div>
 
-            <!-- 2016 -->
             <div class="ml-2 relative">
                 <div class="absolute -left-[33px] top-2 w-6 h-6 rounded-full bg-[#b87542] border-4 border-[#f9f5f0]"></div>
                 <h3 class="text-xl font-bold text-[#1e1e1e]">2016</h3>
@@ -208,7 +198,6 @@
                 </div>
             </div>
 
-            <!-- 2014-2015 -->
             <div class="ml-2 relative">
                 <div class="absolute -left-[33px] top-2 w-6 h-6 rounded-full bg-[#b87542] border-4 border-[#f9f5f0]"></div>
                 <h3 class="text-xl font-bold text-[#1e1e1e]">2014 & 2015</h3>
