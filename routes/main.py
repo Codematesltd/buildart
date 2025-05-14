@@ -51,7 +51,16 @@ def projects():
 
 @main_bp.route('/awards')
 def awards():
-    return render_template('awards.html')
+    try:
+        # Fetch awards from Supabase
+        supabase = current_app.config['supabase']
+        response = supabase.table('awards').select('*').order('year', desc=True).execute()
+        db_awards = response.data if response.data else []
+    except Exception as e:
+        print(f"Error fetching awards: {str(e)}")
+        db_awards = []
+    
+    return render_template('awards.html', db_awards=db_awards)
 
 @main_bp.route('/careers', methods=['GET', 'POST'])
 def careers():
