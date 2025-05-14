@@ -14,3 +14,4 @@ flask-minify
 config
 gunicorn
 Flask-Compress
+flask_mail
