@@ -6,6 +6,8 @@ from flask import Flask, request
 from flask_wtf.csrf import CSRFProtect, generate_csrf
 from supabase import create_client
 from flask_login import LoginManager
+from flask_mail import Mail
+from routes.main import mail
 # from flask_compress import Compress  # <-- Remove this import
 
 # Load environment variables first
@@ -55,7 +57,13 @@ def create_app():
         SESSION_COOKIE_SAMESITE='Lax',      # Restrict cross-site cookie sending
         REMEMBER_COOKIE_SECURE=True,        # Secure remember-me cookie
         REMEMBER_COOKIE_HTTPONLY=True,      # HTTPOnly remember-me cookie
-        PERMANENT_SESSION_LIFETIME=1800     # 30 minutes session timeout
+        PERMANENT_SESSION_LIFETIME=1800,    # 30 minutes session timeout
+        MAIL_SERVER='smtp.gmail.com',
+        MAIL_PORT=587,
+        MAIL_USE_TLS=True,
+        MAIL_USERNAME=os.getenv('MAIL_USERNAME'),
+        MAIL_PASSWORD=os.getenv('MAIL_PASSWORD'),
+        MAIL_DEFAULT_SENDER=('Buildaart Careers', 'info@buildaart.com')
     )
     
     # Add Supabase client to app config
@@ -138,6 +146,9 @@ def create_app():
         return dict(supabase=supabase)
 
     Minify(app=app, html=True, js=False, cssless=False)
+
+    # Initialize Flask-Mail
+    mail.init_app(app)
 
     # Enable Gzip/Brotli compression
     # Compress(app)  # <-- Remove this line

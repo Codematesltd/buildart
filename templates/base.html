@@ -3,6 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JWFCSRFN64"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-JWFCSRFN64');
+  </script>
 
   <meta http-equiv="Content-Security-Policy" content="
     default-src * data: blob:;
@@ -314,20 +323,46 @@
 
   {% block scripts %}{% endblock %}
 
+  <!-- TARS Chatbot -->
+  <div id="tars-fullpage-container" class="fixed bottom-4 right-4 w-96 h-[600px] z-50 shadow-2xl rounded-lg overflow-hidden" style="display: none;">
+    <button onclick="toggleChat()" class="absolute top-2 right-2 z-10 bg-white/10 p-2 rounded-full hover:bg-white/20">
+      <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+    <iframe id="tars-fullpage" width="100%" height="100%" frameborder="0" 
+            allow="geolocation; microphone; camera; midi; encrypted-media;" 
+            src="{{ url_for('static', filename='templates/AX40El.html') }}">
+    </iframe>
+  </div>
+
+  
+
+  <script>
+    function toggleChat() {
+      const container = document.getElementById('tars-fullpage-container');
+      if (container.style.display === 'none') {
+        container.style.display = 'block';
+      } else {
+        container.style.display = 'none';
+      }
+    }
+  </script>
+
   <!-- TARS Chatbot Script -->
   <script>
     (function(){
-      var js, fs, d = document, id = "tars-widget-script", b = "https://tars-file-upload.s3.amazonaws.com/bulb/";
-      if (!d.getElementById(id)) {
-        js = d.createElement("script");
-        js.id = id;
-        js.type = "text/javascript";
-        js.src = b + "js/widget.js";
-        fs = d.getElementsByTagName("script")[0];
-        fs.parentNode.insertBefore(js, fs);
+      var js,fs,d=document,id="tars-widget-script",b="https://tars-file-upload.s3.amazonaws.com/bulb/";
+      if(!d.getElementById(id)){
+        js=d.createElement("script");
+        js.id=id;
+        js.type="text/javascript";
+        js.src=b+"js/widget.js";
+        fs=d.getElementsByTagName("script")[0];
+        fs.parentNode.insertBefore(js,fs)
       }
     })();
-    window.tarsSettings = { "convid": "quIsq4" };
+    window.tarsSettings = {"convid":"AX40El"};
   </script>
 
 </body>
