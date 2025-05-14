@@ -15,27 +15,21 @@
   {% block head_extra %}{% endblock %}
   
   <!-- Favicons -->
-  <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='images/favicon/apple-touch-icon.png') }}">
-  <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='images/favicon/favicon-32x32.png') }}">
-  <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='images/favicon/favicon-16x16.png') }}">
-  <link rel="manifest" href="{{ url_for('static', filename='images/favicon/site.webmanifest') }}">
-  <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon/favicon.ico') }}">
+  <link rel="icon" href="{{ url_for('static', filename='images/favicon_io (1)/fav.png') }}" type="image/png">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon_io (1)/fav.png') }}">
   <meta name="theme-color" content="#ffffff">
 
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;500;600;700&family=Crimson+Text:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="shortcut icon" href="{{ url_for('static', filename='images/fav.ico') }}">
-
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
   <style type="text/tailwindcss">
     @layer base {
       body {
-        font-family: 'Montserrat', sans-serif;
+        font-family: 'Crimson Text', serif;
       }
       h1, h2, h3, h4, h5, h6 {
-        font-family: 'Playfair Display', serif;
+        font-family: 'Josefin Sans', sans-serif;
       }
     }
     @layer utilities {
@@ -97,23 +91,26 @@
   </style>
   {% block styles %}{% endblock %}
 </head>
-<body class="bg-white text-gray-800 flex flex-col min-h-screen overflow-x-hidden font-normal leading-relaxed">
+<body class="bg-white text-gray-900 flex flex-col min-h-screen overflow-x-hidden font-normal leading-relaxed">
   <!-- Navbar -->
   <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm shadow-md transition-all duration-300">
     <div class="container mx-auto px-4">
       <div class="flex items-center justify-between h-24 md:h-28">
         <!-- Logo -->
-        <a href="{{ url_for('main.index') }}" class="flex-shrink-0 transition-transform duration-300 hover:scale-105">
-          <img src="\static\images\LOGO.jpg" alt="Buildaart Logo" class="h-20 md:h-24 w-auto object-contain">
+        <a href="{{ url_for('main.index') }}" class="flex items-center gap-4 flex-shrink-0 transition-transform duration-300 hover:scale-105">
+          <img src="{{ url_for('static', filename='images/LOGO.jpg') }}" alt="Buildaart Logo" class="h-20 md:h-24 w-auto object-contain">
+          <span class="font-bold text-3xl tracking-wider text-yellow-500 font-josefin uppercase">
+            Build<span class="text-yellow-600">aart</span>
+          </span>
         </a>
 
         <!-- Desktop Navigation - Centered -->
-        <nav class="hidden md:flex items-center justify-center flex-grow mx-8 space-x-1">
-          <a href="{{ url_for('main.index') }}" class="relative overflow-hidden px-3 py-2 text-gray-700 hover:text-yellow-500 transition-all duration-300 nav-link-underline">Home</a>
-          <a href="{{ url_for('main.about') }}" class="relative overflow-hidden px-3 py-2 text-gray-700 hover:text-yellow-500 transition-all duration-300 nav-link-underline">About us</a>
-          <a href="{{ url_for('main.projects') }}" class="relative overflow-hidden px-3 py-2 text-gray-700 hover:text-yellow-500 transition-all duration-300 nav-link-underline">Projects</a>
-          <a href="{{ url_for('main.awards') }}" class="relative overflow-hidden px-3 py-2 text-gray-700 hover:text-yellow-500 transition-all duration-300 nav-link-underline">Awards</a>
-          <a href="{{ url_for('main.careers') }}" class="relative overflow-hidden px-3 py-2 text-gray-700 hover:text-yellow-500 transition-all duration-300 nav-link-underline">Careers</a>
+        <nav class="hidden md:flex items-center justify-center flex-grow mx-8 space-x-3">
+          <a href="{{ url_for('main.index') }}" class="relative overflow-hidden px-4 py-2 text-gray-700 hover:text-yellow-500 transition-all duration-300 nav-link-underline text-lg">Home</a>
+          <a href="{{ url_for('main.about') }}" class="relative overflow-hidden px-4 py-2 text-gray-700 hover:text-yellow-500 transition-all duration-300 nav-link-underline text-lg">About us</a>
+          <a href="{{ url_for('main.projects') }}" class="relative overflow-hidden px-4 py-2 text-gray-700 hover:text-yellow-500 transition-all duration-300 nav-link-underline text-lg">Projects</a>
+          <a href="{{ url_for('main.awards') }}" class="relative overflow-hidden px-4 py-2 text-gray-700 hover:text-yellow-500 transition-all duration-300 nav-link-underline text-lg">Awards</a>
+          <a href="{{ url_for('main.careers') }}" class="relative overflow-hidden px-4 py-2 text-gray-700 hover:text-yellow-500 transition-all duration-300 nav-link-underline text-lg">Careers</a>
         </nav>
 
         <!-- Contact Us Button -->
