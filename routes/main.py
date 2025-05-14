@@ -4,10 +4,13 @@ from dotenv import load_dotenv
 import os
 from datetime import datetime
 from routes.admin import supabase
+from flask_mail import Mail, Message
 
 load_dotenv()
 
 main_bp = Blueprint('main', __name__)
+
+mail = Mail()
 
 @main_bp.route('/')
 def index():
@@ -54,28 +57,47 @@ def awards():
 def careers():
     if request.method == 'POST':
         try:
-            # Initialize Supabase client
-            supabase = create_client(
-                os.getenv('SUPABASE_URL'),
-                os.getenv('SUPABASE_KEY')
-            )
-
-            # Insert data into careers table
-            data = supabase.table('careers').insert({
+            # Get form data
+            data = {
                 'name': request.form.get('name'),
                 'email': request.form.get('email'),
                 'phone': request.form.get('phone'),
                 'position': request.form.get('position'),
-                'message': request.form.get('message')
-            }).execute()
-
-            flash('Your application has been submitted successfully! We will get back to you soon.', 'success')
-            return redirect(url_for('main.careers'))
-
-        except Exception as e:
-            print(f"Error: {str(e)}")
-            flash('There was an error submitting your application. Please try again.', 'error')
+                'message': request.form.get('message'),
+                'status': 'pending'
+            }
             
+            # Save to Supabase
+            supabase = current_app.config['supabase']
+            response = supabase.table('careers').insert(data).execute()
+
+            # Send email notification
+            msg = Message(
+                'New Career Application - Buildaart',
+                sender=current_app.config['MAIL_DEFAULT_SENDER'],
+                recipients=['info@buildaart.com']
+            )
+            
+            msg.html = f"""
+            <h2>New Career Application</h2>
+            <p><strong>Name:</strong> {data['name']}</p>
+            <p><strong>Email:</strong> {data['email']}</p>
+            <p><strong>Phone:</strong> {data['phone']}</p>
+            <p><strong>Position:</strong> {data['position']}</p>
+            <p><strong>Cover Letter:</strong></p>
+            <p>{data['message']}</p>
+            """
+            
+            mail.send(msg)
+            
+            flash('Your application has been submitted successfully!', 'success')
+            return redirect(url_for('main.careers'))
+            
+        except Exception as e:
+            print(f"Error submitting application: {str(e)}")
+            flash('There was an error submitting your application. Please try again.', 'error')
+            return redirect(url_for('main.careers'))
+    
     return render_template('careers.html')
 
 @main_bp.route('/contact', methods=['GET', 'POST'])
