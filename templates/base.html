@@ -13,6 +13,15 @@
     frame-src *;">
   <title>{% block title %}{% endblock %}</title>
   {% block head_extra %}{% endblock %}
+  
+  <!-- Favicons -->
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='images/favicon/apple-touch-icon.png') }}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='images/favicon/favicon-32x32.png') }}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='images/favicon/favicon-16x16.png') }}">
+  <link rel="manifest" href="{{ url_for('static', filename='images/favicon/site.webmanifest') }}">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon/favicon.ico') }}">
+  <meta name="theme-color" content="#ffffff">
+
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
   <link rel="shortcut icon" href="{{ url_for('static', filename='images/fav.ico') }}">
@@ -92,10 +101,10 @@
   <!-- Navbar -->
   <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm shadow-md transition-all duration-300">
     <div class="container mx-auto px-4">
-      <div class="flex items-center justify-between h-20">
+      <div class="flex items-center justify-between h-24 md:h-28">
         <!-- Logo -->
         <a href="{{ url_for('main.index') }}" class="flex-shrink-0 transition-transform duration-300 hover:scale-105">
-          <img src="\static\images\LOGO.jpg" alt="Buildaart Logo" class="h-16">
+          <img src="\static\images\LOGO.jpg" alt="Buildaart Logo" class="h-20 md:h-24 w-auto object-contain">
         </a>
 
         <!-- Desktop Navigation - Centered -->
