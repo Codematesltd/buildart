@@ -9,46 +9,77 @@
 
 {% block content %}
 <!-- Debug Info Section -->
-<div class="bg-gray-100 p-4 mb-4 rounded">
-    <h3 class="font-bold">Data Overview:</h3>
-    <p>Active Section: {{ section }}</p>
-    {% if queries is defined %}
-    <p>Total Queries: {{ queries|length }}</p>
-    {% endif %}
-    {% if careers is defined %}
-    <p>Total Career Applications: {{ careers|length }}</p>
-    {% endif %}
+<div class="bg-white p-6 mb-6 rounded-lg shadow-sm border border-gray-100">
+    <h3 class="text-lg font-bold text-gray-800 mb-4">Data Overview</h3>
+    <div class="grid grid-cols-3 gap-6">
+        <div class="bg-gray-50 p-4 rounded-lg">
+            <p class="text-sm text-gray-500 mb-1">Active Section</p>
+            <p class="font-semibold text-gray-800 capitalize">{{ section }}</p>
+        </div>
+        {% if queries is defined %}
+        <div class="bg-gray-50 p-4 rounded-lg">
+            <p class="text-sm text-gray-500 mb-1">Total Queries</p>
+            <p class="font-semibold text-gray-800">{{ queries|length }}</p>
+        </div>
+        {% endif %}
+        {% if careers is defined %}
+        <div class="bg-gray-50 p-4 rounded-lg">
+            <p class="text-sm text-gray-500 mb-1">Total Career Applications</p>
+            <p class="font-semibold text-gray-800">{{ careers|length }}</p>
+        </div>
+        {% endif %}
+    </div>
 </div>
 
-<div class="flex min-h-screen bg-gray-100">
+<div class="flex min-h-screen bg-gray-50">
     <!-- Sidebar -->
-    <div class="w-64 bg-[#66605f] p-5 text-white shadow-md">
-        <h2 class="text-lg font-semibold mb-5 pb-2 border-b border-[#ffb74d]">Admin Panel</h2>
+    <div class="w-64 bg-white p-5 text-gray-700 border-r border-gray-200 shadow-lg sticky top-0 h-screen">
+        <h2 class="text-lg font-semibold mb-5 pb-2 border-b border-gray-200">Admin Panel</h2>
         
         <a href="{{ url_for('admin.dashboard', section='queries') }}" 
-           class="flex items-center py-3 px-4 my-2 rounded-lg hover:bg-[#ffb74d] hover:translate-x-1 transition-all duration-300 {% if section == 'queries' %}bg-gray-700 border-l-4 border-yellow-400{% endif %}">
+           class="flex items-center py-3 px-4 my-2 rounded-lg hover:bg-gray-50 hover:translate-x-1 transition-all duration-300 {% if section == 'queries' %}bg-gray-100 border-l-4 border-[#ff9800]{% endif %}">
             <i class="fas fa-question-circle w-5 mr-3"></i> Queries
         </a>
         
         <a href="{{ url_for('admin.dashboard', section='applications') }}" 
-           class="flex items-center py-3 px-4 my-2 rounded-lg hover:bg-[#ffb74d] hover:translate-x-1 transition-all duration-300 {% if section == 'applications' %}bg-gray-700 border-l-4 border-yellow-400{% endif %}">
+           class="flex items-center py-3 px-4 my-2 rounded-lg hover:bg-gray-50 hover:translate-x-1 transition-all duration-300 {% if section == 'applications' %}bg-gray-100 border-l-4 border-[#ff9800]{% endif %}">
             <i class="fas fa-briefcase w-5 mr-3"></i> Job Applications
         </a>
         
         <a href="{{ url_for('admin.dashboard', section='awards') }}" 
-           class="flex items-center py-3 px-4 my-2 rounded-lg hover:bg-[#ffb74d] hover:translate-x-1 transition-all duration-300 {% if section == 'awards' %}bg-gray-700 border-l-4 border-yellow-400{% endif %}">
+           class="flex items-center py-3 px-4 my-2 rounded-lg hover:bg-gray-50 hover:translate-x-1 transition-all duration-300 {% if section == 'awards' %}bg-gray-100 border-l-4 border-[#ff9800]{% endif %}">
             <i class="fas fa-trophy w-5 mr-3"></i> Add Awards
         </a>
         
         <a href="{{ url_for('admin.logout') }}" 
-           class="flex items-center py-3 px-4 my-2 rounded-lg hover:bg-[#ffb74d] hover:translate-x-1 transition-all duration-300">
+           class="flex items-center py-3 px-4 my-2 rounded-lg hover:bg-gray-50 hover:translate-x-1 transition-all duration-300">
             <i class="fas fa-sign-out-alt w-5 mr-3"></i> Logout
         </a>
     </div>
 
     <!-- Main Content -->
-    <div class="flex-1 p-8">
-        <div class="bg-white rounded-lg shadow-md p-6">
+    <div class="flex-1 p-8 bg-gray-50">
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div id="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="mb-4 p-4 rounded-lg {% if category == 'success' %}bg-green-100 text-green-700{% else %}bg-red-100 text-red-700{% endif %} flex items-center justify-between">
+                            <span>{{ message }}</span>
+                            <button onclick="this.parentElement.remove()" class="text-sm hover:text-black">&times;</button>
+                        </div>
+                    {% endfor %}
+                </div>
+                <script>
+                    setTimeout(() => {
+                        const messages = document.getElementById('flash-messages');
+                        if (messages) messages.remove();
+                    }, 3000);
+                </script>
+            {% endif %}
+        {% endwith %}
+
+        <div class="bg-white rounded-lg shadow-lg p-6 border border-gray-100">
             <!-- Queries Section -->
             <div class="{% if section == 'queries' %}block{% else %}hidden{% endif %}" id="queries">
                 <h2 class="text-xl font-bold mb-5">General Inquiries</h2>
@@ -154,7 +185,7 @@
             <!-- Awards Section -->
             <div class="{% if section == 'awards' %}block{% else %}hidden{% endif %}" id="awards">
                 <h2 class="text-xl font-bold mb-5 pb-2 border-b-2 border-gray-800">Add New Award</h2>
-                <form method="POST" action="{{ url_for('admin.manage_awards') }}" enctype="multipart/form-data" class="space-y-4">
+                <form method="POST" action="{{ url_for('admin.manage_awards') }}" class="space-y-4">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <div>
                         <label class="block text-gray-700 font-bold mb-2">Year:</label>
@@ -174,11 +205,11 @@
                     </div>
                     <div>
                         <label class="block text-gray-700 font-bold mb-2">Prize:</label>
-                        <input type="text" name="prize" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-800 focus:ring-2 focus:ring-gray-800/10">
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 font-bold mb-2">Images:</label>
-                        <input type="file" name="images[]" multiple accept="image/*" required class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50">
+                        <select name="prize" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-800 focus:ring-2 focus:ring-gray-800/10">
+                            <option value="">Select Prize</option>
+                            <option value="Winner">Winner</option>
+                            <option value="Runner Up">Runner Up</option>
+                        </select>
                     </div>
                     <button type="submit" class="bg-[#ff9800] hover:bg-[#ffb74d] text-white font-bold py-3 px-6 rounded-lg transform transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg min-w-[150px] uppercase tracking-wide">
                         Add Award
@@ -309,6 +340,5 @@ console.log('Queries Count:', {{ queries|length }});
 console.log('Careers Count:', {{ careers|length }});
 {% endif %}
 
-// ...existing code...
 </script>
 {% endblock %}

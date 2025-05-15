@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request, jsonify, current_app
+from flask import Blueprint, render_template, redirect, url_for, flash, request, jsonify, current_app, session
 from flask_login import login_user, login_required, logout_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField
@@ -144,60 +144,31 @@ def update_career_status():
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
 
-@admin_bp.route('/add_award', methods=['POST'])
-@login_required
-def add_award():
-    if request.method == 'POST':
-        award_data = {
-            'year': request.form.get('year'),
-            'award_name': request.form.get('award_name'),
-            'project': request.form.get('project_name'),
-            'category': request.form.get('category'),  # Add this line
-            'prize': request.form.get('prize')
-        }
-        response = supabase.table('awards').insert(award_data).execute()
-        if response.data:
-            flash('Award added successfully!', 'success')
-        return redirect(url_for('main.awards'))
-
 @admin_bp.route('/manage/awards', methods=['POST'])
 @login_required
 def manage_awards():
     if request.method == 'POST':
-        supabase = get_supabase()
-        
-        # Create new award
-        award_data = {
-            'id': str(uuid.uuid4()),
-            'year': request.form.get('year'),
-            'award_name': request.form.get('award_name'),
-            'project': request.form.get('project'),
-            'category': request.form.get('category'),
-            'prize': request.form.get('prize'),
-            'images': []  # We'll handle image upload separately
-        }
-        
-        # Handle image uploads
-        if 'images[]' in request.files:
-            images = request.files.getlist('images[]')
-            for image in images:
-                if image.filename:
-                    # Handle image upload to Supabase storage
-                    filename = secure_filename(image.filename)
-                    file_path = f"awards/{award_data['id']}/{filename}"
-                    
-                    # Upload to Supabase storage
-                    supabase.storage.from_('award-images').upload(file_path, image)
-                    
-                    # Add image URL to award data
-                    award_data['images'].append(file_path)
-        
-        # Insert into Supabase
-        response = supabase.table('awards').insert(award_data).execute()
-        
-        if response.data:
-            flash('Award added successfully!', 'success')
-        else:
-            flash('Error adding award', 'error')
+        try:
+            award_data = {
+                'year': request.form.get('year'),
+                'award_name': request.form.get('award_name'),
+                'project': request.form.get('project'),
+                'category': request.form.get('category'),
+                'prize': request.form.get('prize')
+            }
+            
+            # Clear any existing flash messages
+            session.pop('_flashes', None)
+            
+            insert_response = supabase.table('awards').insert(award_data).execute()
+            
+            if insert_response.data:
+                flash(f'Award added successfully for project: {award_data["project"]}!', 'success')
+            else:
+                flash('Error adding award: No data returned', 'error')
+                
+        except Exception as e:
+            flash(f'Error adding award: {str(e)}', 'error')
+            print(f"Error adding award: {str(e)}")
             
         return redirect(url_for('admin.dashboard', section='awards'))

@@ -14,4 +14,8 @@ flask-minify
 config
 gunicorn
 Flask-Compress
+<<<<<<< HEAD
 reportlab>=4.0.0
+=======
+flask_mail
+>>>>>>> 67828fae97d5ff6b191de6e0ffa143429508fdb7
