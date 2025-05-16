@@ -1,13 +1,16 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app
 from supabase import create_client, Client
 from dotenv import load_dotenv
 import os
 from datetime import datetime
 from routes.admin import supabase
+from flask_mail import Mail, Message
 
 load_dotenv()
 
 main_bp = Blueprint('main', __name__)
+
+mail = Mail()
 
 @main_bp.route('/')
 def index():
@@ -19,38 +22,91 @@ def about():
 
 @main_bp.route('/projects')
 def projects():
-    return render_template('projects.html')
+    supabase = current_app.config['supabase']
+    try:
+        # Fetch projects from Supabase
+        response = supabase.table('projects').select('*').execute()
+        projects = response.data if response.data else []
+
+        # Transform image URLs for each project
+        for project in projects:
+            project['image_urls'] = []
+            if project.get('images'):
+                # Convert string to list if needed
+                images = project['images']
+                if isinstance(images, str):
+                    import json
+                    images = json.loads(images)
+                    
+                # Get full URLs for each image
+                project['image_urls'] = [
+                    supabase.storage.from_('project-images').get_public_url(img)
+                    for img in images
+                ]
+
+        return render_template('projects.html', supabase_projects=projects)
+    except Exception as e:
+        print(f"Error fetching projects: {str(e)}")
+        return render_template('projects.html', supabase_projects=[])
 
 @main_bp.route('/awards')
 def awards():
-    return render_template('awards.html')
+    try:
+        # Fetch awards from Supabase
+        supabase = current_app.config['supabase']
+        response = supabase.table('awards').select('*').order('year', desc=True).execute()
+        db_awards = response.data if response.data else []
+    except Exception as e:
+        print(f"Error fetching awards: {str(e)}")
+        db_awards = []
+    
+    return render_template('awards.html', db_awards=db_awards)
 
 @main_bp.route('/careers', methods=['GET', 'POST'])
 def careers():
     if request.method == 'POST':
         try:
-            # Initialize Supabase client
-            supabase = create_client(
-                os.getenv('SUPABASE_URL'),
-                os.getenv('SUPABASE_KEY')
-            )
-
-            # Insert data into careers table
-            data = supabase.table('careers').insert({
+            # Get form data
+            data = {
                 'name': request.form.get('name'),
                 'email': request.form.get('email'),
                 'phone': request.form.get('phone'),
                 'position': request.form.get('position'),
-                'message': request.form.get('message')
-            }).execute()
-
-            flash('Your application has been submitted successfully! We will get back to you soon.', 'success')
-            return redirect(url_for('main.careers'))
-
-        except Exception as e:
-            print(f"Error: {str(e)}")
-            flash('There was an error submitting your application. Please try again.', 'error')
+                'message': request.form.get('message'),
+                'status': 'pending'
+            }
             
+            # Save to Supabase
+            supabase = current_app.config['supabase']
+            response = supabase.table('careers').insert(data).execute()
+
+            # Send email notification
+            msg = Message(
+                'New Career Application - Buildaart',
+                sender=current_app.config['MAIL_DEFAULT_SENDER'],
+                recipients=['info@buildaart.com']
+            )
+            
+            msg.html = f"""
+            <h2>New Career Application</h2>
+            <p><strong>Name:</strong> {data['name']}</p>
+            <p><strong>Email:</strong> {data['email']}</p>
+            <p><strong>Phone:</strong> {data['phone']}</p>
+            <p><strong>Position:</strong> {data['position']}</p>
+            <p><strong>Cover Letter:</strong></p>
+            <p>{data['message']}</p>
+            """
+            
+            mail.send(msg)
+            
+            flash('Your application has been submitted successfully!', 'success')
+            return redirect(url_for('main.careers'))
+            
+        except Exception as e:
+            print(f"Error submitting application: {str(e)}")
+            flash('There was an error submitting your application. Please try again.', 'error')
+            return redirect(url_for('main.careers'))
+    
     return render_template('careers.html')
 
 @main_bp.route('/contact', methods=['GET', 'POST'])
@@ -61,25 +117,33 @@ def contact():
             name = request.form.get('name')
             email = request.form.get('email')
             message = request.form.get('message')
-
-            # Initialize Supabase client
-            supabase: Client = create_client(
-                os.getenv('SUPABASE_URL'),
-                os.getenv('SUPABASE_KEY')
-            )
-
-            # Insert data into general_inquiries table
-            data = supabase.table('general_inquiries').insert({
-                "name": name,
-                "email": email,
-                "message": message
-            }).execute()
-
-            flash('Thank you for your message! We will get back to you soon.', 'success')
-            return redirect(url_for('main.contact'))
-
-        except Exception as e:
-            print(f"Error: {str(e)}")
-            flash('An error occurred while sending your message. Please try again.', 'error')
             
+            # Validate required fields
+            if not all([name, email, message]):
+                flash('All fields are required', 'error')
+                return redirect(url_for('main.contact'))
+            
+            # Insert into Supabase
+            supabase = current_app.config['supabase']
+            data = {
+                'name': name,
+                'email': email,
+                'message': message
+                # created_at will be auto-generated by Supabase
+            }
+            
+            response = supabase.table('general_inquiries').insert(data).execute()
+            
+            if response.data:
+                flash('Thank you for your message! We will get back to you soon.', 'success')
+            else:
+                flash('There was an error sending your message. Please try again.', 'error')
+                
+            return redirect(url_for('main.contact'))
+            
+        except Exception as e:
+            print(f"Error saving contact form: {str(e)}")
+            flash('An unexpected error occurred. Please try again later.', 'error')
+            return redirect(url_for('main.contact'))
+    
     return render_template('contact.html')

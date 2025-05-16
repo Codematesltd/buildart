@@ -3,6 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JWFCSRFN64"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-JWFCSRFN64');
+  </script>
 
   <meta http-equiv="Content-Security-Policy" content="
     default-src * data: blob:;
@@ -13,20 +22,23 @@
     frame-src *;">
   <title>{% block title %}{% endblock %}</title>
   {% block head_extra %}{% endblock %}
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="shortcut icon" href="{{ url_for('static', filename='images/fav.ico') }}">
+  
+  <!-- Favicons -->
+  <link rel="icon" href="{{ url_for('static', filename='images/favicon_io (1)/fav.png') }}" type="image/png">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon_io (1)/fav.png') }}">
+  <meta name="theme-color" content="#ffffff">
 
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;500;600;700&family=Crimson+Text:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='images/fav.ico') }}">
 
   <style type="text/tailwindcss">
     @layer base {
       body {
-        font-family: 'Montserrat', sans-serif;
+        font-family: 'Crimson Text', serif;
       }
       h1, h2, h3, h4, h5, h6 {
-        font-family: 'Playfair Display', serif;
+        font-family: 'Josefin Sans', sans-serif;
       }
     }
     @layer utilities {
@@ -88,23 +100,26 @@
   </style>
   {% block styles %}{% endblock %}
 </head>
-<body class="bg-white text-gray-800 flex flex-col min-h-screen overflow-x-hidden font-normal leading-relaxed">
+<body class="bg-white text-gray-900 flex flex-col min-h-screen overflow-x-hidden font-normal leading-relaxed">
   <!-- Navbar -->
   <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm shadow-md transition-all duration-300">
     <div class="container mx-auto px-4">
-      <div class="flex items-center justify-between h-20">
+      <div class="flex items-center justify-between h-24 md:h-28">
         <!-- Logo -->
-        <a href="{{ url_for('main.index') }}" class="flex-shrink-0 transition-transform duration-300 hover:scale-105">
-          <img src="\static\images\LOGO.jpg" alt="Buildaart Logo" class="h-16">
+        <a href="{{ url_for('main.index') }}" class="flex items-center gap-4 flex-shrink-0 transition-transform duration-300 hover:scale-105">
+          <img src="{{ url_for('static', filename='images/LOGO.jpg') }}" alt="Buildaart Logo" class="h-20 md:h-24 w-auto object-contain">
+          <span class="font-bold text-3xl tracking-wider text-yellow-500 font-josefin uppercase">
+            Build<span class="text-yellow-600">aart</span>
+          </span>
         </a>
 
         <!-- Desktop Navigation - Centered -->
-        <nav class="hidden md:flex items-center justify-center flex-grow mx-8 space-x-1">
-          <a href="{{ url_for('main.index') }}" class="relative overflow-hidden px-3 py-2 text-gray-700 hover:text-yellow-500 transition-all duration-300 nav-link-underline">Home</a>
-          <a href="{{ url_for('main.about') }}" class="relative overflow-hidden px-3 py-2 text-gray-700 hover:text-yellow-500 transition-all duration-300 nav-link-underline">About us</a>
-          <a href="{{ url_for('main.projects') }}" class="relative overflow-hidden px-3 py-2 text-gray-700 hover:text-yellow-500 transition-all duration-300 nav-link-underline">Projects</a>
-          <a href="{{ url_for('main.awards') }}" class="relative overflow-hidden px-3 py-2 text-gray-700 hover:text-yellow-500 transition-all duration-300 nav-link-underline">Awards</a>
-          <a href="{{ url_for('main.careers') }}" class="relative overflow-hidden px-3 py-2 text-gray-700 hover:text-yellow-500 transition-all duration-300 nav-link-underline">Careers</a>
+        <nav class="hidden md:flex items-center justify-center flex-grow mx-8 space-x-3">
+          <a href="{{ url_for('main.index') }}" class="relative overflow-hidden px-4 py-2 text-gray-700 hover:text-yellow-500 transition-all duration-300 nav-link-underline text-lg">Home</a>
+          <a href="{{ url_for('main.about') }}" class="relative overflow-hidden px-4 py-2 text-gray-700 hover:text-yellow-500 transition-all duration-300 nav-link-underline text-lg">About us</a>
+          <a href="{{ url_for('main.projects') }}" class="relative overflow-hidden px-4 py-2 text-gray-700 hover:text-yellow-500 transition-all duration-300 nav-link-underline text-lg">Projects</a>
+          <a href="{{ url_for('main.awards') }}" class="relative overflow-hidden px-4 py-2 text-gray-700 hover:text-yellow-500 transition-all duration-300 nav-link-underline text-lg">Awards</a>
+          <a href="{{ url_for('main.careers') }}" class="relative overflow-hidden px-4 py-2 text-gray-700 hover:text-yellow-500 transition-all duration-300 nav-link-underline text-lg">Careers</a>
         </nav>
 
         <!-- Contact Us Button -->
@@ -308,20 +323,46 @@
 
   {% block scripts %}{% endblock %}
 
+  <!-- TARS Chatbot -->
+  <div id="tars-fullpage-container" class="fixed bottom-4 right-4 w-96 h-[600px] z-50 shadow-2xl rounded-lg overflow-hidden" style="display: none;">
+    <button onclick="toggleChat()" class="absolute top-2 right-2 z-10 bg-white/10 p-2 rounded-full hover:bg-white/20">
+      <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+    <iframe id="tars-fullpage" width="100%" height="100%" frameborder="0" 
+            allow="geolocation; microphone; camera; midi; encrypted-media;" 
+            src="{{ url_for('static', filename='templates/AX40El.html') }}">
+    </iframe>
+  </div>
+
+  
+
+  <script>
+    function toggleChat() {
+      const container = document.getElementById('tars-fullpage-container');
+      if (container.style.display === 'none') {
+        container.style.display = 'block';
+      } else {
+        container.style.display = 'none';
+      }
+    }
+  </script>
+
   <!-- TARS Chatbot Script -->
   <script>
     (function(){
-      var js, fs, d = document, id = "tars-widget-script", b = "https://tars-file-upload.s3.amazonaws.com/bulb/";
-      if (!d.getElementById(id)) {
-        js = d.createElement("script");
-        js.id = id;
-        js.type = "text/javascript";
-        js.src = b + "js/widget.js";
-        fs = d.getElementsByTagName("script")[0];
-        fs.parentNode.insertBefore(js, fs);
+      var js,fs,d=document,id="tars-widget-script",b="https://tars-file-upload.s3.amazonaws.com/bulb/";
+      if(!d.getElementById(id)){
+        js=d.createElement("script");
+        js.id=id;
+        js.type="text/javascript";
+        js.src=b+"js/widget.js";
+        fs=d.getElementsByTagName("script")[0];
+        fs.parentNode.insertBefore(js,fs)
       }
     })();
-    window.tarsSettings = { "convid": "quIsq4" };
+    window.tarsSettings = {"convid":"AX40El"};
   </script>
 
 </body>

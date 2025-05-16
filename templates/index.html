@@ -309,6 +309,45 @@
     </div>
 </section>
 
+<!-- Myhna Properties Section -->
+<section class="relative py-8 sm:py-12 md:py-16 px-4 sm:px-6 bg-white">
+    <div class="container mx-auto max-w-6xl">
+        <div class="flex flex-col-reverse md:flex-row items-center gap-6 md:gap-8 lg:gap-16">
+            <!-- Content -->
+            <div class="w-full md:w-1/2 space-y-4 sm:space-y-6 md:space-y-8 text-left">
+                <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold leading-tight section-title text-yellow-600">
+                    MYHNA PROPERTIES
+                </h2>
+                <div class="space-y-4 sm:space-y-6 content-text">
+                    <p class="text-gray-700 leading-relaxed text-sm sm:text-base md:text-lg">
+                        Discover the epitome of luxury living with Myhna Properties, where every residence is crafted to perfection. Our signature Temple View Villas offer a unique blend of spiritual tranquility and modern comfort.
+                    </p>
+                    <p class="text-gray-700 leading-relaxed text-sm sm:text-base md:text-lg">
+                        Experience the perfect harmony of traditional values and contemporary design, with breathtaking views and world-class amenities that make every day extraordinary.
+                    </p>
+                    <div class="pt-4">
+                        <a href="{{ url_for('main.projects') }}#myhna-section" 
+                           class="inline-flex items-center px-6 py-3 bg-yellow-500 text-white rounded-lg 
+                                  hover:bg-yellow-600 transition-all duration-300 shadow-md hover:shadow-xl 
+                                  transform hover:-translate-y-0.5">
+                            <span class="text-lg font-semibold">Book Now</span>
+                            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Image -->
+            <div class="w-full md:w-1/2">
+                 <img src="/static/images/projects/myhna/Temple-View.jpg" alt="Temple View" 
+                     class="w-full h-[300px] sm:h-[350px] md:h-[400px] object-cover rounded-lg shadow-2xl">
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- Vision Section -->
 <section class="relative py-8 sm:py-12 md:py-16 px-4 sm:px-6 bg-white">
     <div class="container mx-auto max-w-6xl">
@@ -359,7 +398,7 @@
             <!-- Project Cards with responsive spacing and typography -->
             <div class="bg-white rounded-xl overflow-hidden shadow-lg card-hover">
                 <div class="relative h-48 sm:h-56 md:h-64">
-                    <img src=\static\images\myhna2.jpg 
+                    <img src="static\images\projects\myhna\Temple-View.jpg" 
                          alt="Residential Projects" 
                          class="w-full h-full object-cover">
                 </div>
@@ -446,7 +485,7 @@
             <!-- Image -->
             <div class="relative group mt-6 md:mt-0">
                 <div class="absolute -inset-4 bg-gradient-primary opacity-20 blur-xl rounded-lg"></div>
-                <img src="{{ url_for('static', filename='images/cityscape.jpg') }}" 
+                <img src="https://zpnparyxnrtfbxnwriyv.supabase.co/storage/v1/object/public/project-images//17_11zon.jpg" 
                      alt="Innovative Cityscape" 
                      class="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] object-cover rounded-lg shadow-2xl">
             </div>
