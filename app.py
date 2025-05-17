@@ -7,44 +7,30 @@ from flask_wtf.csrf import CSRFProtect, generate_csrf
 from supabase import create_client
 from flask_login import LoginManager
 from flask_mail import Mail
-from routes.main import mail
-# from flask_compress import Compress  # <-- Remove this import
+from flask_minify import Minify  # Add this import
+from extensions import init_extensions
 
 # Load environment variables first
 load_dotenv()
 
-# Initialize Supabase client
-supabase = create_client(
-    os.getenv('SUPABASE_URL'),
-    os.getenv('SUPABASE_KEY')
-)
-
-from config import Config
-from extensions import init_extensions
-from routes.admin import admin_bp
-from routes.main import main_bp
-from flask_minify import Minify
-
 # Initialize login manager globally
 login_manager = LoginManager()
-
-# Example: Reading a text file with unknown encoding
-def read_file(filepath):
-    try:
-        with open(filepath, encoding='utf-8') as f:
-            return f.read()
-    except UnicodeDecodeError:
-        # Try a fallback encoding
-        with open(filepath, encoding='latin-1') as f:
-            return f.read()
-
-# Example: Reading a binary file
-def read_binary_file(filepath):
-    with open(filepath, 'rb') as f:
-        return f.read()
+mail = Mail()  # Move mail initialization here
 
 def create_app():
     app = Flask(__name__)
+    
+    # Verify and initialize Supabase first
+    supabase_url = os.getenv('SUPABASE_URL')
+    supabase_key = os.getenv('SUPABASE_KEY')
+
+    if not supabase_url or not supabase_key:
+        raise ValueError("Missing Supabase credentials. Ensure SUPABASE_URL and SUPABASE_KEY are set in .env file")
+
+    try:
+        supabase = create_client(supabase_url, supabase_key)
+    except Exception as e:
+        raise Exception(f"Failed to initialize Supabase client: {str(e)}")
     
     # Configuration
     app.config.update(
@@ -103,7 +89,7 @@ def create_app():
     csrf = CSRFProtect()
     csrf.init_app(app)
     
-    # Initialize extensions
+    # Initialize extensions with Supabase client
     init_extensions(app)
     
     # Initialize login manager
@@ -122,7 +108,14 @@ def create_app():
             print(f"Error loading user: {e}")
         return None
     
-    # Register blueprints and setup
+    # Initialize Flask-Mail before importing routes
+    mail.init_app(app)
+    
+    # Import routes after app and extensions are initialized
+    from routes.admin import admin_bp
+    from routes.main import main_bp
+    
+    # Register blueprints
     app.register_blueprint(main_bp)
     app.register_blueprint(admin_bp, url_prefix='/admin')
     
@@ -146,12 +139,6 @@ def create_app():
         return dict(supabase=supabase)
 
     Minify(app=app, html=True, js=False, cssless=False)
-
-    # Initialize Flask-Mail
-    mail.init_app(app)
-
-    # Enable Gzip/Brotli compression
-    # Compress(app)  # <-- Remove this line
 
     @app.cli.command("create-admin")
     @click.argument("username")

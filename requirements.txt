@@ -16,6 +16,6 @@ gunicorn
 Flask-Compress
 
 reportlab>=4.0.0
-
+extensions
 flask_mail
 

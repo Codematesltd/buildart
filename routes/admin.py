@@ -3,7 +3,6 @@ from flask_login import login_user, login_required, logout_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired
-from supabase import create_client
 import os
 import uuid
 from werkzeug.utils import secure_filename
@@ -13,12 +12,7 @@ import io
 # Setup
 admin_bp = Blueprint('admin', __name__)
 
-# Initialize Supabase
-supabase = create_client(
-    supabase_url="https://zpnparyxnrtfbxnwriyv.supabase.co",
-    supabase_key="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpwbnBhcnl4bnJ0ZmJ4bndyaXl2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDE2MTkzODAsImV4cCI6MjAxNzE5NTM4MH0.6zR0QGGOWzqIv0wJwK6FxBOwW6uRiUAS36dm8WRxcTM"
-)
-
+# Remove hardcoded Supabase initialization and use get_supabase() helper instead
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
 MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB
 
@@ -48,6 +42,7 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         try:
+            supabase = get_supabase()
             response = supabase.table('admin_users').select('*').eq('username', form.username.data).execute()
             if response.data and response.data[0]['password_hash'] == form.password.data:
                 user_data = response.data[0]
@@ -149,6 +144,7 @@ def update_career_status():
 def manage_awards():
     if request.method == 'POST':
         try:
+            supabase = get_supabase()
             award_data = {
                 'year': request.form.get('year'),
                 'award_name': request.form.get('award_name'),
