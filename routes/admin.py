@@ -15,8 +15,8 @@ admin_bp = Blueprint('admin', __name__)
 
 # Initialize Supabase
 supabase = create_client(
-    os.getenv('SUPABASE_URL'),
-    os.getenv('SUPABASE_KEY')
+    supabase_url="https://zpnparyxnrtfbxnwriyv.supabase.co",
+    supabase_key="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpwbnBhcnl4bnJ0ZmJ4bndyaXl2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDE2MTkzODAsImV4cCI6MjAxNzE5NTM4MH0.6zR0QGGOWzqIv0wJwK6FxBOwW6uRiUAS36dm8WRxcTM"
 )
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
