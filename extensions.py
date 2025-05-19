@@ -1,14 +1,6 @@
 from flask_login import LoginManager
-from supabase import create_client, Client
 from flask_wtf.csrf import CSRFProtect
 from flask_talisman import Talisman
-import os
-
-# Initialize Supabase client
-supabase: Client = create_client(
-    os.getenv('SUPABASE_URL', ''),
-    os.getenv('SUPABASE_KEY', '')
-)
 
 # Initialize Flask-Login and CSRF protection
 login_manager = LoginManager()
@@ -23,7 +15,7 @@ def init_extensions(app):
     def load_user(user_id):
         from models.user import User
         try:
-            response = supabase.table('users').select('*').eq('id', user_id).execute()
+            response = app.config['supabase'].table('users').select('*').eq('id', user_id).execute()
             if response.data:
                 return User(response.data[0])
         except Exception as e:
