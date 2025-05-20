@@ -235,21 +235,15 @@ async function handleSubmit(e) {
         });
 
         if (response.ok) {
-            const name = document.getElementById('name').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const message = document.getElementById('message').value.trim();
-            
-            // Open WhatsApp in new tab
-            const whatsappMessage = `*New Inquiry from Website*%0A%0A*Name:* ${name}%0A*Email:* ${email}%0A*Message:* ${message}`;
-            window.open(`https://wa.me/918748899996?text=${whatsappMessage}`, '_blank');
-            
-            // Reset form
+            showSuccessMessage('Your inquiry has been submitted successfully!');
             e.target.reset();
+            ['name', 'email', 'message'].forEach(field => {
+                document.getElementById(field).classList.remove('border-green-500');
+            });
         }
     } catch (error) {
         console.error('Submission error:', error);
     } finally {
-        // Reset submission state
         isSubmitting = false;
         submitButton.disabled = false;
         buttonText.textContent = 'Submit Inquiry';
@@ -259,10 +253,56 @@ async function handleSubmit(e) {
     return false;
 }
 
-// Remove all other form submit event listeners
+function sendWhatsApp() {
+    if (!validateForm()) {
+        alert('Please fill in all required fields correctly before sending');
+        return;
+    }
+    
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const message = document.getElementById('message').value.trim();
+    
+    const whatsappMessage = `*New Inquiry from Website*%0A%0A*Name:* ${name}%0A*Email:* ${email}%0A*Message:* ${message}`;
+    window.open(`https://wa.me/918748899996?text=${whatsappMessage}`, '_blank');
+    
+    showSuccessMessage('Opening WhatsApp with your message...');
+}
+
+function showSuccessMessage(message) {
+    // Remove any existing success messages
+    const existingMessages = document.querySelectorAll('.success-message');
+    existingMessages.forEach(msg => msg.remove());
+    
+    const successDiv = document.createElement('div');
+    successDiv.className = 'max-w-4xl mx-auto mb-4 p-4 rounded-lg animate-fade-in bg-green-100 text-green-800 success-message';
+    successDiv.innerHTML = `
+        <div class="flex items-center">
+            <svg class="w-5 h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            ${message}
+        </div>
+    `;
+    
+    // Find the form container and insert before it
+    const formContainer = document.querySelector('.max-w-4xl.mx-auto.bg-white');
+    if (formContainer) {
+        formContainer.parentNode.insertBefore(successDiv, formContainer);
+    }
+    
+    // Auto-hide after 5 seconds
+    setTimeout(() => {
+        successDiv.classList.add('animate-fade-out');
+        setTimeout(() => successDiv.remove(), 500);
+    }, 5000);
+}
+
+// Single form submit event listener
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('inquiryForm');
     if (form) {
+        // Remove any existing listeners and set only one
         form.onsubmit = handleSubmit;
     }
 });
@@ -276,73 +316,6 @@ function validateForm() {
     return isValid;
 }
 
-document.getElementById('inquiryForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    // Reset errors
-    hideAllErrors();
-    
-    // Get form values
-    const name = document.getElementById('name').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const message = document.getElementById('message').value.trim();
-    
-    let isValid = true;
-    
-    // Name validation
-    if (name.length < 3) {
-        showError('name', 'Name must be at least 3 characters long');
-        isValid = false;
-    } else if (name.length > 50) {
-        showError('name', 'Name cannot exceed 50 characters');
-        isValid = false;
-    }
-    
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-        showError('email', 'Please enter a valid email address');
-        isValid = false;
-    }
-    
-    // Message validation
-    if (message.length < 10) {
-        showError('message', 'Message must be at least 10 characters long');
-        isValid = false;
-    } else if (message.length > 1000) {
-        showError('message', 'Message cannot exceed 1000 characters');
-        isValid = false;
-    }
-    
-    if (isValid) {
-        // Show loading state
-        const submitButton = document.getElementById('submitButton');
-        const loadingIcon = document.getElementById('loadingIcon');
-        const buttonText = submitButton.querySelector('span');
-        
-        submitButton.disabled = true;
-        buttonText.textContent = 'Sending...';
-        loadingIcon.classList.remove('hidden');
-        
-        // Submit the form
-        this.submit();
-    }
-});
-
-function showError(fieldId, message) {
-    const errorElement = document.getElementById(fieldId + 'Error');
-    errorElement.textContent = message;
-    errorElement.classList.remove('hidden');
-    document.getElementById(fieldId).classList.add('border-red-500');
-}
-
-function hideAllErrors() {
-    ['name', 'email', 'message'].forEach(field => {
-        document.getElementById(field + 'Error').classList.add('hidden');
-        document.getElementById(field).classList.remove('border-red-500');
-    });
-}
-
 // Auto-hide flash messages
 document.addEventListener('DOMContentLoaded', function() {
     const flashMessages = document.querySelectorAll('[class*="animate-fade-in"]');
@@ -354,31 +327,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Add this function to your existing script section
-function sendWhatsApp() {
-    const name = document.getElementById('name').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const message = document.getElementById('message').value.trim();
-    
-    // Format the message for WhatsApp
-    const whatsappMessage = `*New Inquiry from Website*%0A%0A*Name:* ${name}%0A*Email:* ${email}%0A*Message:* ${message}`;
-    
-    // Open WhatsApp with the pre-filled message
-    window.open(`https://wa.me/918748899996?text=${whatsappMessage}`, '_blank');
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('contactForm');
-    if (form) {
-        form.addEventListener('submit', function(event) {
-            const submitButton = this.querySelector('button[type="submit"]');
-            if (submitButton) {
-                submitButton.disabled = true;
-                submitButton.textContent = 'Sending...';
-            }
-        });
-    }
-});
 </script>
 
 <style>

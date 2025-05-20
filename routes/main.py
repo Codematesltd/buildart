@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app, session
 from flask_mail import Mail, Message
+import time
+import datetime
 
 main_bp = Blueprint('main', __name__)
 mail = Mail()
@@ -99,25 +101,34 @@ def contact():
             flash('Form already submitted or invalid submission.', 'error')
             return redirect(url_for('main.contact'))
             
+        # Check if form is being submitted too quickly
+        last_submit_time = session.get('last_submit_time', 0)
+        current_time = int(time.time())
+        if current_time - last_submit_time < 5:  # 5 seconds cooldown
+            flash('Please wait a few seconds before submitting again.', 'error')
+            return redirect(url_for('main.contact'))
+
         try:
-            # Clear the form token to prevent resubmission
-            session.pop('form_token', None)
+            # Set submission lock
+            session['last_submit_time'] = current_time
             
             # Get form data
             name = request.form.get('name')
             email = request.form.get('email')
             message = request.form.get('message')
             
-            # Validate required fields
             if not all([name, email, message]):
                 flash('All fields are required', 'error')
                 return redirect(url_for('main.contact'))
             
-            # Check for duplicate submission
+            # Check for duplicate submission in last 1 hour
             supabase = current_app.config['supabase']
+            one_hour_ago = datetime.datetime.now() - datetime.timedelta(hours=1)
+            
             check_duplicate = supabase.table('general_inquiries').select('*')\
                 .eq('email', email)\
                 .eq('message', message)\
+                .gte('created_at', one_hour_ago.isoformat())\
                 .execute()
                 
             if check_duplicate.data:
@@ -129,12 +140,13 @@ def contact():
                 'name': name,
                 'email': email,
                 'message': message
-                # status and created_at will use table defaults
             }
             
             response = supabase.table('general_inquiries').insert(data).execute()
             
             if response.data:
+                # Clear the form token only on successful submission
+                session.pop('form_token', None)
                 flash('Thank you for your message! We will get back to you soon.', 'success')
             else:
                 flash('There was an error sending your message. Please try again.', 'error')
