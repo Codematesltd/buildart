@@ -2,19 +2,6 @@
 
 {% block title %}Projects - Buildaart Construction{% endblock %}
 
-<!-- Add font imports -->
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap');
-    
-    h1, h2, h3, h4, .heading {
-        font-family: 'Playfair Display', serif !important;
-    }
-    
-    body, p, span, li, button {
-        font-family: 'Times New Roman', Times, serif !important;
-    }
-</style>
-
 {% block content %}
 <!-- Projects Hero Section -->
 <section class="relative">
@@ -216,18 +203,8 @@
                 <div class="mt-16">
                     <h3 class="text-2xl font-bold mb-8 text-cyan-800">Featured Projects</h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                       
-                </div>
-
-                <!-- Ongoing Projects -->
-                <div class="mt-8 border-t border-gray-200 pt-8">
-                    <h3 class="text-2xl font-bold mb-6 text-cyan-600">Ongoing Projects</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <!-- Cafe Project Card -->
-                        <div class="group relative">
-                            <div class="absolute -top-2 -right-2 bg-cyan-500 text-white px-3 py-1 rounded-full text-sm z-10">
-                                Ongoing
-                            </div>
+                        <!-- Urban Cafe Project Card -->
+                        <div class="group">
                             <div class="relative overflow-hidden rounded-xl">
                                 <img src="/static/images/projects/cafe/project1.jpg" alt="Urban Cafe" 
                                      class="w-full aspect-[4/3] object-cover transform group-hover:scale-110 transition-all duration-700">
@@ -241,8 +218,14 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        <!-- Brewery Project Card -->
+                    </div>
+                </div>
+
+                <!-- Ongoing Projects -->
+                <div class="mt-8 border-t border-gray-200 pt-8">
+                    <h3 class="text-2xl font-bold mb-6 text-cyan-600">Ongoing Projects</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <!-- Only Brewery Project Card -->
                         <div class="group relative">
                             <div class="absolute -top-2 -right-2 bg-cyan-500 text-white px-3 py-1 rounded-full text-sm z-10">
                                 Ongoing
@@ -657,14 +640,15 @@
                                 </div>
                             </div>
                         </div>
-                         <!-- Akash House Project Card -->
-                        <div class="group project-card">
+
+                         <!-- Catalyst Project Card -->
+                        <div class="group">
                             <div class="relative overflow-hidden rounded-xl">
-                                 <img src="/static/images/projects/akash/5.jpg" alt="Akash House"  
-                                     class="w-full  aspect-[4/3] object-cover transform group-hover:scale-110 transition-all duration-700">
+                                <img src="/static/images/projects/akash/1.jpg" alt="akash" 
+                                     class="w-full aspect-[4/3] object-cover transform group-hover:scale-110 transition-all duration-700">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 p-6 flex flex-col justify-end">
                                     <h4 class="text-white text-xl font-bold">Akash House</h4>
-                                    <p class="text-gray-300">Bangalore, 2024</p>
+                                    <p class="text-gray-300">Bangalore, 2023</p>
                                     <button onclick="openGallery('akash', 7)" 
                                             class="mt-4 px-4 py-2 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white rounded-lg transition-all">
                                         View Album
@@ -672,10 +656,13 @@
                                 </div>
                             </div>
                         </div>
+                        
                          <!-- Row House Project Card -->
                         <div class="group project-card">
                             <div class="relative overflow-hidden rounded-xl h-[300px]">
-                                <img src="/static/images/projects/rowhouse/1.jpg" alt="Row House" 
+                                <img src="/static/images/projects/rowhouse/1.jpg" 
+                                     alt="Row House" 
+                                     onerror="this.src='/static/images/placeholder.jpg'"
                                      class="w-full h-full object-cover transform group-hover:scale-110 transition-all duration-700">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 p-6 flex flex-col justify-end">
                                     <h4 class="text-white text-xl font-bold">Row House</h4>
@@ -848,7 +835,7 @@
 
 <script>
 const projects = [
-    { id: 'le', name: 'Le Tranquil', count: 12 },
+    { id: 'tranqui', name: 'Le Tranquil', count: 13 }, // Changed from 'letranquil' to 'tranqui'
     { id: 'cata', name: 'Catalyst', count: 8 },
     { id: 'candour', name: 'Candour', count: 10 },
     { id: 'blooming', name: 'The Blooming Haus', count: 15 },
@@ -863,7 +850,8 @@ const projects = [
     { id: 'cafe', name: 'Cafe', count: 9 },
     { id: 'brewery', name: 'Brewery', count: 11 },
     { id: 'neuron', name: 'Neuron School', count: 12 },
-    { id: 'myhna', name: 'Myhna Meadows', count: 35 }  // Add this line
+    { id: 'myhna', name: 'Myhna Meadows', count: 35 },
+    { id: 'akash', name: 'Akash House', count: 7 }  // Add this line
 ];
 
 let currentIndex = 4; // Start after initial 4 projects
@@ -945,7 +933,7 @@ function openGallery(projectId, imageCount) {
         'special': 'Something Special Commercial Project',
         'techpark': 'Modern Tech Park Project',
         'wateredge': 'Water Edge Resort Project',
-        'letranquil': 'Le Tranquil Project',
+        'tranqui': 'Le Tranquil', // Changed to match folder name
         'catalyst': 'Catalyst Project',
         'frames': 'The Frames Residence Project',
         'sanctum': 'Sanctum Project',
@@ -962,7 +950,7 @@ function openGallery(projectId, imageCount) {
         'brick': 'House of Brick',
         'cantilever': 'The Cantilever',
         'rowhouse': 'Row House Project',
-        'akash': 'Akash House Project',
+        'akash': 'Catalyst Project', // Update this line
         'myhna': 'Myhna Meadows - Vintage Collection'
     };
 
@@ -974,7 +962,7 @@ function openGallery(projectId, imageCount) {
     currentImages = Array.from({length: imageCount}, (_, i) => {
         const index = i + 1;
         // Add Myhna to the list of projects using number-only naming
-        if (['blooming', 'letranquil', 'trazient', 'casa', 'catalyst', 
+        if (['blooming', 'tranqui', 'trazient', 'casa', 'catalyst', 
             'candour', 'sanctum', 'urban', 'brick', 'the', 'cantilever', 
             'rowhouse', 'akash', 'myhna'].includes(projectId.toLowerCase())) {
             return `${basePath}/${index}.jpg`;
@@ -1096,7 +1084,7 @@ document.addEventListener('keydown', function(e) {
 // Residential Projects Configuration
 const residentialProjects = [
     { id: 'blooming', name: 'The Blooming Haus', count: 15 },
-    { id: 'letranquil', name: 'Le Tranquil', count: 12 },
+    { id: 'tranqui', name: 'Le Tranquil', count: 12 },
     { id: 'trazient', name: 'Trazient Nest', count: 10 },
     { id: 'casalux', name: 'Casa Lux', count: 8 },
     { id: 'catalyst', name: 'Catalyst', count: 12 },

@@ -4,7 +4,12 @@
 
 {% block content %}
 <div class="container mx-auto px-4 py-8 sm:py-12 bg-gray-100">
-    
+    <!-- Page Header -->
+    <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold mb-4">Contact Us</h1>
+        <div class="w-24 h-1 bg-yellow-500 mx-auto"></div>
+    </div>
+
     <!-- Flash Messages with Animation -->
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
@@ -81,12 +86,6 @@
                 </a>
             </div>
         </form>
-    </div>
-
-    <!-- Page Header -->
-    <div class="text-center mb-12">
-        <h1 class="text-4xl font-bold mb-4">Contact Us</h1>
-        <div class="w-24 h-1 bg-yellow-500 mx-auto"></div>
     </div>
 
     <!-- Map and Contact Info Section -->

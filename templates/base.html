@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   
   <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JWFCSRFN64"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XPSRQP88XP"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'G-JWFCSRFN64');
+    gtag('config', 'G-XPSRQP88XP');
   </script>
 
   <meta http-equiv="Content-Security-Policy" content="
@@ -35,10 +35,13 @@
   <style type="text/tailwindcss">
     @layer base {
       body {
-        font-family: 'Crimson Text', serif;
+        font-family: 'Crimson Text', serif !important;
       }
-      h1, h2, h3, h4, h5, h6 {
-        font-family: 'Josefin Sans', sans-serif;
+      h1, h2, h3, h4, h5, h6, .heading {
+        font-family: 'Josefin Sans', sans-serif !important;
+      }
+      .content-text {
+        font-family: 'Crimson Text', serif !important;
       }
     }
     @layer utilities {
@@ -99,6 +102,7 @@
     }
   </style>
   {% block styles %}{% endblock %}
+  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body class="bg-white text-gray-900 flex flex-col min-h-screen overflow-x-hidden font-normal leading-relaxed">
   <!-- Navbar -->
