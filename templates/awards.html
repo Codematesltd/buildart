@@ -7,10 +7,10 @@
     <!-- Carousel Container -->
     <div class="relative h-screen" id="carousel-wrapper">
         <div class="carousel-container h-full">
-            <!-- Awards 1-17 -->
+            <!-- Awards 1-12 -->
             <img src="/static/images/awards/1.jpg" alt="Award 1"
                  class="absolute inset-0 w-full h-full object-cover brightness-75 transition-opacity duration-1000" data-active>
-            {% for i in range(2, 12) %}  {# Changed to include image 17 #}
+            {% for i in range(2, 13) %}  <!-- Changed to include image 12 -->
             <img src="/static/images/awards/{{ i }}.jpg" 
                  alt="Award {{ i }}" 
                  class="absolute inset-0 w-full h-full object-cover brightness-75 transition-opacity duration-1000 opacity-0">
@@ -283,16 +283,16 @@
 <script>
 let currentSlide = 0;
 let autoplayInterval;
-const totalSlides = 17;
+const totalSlides = 12; // Update to match the actual number of slides
 
 function showSlide(index) {
     const images = document.querySelectorAll('.carousel-container img');
     
-    // Handle wrapping
-    if (index >= totalSlides) {
+    // Reset to first slide after reaching the end
+    if (index >= images.length) {
         index = 0;
     } else if (index < 0) {
-        index = totalSlides - 1;
+        index = images.length - 1;
     }
 
     // Fade out all images
@@ -321,7 +321,7 @@ function autoScroll() {
 document.addEventListener('DOMContentLoaded', () => {
     const wrapper = document.getElementById('carousel-wrapper');
     
-    // Create dot indicators for all 17 slides
+    // Create dot indicators for all 12 slides
     const dotsContainer = document.querySelector('.dots-container');
     dotsContainer.innerHTML = Array.from({length: totalSlides}, (_, i) => `
         <button class="dot-indicator ${i === 0 ? 'active bg-white w-8' : 'bg-white/30'}"
