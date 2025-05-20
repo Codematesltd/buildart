@@ -2,6 +2,19 @@
 
 {% block title %}Projects - Buildaart Construction{% endblock %}
 
+<!-- Add font imports -->
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap');
+    
+    h1, h2, h3, h4, .heading {
+        font-family: 'Playfair Display', serif !important;
+    }
+    
+    body, p, span, li, button {
+        font-family: 'Times New Roman', Times, serif !important;
+    }
+</style>
+
 {% block content %}
 <!-- Projects Hero Section -->
 <section class="relative">
@@ -20,7 +33,7 @@
                class="px-6 py-2.5 bg-rose-100 text-rose-800 rounded-full hover:bg-rose-200 
                       transition-all duration-300 shadow hover:shadow-md transform hover:-translate-y-0.5
                       focus:outline-none focus:ring-2 focus:ring-rose-400">
-                Myhna Projects
+                Myhna Meadows
             </a>
             <a href="#cafe" 
                class="px-6 py-2.5 bg-cyan-100 text-cyan-800 rounded-full hover:bg-cyan-200 
@@ -64,7 +77,7 @@
                 <div class="space-y-6">
                     <span class="text-rose-700 text-sm tracking-wider uppercase">Featured Collection</span>
                     <h2 class="heading text-4xl md:text-5xl font-bold text-rose-900">
-                        Myhna Projects
+                        Myhna Meadows
                     </h2>
                     <p class="text-rose-800 text-lg leading-relaxed">
                         A collection of unique architectural perspectives that blend timeless design with modern aesthetics.
@@ -74,7 +87,7 @@
                             <svg class="w-5 h-5 text-rose-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
                             </svg>
-                            Vintage Views
+                            Frames of Grace
                         </li>
                         <li class="flex items-center text-rose-700">
                             <svg class="w-5 h-5 text-rose-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
@@ -86,47 +99,47 @@
                 </div>
 
                 <!-- Featured Projects Grid -->
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="space-y-4">
-                        <div class="aspect-w-4 aspect-h-5 rounded-xl overflow-hidden">
-                            <img src="/static/images/projects/myhna/3.jpg" alt="30's 40's View" class="w-full h-full object-cover transform hover:scale-110 transition-all duration-700">
-                        </div>
-                        <div class="aspect-w-4 aspect-h-3 rounded-xl overflow-hidden">
-                            <img src="/static/images/projects/myhna/19.jpg" alt="Barbecue" class="w-full h-full object-cover transform hover:scale-110 transition-all duration-700">
-                        </div>
-                    </div>
-                    <div class="mt-8">
-                        <div class="aspect-w-4 aspect-h-6 rounded-xl overflow-hidden">
-                            <img src="/static/images/projects/myhna/21.jpg" alt="Clock Tower View" class="w-full h-full object-cover transform hover:scale-110 transition-all duration-700">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Myhna Projects Grid -->
-            <div class="mt-16">
-                <h3 class="text-2xl font-bold mb-8 text-rose-800">Featured Myhna Projects</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
                     <!-- 30's,40's View -->
-                    <div class="group">
-                        <div class="relative overflow-hidden rounded-xl">
-                            <img src="/static/images/projects/myhna/3.jpg" alt="30's 40's View" 
-                                 class="w-full aspect-[4/3] object-cover transform group-hover:scale-110 transition-all duration-700">
+                    <div class="group w-full">
+                        <div class="relative overflow-hidden rounded-xl h-[350px] lg:h-[300px]">
+                            <img src="/static/images/projects/myhna/5.jpg" alt="30's 40's View" 
+                                 class="w-full h-full object-cover transform group-hover:scale-110 transition-all duration-700">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 p-6 flex flex-col justify-end">
-                                <h4 class="text-white text-xl font-bold">Myhna Meadows</h4>
-                                <p class="text-gray-300">Vintage Collection</p>
+                                <h4 class="text-white text-2xl font-bold">Myhna Meadows</h4>
+                                <p class="text-gray-300">Frames of Grace</p>
                                 <button onclick="openGallery('myhna', 35)" 
-                                        class="mt-4 px-4 py-2 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white rounded-lg transition-all">
+                                        class="mt-4 px-6 py-3 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white rounded-lg transition-all text-lg">
                                     View Album
                                 </button>
                             </div>
                         </div>
                     </div>
+                </div>
 
+            </div>
 
-                   
-
-                  
+            <!-- Myhna Projects Grid -->
+            <div class="mt-12">
+                <h3 class="text-2xl font-bold mb-6 text-rose-800">Featured Myhna Meadows</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- First Image -->
+                    <div class="relative overflow-hidden rounded-lg shadow-md h-[280px]"> <!-- Fixed height -->
+                        <img src="/static/images/projects/myhna/3.jpg" alt="30's 40's View" 
+                             class="w-full h-full object-cover transform hover:scale-105 transition-all duration-500">
+                    </div>
+                    
+                    <!-- Second Image -->
+                    <div class="relative overflow-hidden rounded-lg shadow-md h-[280px]"> <!-- Fixed height -->
+                        <img src="/static/images/projects/myhna/19.jpg" alt="Barbecue" 
+                             class="w-full h-full object-cover transform hover:scale-105 transition-all duration-500">
+                    </div>
+                    
+                    <!-- Third Image -->
+                    <div class="relative overflow-hidden rounded-lg shadow-md h-[280px]"> <!-- Fixed height -->
+                        <img src="/static/images/projects/myhna/21.jpg" alt="Clock Tower View" 
+                             class="w-full h-full object-cover transform hover:scale-105 transition-all duration-500">
+                    </div>
                 </div>
             </div>
             <!-- Add View More Projects Button -->
@@ -135,7 +148,7 @@
                    target="_blank" 
                    rel="noopener noreferrer" 
                    class="inline-flex items-center gap-2 px-8 py-4 bg-green-600 hover:bg-green-700 text-white rounded-full shadow-lg transform hover:scale-105 transition-all duration-300">
-                    <span class="text-lg font-semibold">Chat About Myhna Projects</span>
+                    <span class="text-lg font-semibold">Chat About Myhna Meadows</span>
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564c.173.087.289.129.332.202.043.073.043.423-.101.828z"/>
                     </svg>
@@ -519,7 +532,7 @@
                                 <img src="/static/images/projects/trazient/1.jpg" alt="Trazient Nest" 
                                      class="w-full aspect-[4/3] object-cover transform group-hover:scale-110 transition-all duration-700">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 p-6 flex flex-col justify-end">
-                                    <h4 class="text-white text-xl font-bold">Trazient Nest</h4>
+                                    <h4 class="text-white text-xl font-bold">Trasient Nest</h4>
                                     <p class="text-gray-300">Bangalore, 2023</p>
                                     <button onclick="openGallery('trazient', 7)" 
                                             class="mt-4 px-4 py-2 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white rounded-lg transition-all">
@@ -535,7 +548,7 @@
                                 <img src="/static/images/projects/casa/1.jpg" alt="Casa" 
                                      class="w-full h-full object-cover transform group-hover:scale-110 transition-all duration-700">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 p-6 flex flex-col justify-end">
-                                    <h4 class="text-white text-xl font-bold">Casa</h4>
+                                    <h4 class="text-white text-xl font-bold">Casa Lux</h4>
                                     <p class="text-gray-300">Bangalore, 2023</p>
                                     <button onclick="openGallery('casa', 9)" 
                                             class="mt-4 px-4 py-2 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white rounded-lg transition-all">
@@ -584,7 +597,7 @@
                                 <img src="/static/images/projects/urban/1.jpg" alt="Urban" 
                                      class="w-full h-full object-cover transform group-hover:scale-110 transition-all duration-700">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 p-6 flex flex-col justify-end">
-                                    <h4 class="text-white text-xl font-bold">Urban</h4>
+                                    <h4 class="text-white text-xl font-bold">Urban Envelope</h4>
                                     <p class="text-gray-300">Bangalore, 2023</p>
                                     <button onclick="openGallery('urban', 15)" 
                                             class="mt-4 px-4 py-2 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white rounded-lg transition-all">
@@ -600,7 +613,7 @@
                                 <img src="/static/images/projects/brick/1.jpg" alt="Brick" 
                                      class="w-full h-full object-cover transform group-hover:scale-110 transition-all duration-700">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 p-6 flex flex-col justify-end">
-                                    <h4 class="text-white text-xl font-bold">Brick</h4>
+                                    <h4 class="text-white text-xl font-bold">The Brick House</h4>
                                     <p class="text-gray-300">Bangalore, 2023</p>
                                     <button onclick="openGallery('brick', 6)" 
                                             class="mt-4 px-4 py-2 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white rounded-lg transition-all">
@@ -628,7 +641,7 @@
                         <!-- Catalyst Project Card -->
                         <div class="group">
                             <div class="relative overflow-hidden rounded-xl">
-                                <img src="/static/images/projects/catalyst/5.jpg" alt="Catalyst" 
+                                <img src="/static/images/projects/catalyst/1.jpg" alt="Catalyst" 
                                      class="w-full aspect-[4/3] object-cover transform group-hover:scale-110 transition-all duration-700">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 p-6 flex flex-col justify-end">
                                     <h4 class="text-white text-xl font-bold">Catalyst</h4>
@@ -648,7 +661,7 @@
                                      class="w-full aspect-[4/3] object-cover transform group-hover:scale-110 transition-all duration-700">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 p-6 flex flex-col justify-end">
                                     <h4 class="text-white text-xl font-bold">Akash House</h4>
-                                    <p class="text-gray-300">Bangalore, 2023</p>
+                                    <p class="text-gray-300">Bangalore, 2024</p>
                                     <button onclick="openGallery('akash', 7)" 
                                             class="mt-4 px-4 py-2 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white rounded-lg transition-all">
                                         View Album
@@ -660,13 +673,11 @@
                          <!-- Row House Project Card -->
                         <div class="group project-card">
                             <div class="relative overflow-hidden rounded-xl h-[300px]">
-                                <img src="/static/images/projects/rowhouse/1.jpg" 
-                                     alt="Row House" 
-                                     onerror="this.src='/static/images/placeholder.jpg'"
+                                <img src="/static/images/projects/rowhouse/1.jpg" alt="Row House" 
                                      class="w-full h-full object-cover transform group-hover:scale-110 transition-all duration-700">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 p-6 flex flex-col justify-end">
                                     <h4 class="text-white text-xl font-bold">Row House</h4>
-                                    <p class="text-gray-300">Bangalore, 2024</p>
+                                    <p class="text-gray-300">Bangalore, 2023</p>
                                     <button onclick="openGallery('rowhouse', 7)" 
                                             class="mt-4 px-4 py-2 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white rounded-lg transition-all">
                                         View Album
@@ -790,7 +801,7 @@
                                 <img src="/static/images/projects/meta/project8.jpg" alt="City Hall" 
                                      class="w-full aspect-[4/3] object-cover transform group-hover:scale-110 transition-all duration-700">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 p-6 flex flex-col justify-end">
-                                    <h4 class="text-white text-xl font-bold">Meta Morphosis Public Building</h4>
+                                    <h4 class="text-white text-xl font-bold">MetaMorphosis </h4>
                                     <p class="text-gray-300">Bangalore, 2023</p>
                                     <button onclick="openGallery('meta', 9)" 
                                             class="mt-4 px-4 py-2 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white rounded-lg transition-all">
@@ -940,17 +951,17 @@ function openGallery(projectId, imageCount) {
         'modern-school': 'Modern School Project',
         'arohana': 'Arohana School Project',
         'neuron': 'Neuron School Project',
-        'metamorphosis': 'Meta Morphosis Public Building Project',
+        'metamorphosis': 'MetaMorphosis',
         'water-edge-resort': 'Water Edge Resort Project',  // Updated title
         'blooming': 'The Blooming Haus',
-        'trazient': 'Trazient Nest',
+        'trazient': 'Trasient Nest',
         'casalux': 'Casa Lux',
         'candour': 'Candour',
         'urban': 'Urban Envelope',
         'brick': 'House of Brick',
         'cantilever': 'The Cantilever',
         'rowhouse': 'Row House Project',
-        'akash': 'Catalyst Project', // Update this line
+        'akash': 'Akash House Project',
         'myhna': 'Myhna Meadows - Vintage Collection'
     };
 
@@ -1084,7 +1095,7 @@ document.addEventListener('keydown', function(e) {
 // Residential Projects Configuration
 const residentialProjects = [
     { id: 'blooming', name: 'The Blooming Haus', count: 15 },
-    { id: 'tranqui', name: 'Le Tranquil', count: 12 },
+    { id: 'letranquil', name: 'Le Tranquil', count: 12 },
     { id: 'trazient', name: 'Trazient Nest', count: 10 },
     { id: 'casalux', name: 'Casa Lux', count: 8 },
     { id: 'catalyst', name: 'Catalyst', count: 12 },
@@ -1159,10 +1170,18 @@ document.getElementById('backToFirstResidential').addEventListener('click', func
 
 // Helper function to create project card HTML
 function createProjectCard(project) {
+    let imgPath;
+    if (['blooming', 'tranqui', 'trazient', 'casalux', 'catalyst', 
+        'candour', 'sanctum', 'urban', 'brick', 'frames', 'cantilever', 
+        'rowhouse', 'akash'].includes(project.id)) {
+        imgPath = `/static/images/projects/${project.id}/1.jpg`;
+    } else {
+        imgPath = `/static/images/projects/${project.id}/project1.jpg`;
+    }
     return `
         <div class="group project-card opacity-0 transition-opacity duration-500">
             <div class="relative overflow-hidden rounded-xl">
-                <img src="/static/images/projects/${project.id}/project1.jpg" alt="${project.name}" 
+                <img src="${imgPath}" alt="${project.name}" 
                      class="w-full aspect-[4/3] object-cover transform group-hover:scale-110 transition-all duration-700">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 p-6 flex flex-col justify-end">
                     <h4 class="text-white text-xl font-bold">${project.name}</h4>

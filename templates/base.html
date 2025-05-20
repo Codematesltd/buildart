@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   
   <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XPSRQP88XP"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JWFCSRFN64"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'G-XPSRQP88XP');
+    gtag('config', 'G-JWFCSRFN64');
   </script>
 
   <meta http-equiv="Content-Security-Policy" content="
@@ -28,8 +28,7 @@
   <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon_io (1)/fav.png') }}">
   <meta name="theme-color" content="#ffffff">
 
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;500;600;700&family=Crimson+Text:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;500;600;700&family=Crimson+Text:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="shortcut icon" href="{{ url_for('static', filename='images/fav.ico') }}">
 
   <style type="text/tailwindcss">
@@ -40,8 +39,8 @@
       h1, h2, h3, h4, h5, h6, .heading {
         font-family: 'Josefin Sans', sans-serif !important;
       }
-      .content-text {
-        font-family: 'Crimson Text', serif !important;
+      h1, h2, h3, h4, h5, h6 {
+        font-family: 'Josefin Sans', sans-serif;
       }
     }
     @layer utilities {
@@ -111,7 +110,7 @@
       <div class="flex items-center justify-between h-24 md:h-28">
         <!-- Logo -->
         <a href="{{ url_for('main.index') }}" class="flex items-center gap-4 flex-shrink-0 transition-transform duration-300 hover:scale-105">
-          <img src="{{ url_for('static', filename='images/LOGO.jpg') }}" alt="Buildaart Logo" class="h-20 md:h-24 w-auto object-contain">
+          <img src="{{ url_for('static', filename='images/LOGO.png') }}" alt="Buildaart Logo" class="h-20 md:h-24 w-auto object-contain">
           <img src="{{ url_for('static', filename='images/buildart2.png') }}" alt="Buildaart Text Logo" class="h-12 w-auto object-contain">
         </a>
 

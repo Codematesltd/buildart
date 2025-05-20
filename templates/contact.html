@@ -36,8 +36,9 @@
     <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-4 sm:p-8 mb-8 sm:mb-12">
         <h2 class="text-2xl font-bold mb-6">General Inquiries</h2>
         <p class="text-gray-600 mb-6">For project details, collaborations, or other queries, reach out to us here.</p>
-        <form id="inquiryForm" method="POST" action="{{ url_for('main.contact') }}" class="space-y-6" onsubmit="return handleSubmit(event)" novalidate>
+        <form id="inquiryForm" method="POST" action="{{ url_for('main.contact') }}" class="space-y-6" novalidate>
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <input type="hidden" name="form_token" value="{{ session.get('form_token', '') }}">
             <div class="grid md:grid-cols-2 gap-6">
                 <div>
                     <label class="block text-gray-700 font-semibold mb-2">Name *</label>
@@ -93,7 +94,7 @@
         <!-- Google Map -->
         <div class="rounded-lg shadow-lg overflow-hidden h-[300px] sm:h-[400px]">
             <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31107.41088146807!2d77.54899095305798!3d12.94454710800707!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae159375760aeb%3A0xd246829b5e67902!2sStudio%20WHITESCAPE!5e0!3m2!1sen!2sin!4v1747242742202!5m2!1sen!2sin"
+                src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d1759.4341513043305!2d77.57777779999999!3d12.9413611!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMTLCsDU2JzI4LjkiTiA3N8KwMzQnNDAuMCJF!5e1!3m2!1sen!2sin!4v1747743067590!5m2!1sen!2sin"
                 width="100%" 
                 height="100%" 
                 style="border:0;" 
@@ -207,16 +208,15 @@ document.addEventListener('DOMContentLoaded', () => {
     ['name', 'email', 'message'].forEach(validateField);
 });
 
+let isSubmitting = false;
+
 async function handleSubmit(e) {
     e.preventDefault();
     
-    if (!validateForm()) return false;
+    if (isSubmitting || !validateForm()) return false;
     
-    const name = document.getElementById('name').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const message = document.getElementById('message').value.trim();
+    isSubmitting = true;
     
-    // Show loading state
     const submitButton = document.getElementById('submitButton');
     const loadingIcon = document.getElementById('loadingIcon');
     const buttonText = submitButton.querySelector('span');
@@ -226,26 +226,31 @@ async function handleSubmit(e) {
     loadingIcon.classList.remove('hidden');
     
     try {
-        // Submit form to Supabase
-        await fetch(e.target.action, {
+        const response = await fetch(e.target.action, {
             method: 'POST',
             body: new FormData(e.target),
             headers: {
                 'X-Requested-With': 'XMLHttpRequest'
             }
         });
-        
-        // Open WhatsApp in new tab
-        const whatsappMessage = `*New Inquiry from Website*%0A%0A*Name:* ${name}%0A*Email:* ${email}%0A*Message:* ${message}`;
-        window.open(`https://wa.me/918748899996?text=${whatsappMessage}`, '_blank');
-        
-        // Reset form
-        e.target.reset();
-        
+
+        if (response.ok) {
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const message = document.getElementById('message').value.trim();
+            
+            // Open WhatsApp in new tab
+            const whatsappMessage = `*New Inquiry from Website*%0A%0A*Name:* ${name}%0A*Email:* ${email}%0A*Message:* ${message}`;
+            window.open(`https://wa.me/918748899996?text=${whatsappMessage}`, '_blank');
+            
+            // Reset form
+            e.target.reset();
+        }
     } catch (error) {
         console.error('Submission error:', error);
     } finally {
-        // Reset button state
+        // Reset submission state
+        isSubmitting = false;
         submitButton.disabled = false;
         buttonText.textContent = 'Submit Inquiry';
         loadingIcon.classList.add('hidden');
@@ -253,6 +258,14 @@ async function handleSubmit(e) {
     
     return false;
 }
+
+// Remove all other form submit event listeners
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('inquiryForm');
+    if (form) {
+        form.onsubmit = handleSubmit;
+    }
+});
 
 function validateForm() {
     let isValid = true;
@@ -353,6 +366,19 @@ function sendWhatsApp() {
     // Open WhatsApp with the pre-filled message
     window.open(`https://wa.me/918748899996?text=${whatsappMessage}`, '_blank');
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('contactForm');
+    if (form) {
+        form.addEventListener('submit', function(event) {
+            const submitButton = this.querySelector('button[type="submit"]');
+            if (submitButton) {
+                submitButton.disabled = true;
+                submitButton.textContent = 'Sending...';
+            }
+        });
+    }
+});
 </script>
 
 <style>

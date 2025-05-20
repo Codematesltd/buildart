@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app
+from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app, session
 from flask_mail import Mail, Message
 
 main_bp = Blueprint('main', __name__)
@@ -93,7 +93,16 @@ def careers():
 @main_bp.route('/contact', methods=['GET', 'POST'])
 def contact():
     if request.method == 'POST':
+        # Check if form was already submitted
+        form_token = request.form.get('form_token')
+        if not form_token or form_token != session.get('form_token'):
+            flash('Form already submitted or invalid submission.', 'error')
+            return redirect(url_for('main.contact'))
+            
         try:
+            # Clear the form token to prevent resubmission
+            session.pop('form_token', None)
+            
             # Get form data
             name = request.form.get('name')
             email = request.form.get('email')
@@ -136,5 +145,9 @@ def contact():
             print(f"Error saving contact form: {str(e)}")
             flash('An unexpected error occurred. Please try again later.', 'error')
             return redirect(url_for('main.contact'))
+    else:
+        # Generate new token for GET request
+        import secrets
+        session['form_token'] = secrets.token_hex(16)
     
     return render_template('contact.html')
