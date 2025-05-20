@@ -28,8 +28,7 @@
   <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon_io (1)/fav.png') }}">
   <meta name="theme-color" content="#ffffff">
 
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;500;600;700&family=Crimson+Text:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;500;600;700&family=Crimson+Text:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="shortcut icon" href="{{ url_for('static', filename='images/fav.ico') }}">
 
   <style type="text/tailwindcss">
@@ -37,8 +36,11 @@
       body {
         font-family: 'Crimson Text', serif;
       }
-      h1, h2, h3, h4, h5, h6 {
-        font-family: 'Josefin Sans', sans-serif;
+      h1, h2, h3, h4, h5, h6, .heading {
+        font-family: 'Josefin Sans', sans-serif !important;
+      }
+      .secondary-heading {
+        font-family: 'Crimson Text', serif !important;
       }
     }
     @layer utilities {

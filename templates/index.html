@@ -20,10 +20,9 @@
     .touch-action-none {
         touch-action: none;
     }
-    
-    /* Enhanced Typography */
+      /* Enhanced Typography */
     .hero-title {
-        font-family: 'Playfair Display', serif;
+        font-family: 'Josefin Sans', sans-serif !important;
         letter-spacing: 0.02em;
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
     }
@@ -187,13 +186,9 @@
                     <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-white text-shadow-lg animate-fade-in tracking-wide hero-title">
                         Welcome to Buildaart
                     </h1>
-                    <div class="space-y-2 sm:space-y-3">
-                        <p class="text-lg sm:text-xl md:text-2xl lg:text-3xl text-white opacity-90 font-light animate-slide-up delay-500 leading-relaxed hero-subtitle">
-                            Where Visions Rise,
-                            Communities Thrive,
-                            and Every Brick Builds a Legacy.
-                        </p>
-                    </div>
+                    <p class="text-xl sm:text-2xl text-gray-200 secondary-heading">
+                        Building landmarks that inspire, one project at a time
+                    </p>
                     <div class="pt-4 sm:pt-6 md:pt-8 animate-fade-in delay-1000">
                         <a href="{{ url_for('main.contact') }}" 
                            class="inline-block bg-gradient-primary text-white px-6 sm:px-8 md:px-10 py-3 sm:py-4 rounded-md shadow-xl 
