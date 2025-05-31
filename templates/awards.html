@@ -64,6 +64,103 @@
     </div>
 </section>
 
+<!-- Device Compatibility Features -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const carouselWrapper = document.getElementById('carousel-wrapper');
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        // Touch Events for Mobile
+        carouselWrapper.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        carouselWrapper.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+
+        // Swipe Handler
+        function handleSwipe() {
+            const swipeThreshold = 50; // Minimum swipe distance
+            const swipeDistance = touchEndX - touchStartX;
+            
+            if (Math.abs(swipeDistance) > swipeThreshold) {
+                if (swipeDistance > 0) {
+                    prevSlide(); // Swipe right -> previous slide
+                } else {
+                    nextSlide(); // Swipe left -> next slide
+                }
+            }
+        }
+
+        // Responsive Controls - Show/Hide based on screen size
+        const updateControlsVisibility = () => {
+            const controls = document.querySelectorAll('.carousel-control');
+            if (window.innerWidth < 640) { // sm breakpoint
+                controls.forEach(control => control.classList.add('opacity-0'));
+            } else {
+                controls.forEach(control => control.classList.remove('opacity-0'));
+            }
+        };
+
+        // Initial check and resize listener
+        updateControlsVisibility();
+        window.addEventListener('resize', updateControlsVisibility);
+
+        // Pause on Mobile Scroll
+        let scrollTimeout;
+        window.addEventListener('scroll', () => {
+            clearInterval(autoplayInterval);
+            clearTimeout(scrollTimeout);
+            
+            scrollTimeout = setTimeout(() => {
+                autoplayInterval = setInterval(autoScroll, 6000);
+            }, 150); // Resume after scroll stops
+        }, { passive: true });
+
+        // Handle visibility change
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                clearInterval(autoplayInterval);
+            } else {
+                autoplayInterval = setInterval(autoScroll, 6000);
+            }
+        });
+    });
+</script>
+
+<!-- Add these styles -->
+<style>
+    /* Touch-friendly styles */
+    @media (hover: none) {
+        .carousel-control {
+            opacity: 0.5;
+            backdrop-filter: blur(4px);
+        }
+        
+        .carousel-indicator {
+            min-height: 44px; /* Touch target size */
+            min-width: 44px;
+        }
+    }
+
+    /* Prevent text selection during swipe */
+    .carousel-container {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    /* Smooth transitions for all devices */
+    .carousel-slide {
+        -webkit-transition: transform 0.3s ease-out;
+        transition: transform 0.3s ease-out;
+    }
+</style>
+
 <!-- Founder Biography Section -->
 <section class="p-4 sm:p-6 md:p-10 bg-gray-100 text-gray-800">
     <div class="max-w-4xl mx-auto space-y-6">
